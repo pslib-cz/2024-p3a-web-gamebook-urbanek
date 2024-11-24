@@ -1,6 +1,6 @@
 # Star Wars: Shadows of the Force
 
-[Figma - Shadows of the Force](https://www.figma.com/design/Jj13tJEqtj2Oa91zrdMhhR/Shadows-of-the-Force?node-id=0-1&t=nGB0eywPFq4gtwNd-1){:target="_blank"}
+[Figma - Shadows of the Force](https://www.figma.com/design/Jj13tJEqtj2Oa91zrdMhhR/Shadows-of-the-Force?node-id=0-1&t=nGB0eywPFq4gtwNd-1)
 
 ## Popis hry
 "Star Wars: Shadows of the Force" je interaktivní gamebook zasazený do světa Star Wars. Hráči se ujímají role mladého Jedi, Kaela Orinna, který je trénován Obi-Wanem Kenobim, aby se postavil temné straně Síly a obnovil rovnováhu v galaxii. Hráčova rozhodnutí ovlivňují vývoj příběhu, vztahy s postavami a konečný osud postavy a galaxie.
