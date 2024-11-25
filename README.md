@@ -39,3 +39,32 @@ Kael Orinn se vydává na misi do ruin Jedi chrámu na planetě Kash Tennar, kde
 - **Databáze herního pokroku**: Ukládání stavu hry (rozhodnutí, postavy, předměty).
 - **Responsivní design**: Aplikace by měla fungovat na desktopových i mobilních zařízeních.
 - **Generování obrázků a médií**: Implementace obrázků pro postavy, prostředí a předměty.
+
+## Prioritní úkoly
+1. **Frontend** (React + TypeScript):
+   - [x] Vytvoření hlavního menu s volbami pro spuštění hry, načtení uložené hry a nastavení.
+   - [x] Implementace interaktivních dialogů s výběrem možností.
+   - [ ] Vytvoření responsivního UI pro textové volby, příběh a mapu.
+   - [ ] Dynamická změna prostředí na základě volby hráče.
+   - [ ] Podpora light/dark módu pro lepší přístupnost.
+
+2. **Backend** (ASP.NET):
+   - [x] Nastavení API pro ukládání herního pokroku (SQLite).
+   - [ ] Přidání endpointů pro správu herních statistik (zdraví, inventář, vztahy).
+   - [ ] Integrace s AI generovanými obrázky a správou dat.
+
+3. **Herní mechaniky**:
+   - [x] Základní systém rozhodování (volba -> výsledek).
+   - [ ] Přidání hádanek (např. přemístění artefaktů v Jedi chrámu).
+   - [ ] Implementace soubojového systému (souboje se světelnými meči).
+   - [ ] Postupné odemykání nových schopností (např. Force Push, Mind Trick).
+
+4. **Grafika**:
+   - [x] Generování úvodních AI obrázků pro postavy a prostředí.
+   - [ ] Detailní návrhy interiéru Jedi chrámů a Sithských ruin.
+   - [ ] Animace světelného meče a efektů Síly.
+
+5. **Testing**:
+   - [ ] Kompletní unit testy pro herní logiku a API.
+   - [ ] Uživatelské testování na menším vzorku hráčů.
+   - [ ] Optimalizace výkonu na mobilních i desktopových zařízeních.
