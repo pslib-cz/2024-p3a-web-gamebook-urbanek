@@ -7,12 +7,21 @@
 
 Hra kombinuje tradiční vyprávění s interaktivními volbami a minihrami, které umožňují prozkoumávat různé cesty a konec příběhu. V závislosti na volbách může hráč stát na straně světla, temné strany nebo zůstat neutrální, přičemž každé rozhodnutí má své důsledky.
 
-## Hlavní rysy
-- **Interaktivní příběh**: Příběh, který se přizpůsobuje rozhodnutím hráče a nabízí různé cesty a konce.
-- **Volby a následky**: Hráči mohou ovlivnit vztahy s postavami, směr příběhu a konec hry.
-- **Minihry a hádanky**: Prozkoumávejte tajemství Jedi chrámů, bojujte proti nepřátelům a opravujte vesmírné lodě.
-- **Různé prostředí**: Od pouštní planety Tatooine po temné ruiny na Korribanu – každé místo má svou atmosféru a výzvy.
-- **Příběh s hlubokým vyprávěním**: Zkoumání světlé a temné strany Síly, rozhodnutí o tom, jaký bude osud hlavní postavy a celé galaxie.
+## Herní mechaniky
+**Interaktivní příběh**:
+   - Hráč rozhoduje o akcích Kaela v klíčových momentech příběhu.
+   - Možnost volby mezi světlou a temnou stranou Síly.
+**Různé cesty příběhu**:
+   - Prozkoumejte rozmanité prostředí: Pouště Tatooine, džungle na Kash Tennaru, městské ulice na Nar Shaddaa, a Sithskou planetu Korriban.
+   - Každá volba ovlivňuje vztahy s Obi-Wanem, rozvoj schopností Kaela a konečný výsledek příběhu.
+**Herní mechaniky**:
+   - **Použití Síly**: Schopnosti jako skenování okolí, manipulace s nepřáteli a řešení hádanek.
+   - **Minihry**: Oprava Jedi stíhačky, obcházení pastí, bojové sekvence.
+   - **Morální rozhodnutí**: Výběr mezi světlou a temnou stranou.
+**Více zakončení**:
+   - Hra má tři hlavní zakončení: cesta světla, cesta temnoty nebo neutrální zakončení.
+**Příběh inspirovaný Star Wars univerzem**:
+   - Originální příběh propojený s tématy, místy a postavami Star Wars.
 
 ## Příběh
 Válka klonů skončila a galaxie se ponořila do temnoty. Jediové, kdysi ochránci míru, byli téměř vyhlazeni. Galaktické impérium upevňuje svou moc. V této době strachu a chaosu však přežívají záblesky naděje. Obi-Wan Kenobi, skrytý na Tatooine, trénuje posledního z mladých Padawanů, Kaela Orinna, aby mohl jednoho dne obnovit světlo v galaxii.
@@ -27,36 +36,11 @@ Kael Orinn se vydává na misi do ruin Jedi chrámu na planetě Kash Tennar, kde
 5. **Jedha – Planeta proroků**: Kael hledá proroky, kteří odhalí temná tajemství Sithů.
 6. **Korriban – Srdce temnoty**: Kael čelí Darth Vaderovi a rozhoduje se, jakým směrem půjde.
 
-## Herní mechaniky
-- **Volby hráče**: Hráči mohou činit rozhodnutí, která ovlivní směr příběhu. Některé volby vedou k novým možnostem, jiné mohou změnit vztahy s ostatními postavami.
-- **Sběr a použití předmětů**: Hráči sbírají artefakty, jako je Sithský holokron, které mohou mít vliv na další rozhodnutí a události.
-- **Minihry**: Hráči se setkávají s minihrami, jako je oprava vesmírné lodi nebo řešení hádanek v ruinách Jedi chrámu.
-- **Konečné volby**: Na konci hry se hráči rozhodnou, zda zůstanou na straně světla, podlehnou temné straně, nebo zůstanou neutrální.
-
 ## Katalog požadavků
-- **Interaktivní volby**: Schopnost implementovat více větvení příběhu.
-- **UI pro textové možnosti**: Systém pro zobrazování textových voleb a reakce na výběr.
-- **Databáze herního pokroku**: Ukládání stavu hry (rozhodnutí, postavy, předměty).
-- **Responsivní design**: Aplikace by měla fungovat na desktopových i mobilních zařízeních.
-- **Generování obrázků a médií**: Implementace obrázků pro postavy, prostředí a předměty.
-
-## Prioritní úkoly
-1. **Frontend** (React + TypeScript):
-   - [ ] Vytvoření hlavního menu s volbami pro spuštění hry, načtení uložené hry a nastavení.
-   - [ ] Implementace interaktivních dialogů s výběrem možností.
-   - [ ] Vytvoření responsivního UI pro textové volby, příběh a mapu.
-   - [ ] Dynamická změna prostředí na základě volby hráče.
-
-2. **Backend** (ASP.NET):
-   - [ ] Nastavení API pro ukládání herního pokroku (SQLite).
-   - [ ] Přidání endpointů pro správu herních statistik (zdraví, inventář, vztahy).
-   - [ ] Integrace s AI generovanými obrázky a správou dat.
-
-3. **Herní mechaniky**:
-   - [ ] Základní systém rozhodování (volba -> výsledek).
-   - [ ] Přidání hádanek (např. přemístění artefaktů v Jedi chrámu).
-   - [ ] Implementace soubojového systému (souboje se světelnými meči).
-   - [ ] Postupné odemykání nových schopností (např. Force Push, Mind Trick).
-
-4. **Grafika**:
-   - [ ] Generování AI obrázků pro postavy, prostředí a itemy.
+**Technologický stack**:
+   - **Frontend**: React s TypeScriptem.
+   - **Backend**: ASP.NET Core.
+   - **Databáze**: SQLite pro ukládání herních stavů a statistik.
+**Design**:
+   - Vytvořit čisté a intuitivní uživatelské rozhraní (UI) pro hráče.
+   - Podpora různých zařízení: mobilní telefony, tablety a PC.
