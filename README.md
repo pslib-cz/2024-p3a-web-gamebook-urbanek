@@ -11,15 +11,19 @@ Hra kombinuje tradiční vyprávění s interaktivními volbami a minihrami, kte
 **Interaktivní příběh**:
    - Hráč rozhoduje o akcích Kaela v klíčových momentech příběhu.
    - Možnost volby mezi světlou a temnou stranou Síly.
+     
 **Různé cesty příběhu**:
    - Prozkoumejte rozmanité prostředí: Pouště Tatooine, džungle na Kash Tennaru, městské ulice na Nar Shaddaa, a Sithskou planetu Korriban.
    - Každá volba ovlivňuje vztahy s Obi-Wanem, rozvoj schopností Kaela a konečný výsledek příběhu.
+     
 **Herní mechaniky**:
    - **Použití Síly**: Schopnosti jako skenování okolí, manipulace s nepřáteli a řešení hádanek.
    - **Minihry**: Oprava Jedi stíhačky, obcházení pastí, bojové sekvence.
    - **Morální rozhodnutí**: Výběr mezi světlou a temnou stranou.
+     
 **Více zakončení**:
    - Hra má tři hlavní zakončení: cesta světla, cesta temnoty nebo neutrální zakončení.
+     
 **Příběh inspirovaný Star Wars univerzem**:
    - Originální příběh propojený s tématy, místy a postavami Star Wars.
 
