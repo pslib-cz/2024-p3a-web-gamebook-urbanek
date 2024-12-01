@@ -1,9 +1,9 @@
-# Star Wars: Stíny Síly
+# Star Wars: Stín Síly
 
-[Figma - Shadows of the Force](https://www.figma.com/design/Jj13tJEqtj2Oa91zrdMhhR/Shadows-of-the-Force?node-id=0-1&t=nGB0eywPFq4gtwNd-1)
+[Figma - Shadow of the Force](https://www.figma.com/design/Jj13tJEqtj2Oa91zrdMhhR/Shadows-of-the-Force?node-id=0-1&t=nGB0eywPFq4gtwNd-1)
 
 ## Popis hry
-"Star Wars: Stíny Síly" je interaktivní gamebook zasazený do světa Star Wars. Hráči se ujímají role mladého Jedi, Kaela Orinna, který je trénován Obi-Wanem Kenobim, aby se postavil temné straně Síly a obnovil rovnováhu v galaxii. Hráčova rozhodnutí ovlivňují vývoj příběhu, vztahy s postavami a konečný osud postavy a galaxie.
+"Star Wars: Stín Síly" je interaktivní gamebook zasazený do světa Star Wars. Hráči se ujímají role mladého Jedi, Kaela Orinna, který je trénován Obi-Wanem Kenobim, aby se postavil temné straně Síly a obnovil rovnováhu v galaxii. Hráčova rozhodnutí ovlivňují vývoj příběhu, vztahy s postavami a konečný osud postavy a galaxie.
 
 Hra kombinuje tradiční vyprávění s interaktivními volbami a minihrami, které umožňují prozkoumávat různé cesty a konec příběhu. V závislosti na volbách může hráč stát na straně světla, temné strany nebo zůstat neutrální, přičemž každé rozhodnutí má své důsledky.
 
