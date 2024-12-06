@@ -1,0 +1,108 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using stinsily.Server.Data;
+using stinsily.Server.Models;
+
+namespace stinsily.Server.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class MiniGamesController : ControllerBase
+    {
+        private readonly AppDbContext _context;
+
+        public MiniGamesController(AppDbContext context)
+        {
+            _context = context;
+        }
+
+        // GET: api/MiniGames
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<MiniGames>>> GetMiniGames()
+        {
+            return await _context.MiniGames.ToListAsync();
+        }
+
+        // GET: api/MiniGames/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<MiniGames>> GetMiniGames(int id)
+        {
+            var miniGames = await _context.MiniGames.FindAsync(id);
+
+            if (miniGames == null)
+            {
+                return NotFound();
+            }
+
+            return miniGames;
+        }
+
+        // PUT: api/MiniGames/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutMiniGames(int id, MiniGames miniGames)
+        {
+            if (id != miniGames.MiniGameID)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(miniGames).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!MiniGamesExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
+        // POST: api/MiniGames
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost]
+        public async Task<ActionResult<MiniGames>> PostMiniGames(MiniGames miniGames)
+        {
+            _context.MiniGames.Add(miniGames);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetMiniGames", new { id = miniGames.MiniGameID }, miniGames);
+        }
+
+        // DELETE: api/MiniGames/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteMiniGames(int id)
+        {
+            var miniGames = await _context.MiniGames.FindAsync(id);
+            if (miniGames == null)
+            {
+                return NotFound();
+            }
+
+            _context.MiniGames.Remove(miniGames);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        private bool MiniGamesExists(int id)
+        {
+            return _context.MiniGames.Any(e => e.MiniGameID == id);
+        }
+    }
+}

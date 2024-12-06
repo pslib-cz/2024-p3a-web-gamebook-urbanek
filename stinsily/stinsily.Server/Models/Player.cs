@@ -9,7 +9,7 @@ namespace stinsily.Server.Models
         public int PlayerID { get; set; }
         public int UserID { get; set; } //foreign key
         [ForeignKey(nameof(UserID))]
-        public User User { get; set; }
+        public Users User { get; set; }
         public int ItemID { get; set; } //foreign key
         public int Health { get; set; } = 100;
         public int Force { get; set; } = 25;

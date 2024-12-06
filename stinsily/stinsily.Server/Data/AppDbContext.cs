@@ -9,7 +9,7 @@ namespace stinsily.Server.Data
         {
         }
 
-        public DbSet<User> Users { get; set; }
+        public DbSet<Users> Users { get; set; }
         public DbSet<Player> Players { get; set; }
         public DbSet<Scenes> Scenes { get; set; }
         public DbSet<Items> Items { get; set; }
@@ -18,7 +18,7 @@ namespace stinsily.Server.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>().ToTable("Users");
+            modelBuilder.Entity<Users>().ToTable("Users");
             modelBuilder.Entity<Player>().ToTable("Players");
             modelBuilder.Entity<Scenes>().ToTable("Scenes");
             modelBuilder.Entity<Items>().ToTable("Items");
