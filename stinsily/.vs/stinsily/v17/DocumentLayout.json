@@ -1,7 +1,12 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\",
-  "Documents": [],
+  "WorkspaceRootPath": "C:\\Users\\adam.urbanek.022\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{AF57D14F-15C0-471E-B1A9-298616133857}|stinsily.client\\stinsily.client.esproj|c:\\users\\adam.urbanek.022\\documents\\github\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.client\\src\\app.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
+      "RelativeMoniker": "D:0:0:{AF57D14F-15C0-471E-B1A9-298616133857}|stinsily.client\\stinsily.client.esproj|solutionrelative:stinsily.client\\src\\app.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -9,8 +14,21 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": -1,
+          "SelectedChildIndex": 0,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "App.tsx",
+              "DocumentMoniker": "C:\\Users\\adam.urbanek.022\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.client\\src\\App.tsx",
+              "RelativeDocumentMoniker": "stinsily.client\\src\\App.tsx",
+              "ToolTip": "C:\\Users\\adam.urbanek.022\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.client\\src\\App.tsx",
+              "RelativeToolTip": "stinsily.client\\src\\App.tsx",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
+              "WhenOpened": "2024-12-06T07:04:05.488Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
