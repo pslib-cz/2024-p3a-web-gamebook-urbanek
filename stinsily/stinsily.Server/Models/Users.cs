@@ -1,7 +1,10 @@
-﻿namespace stinsily.Server.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace stinsily.Server.Models
 {
     public class User
     {
+        [Key]
         public int UserID { get; set; }
         public int PlayerID { get; set; } //foreign key
         public string UserName { get; set; } = string.Empty;
