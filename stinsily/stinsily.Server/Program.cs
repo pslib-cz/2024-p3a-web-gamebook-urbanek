@@ -1,40 +1,110 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 using stinsily.Server.Data;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Pøidání služby pro SQLite
+// Pï¿½idï¿½nï¿½ sluï¿½by pro SQLite
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite("Data Source=gamebook.db"));
 
-// Pøidání autentizace pøes Google
-builder.Services.AddAuthentication(options =>
+// Nastavenï¿½ Identity
+builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 {
-    options.DefaultScheme = "Cookies";
-    options.DefaultChallengeScheme = "Google";
-}).AddCookie("Cookies")
-  .AddGoogle("Google", options =>
-  {
-      options.ClientId = "TVÙJ_GOOGLE_CLIENT_ID";
-      options.ClientSecret = "TVÙJ_GOOGLE_CLIENT_SECRET";
-  });
+    options.Password.RequiredLength = 6;
+    options.User.RequireUniqueEmail = true;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireDigit = false;
+    options.SignIn.RequireConfirmedEmail = false;
+})
+.AddEntityFrameworkStores<AppDbContext>();
 
-// Pøidání Swaggeru
+// Nastavenï¿½ autorizace pro role
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
+});
+
+builder.Services.AddControllers();
+
+//// Pï¿½idï¿½nï¿½ autentizace pï¿½es Google
+//builder.Services.AddAuthentication(options =>
+//{
+//    options.DefaultScheme = "Cookies";
+//    options.DefaultChallengeScheme = "Google";
+//}).AddCookie("Cookies")
+//  .AddGoogle("Google", options =>
+//  {
+//      options.ClientId = "TVï¿½J_GOOGLE_CLIENT_ID";
+//      options.ClientSecret = "TVï¿½J_GOOGLE_CLIENT_SECRET";
+//  });
+
+// Pï¿½idï¿½nï¿½ Swaggeru
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowReactApp",
+        builder =>
+        {
+            builder
+                .WithOrigins("https://localhost:50701") // port vaÅ¡eho frontendu
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials(); // DÅ¯leÅ¾itÃ© pro credentials: "include"
+        });
+});
+
 var app = builder.Build();
 
-// Použití Swaggeru
+// Automatickï¿½ vytvoï¿½enï¿½ uï¿½ivatele admina
+using (var scope = app.Services.CreateScope())
+{
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+    // Vytvoï¿½enï¿½ role Admin
+    if (!await roleManager.RoleExistsAsync("Admin"))
+    {
+        await roleManager.CreateAsync(new IdentityRole("Admin"));
+    }
+
+    // Vytvoï¿½enï¿½ uï¿½ivatele Admin
+    var adminEmail = "kokt@pica.com";
+    var adminPassword = "zmrdecek";
+
+    if (await userManager.FindByEmailAsync(adminEmail) == null)
+    {
+        var adminUser = new IdentityUser
+        {
+            UserName = adminEmail,
+            Email = adminEmail
+        };
+
+        var result = await userManager.CreateAsync(adminUser, adminPassword);
+        if (result.Succeeded)
+        {
+            await userManager.AddToRoleAsync(adminUser, "Admin");
+        }
+    }
+}
+
+// Pouï¿½itï¿½ Swaggeru
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-// Použití autentizace
+// Pouï¿½itï¿½ autentizace
+app.UseRouting();
+app.UseCors("AllowReactApp");
 app.UseAuthentication();
 app.UseAuthorization();
+app.MapGroup("/api").MapCustomIdentityApi<IdentityUser>(); // Vyuï¿½itï¿½ Identity API endpointï¿½
 
 app.MapControllers();
 app.Run();

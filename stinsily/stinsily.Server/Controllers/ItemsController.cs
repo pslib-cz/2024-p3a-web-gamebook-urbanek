@@ -22,6 +22,22 @@ namespace stinsily.Server.Controllers
             _context = context;
         }
 
+        [HttpGet("is-admin")]
+        [Authorize] // Pouze přihlášení uživatelé
+        public IActionResult IsAdmin()
+        {
+            var isAdmin = User.IsInRole("Admin"); // Ověření role admin
+            return Ok(isAdmin); // Vrací true nebo false
+        }
+
+        [HttpPost]
+        [Authorize(Policy = "Admin")] // Pouze admini mohou přidávat položky
+        public IActionResult AddItem([FromBody] Items item)
+        {
+            // Logika pro přidání položky
+            return Ok("Item added successfully.");
+        }
+
         // GET: api/Items
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Items>>> GetItems()

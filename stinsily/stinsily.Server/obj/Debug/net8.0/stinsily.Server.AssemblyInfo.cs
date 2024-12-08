@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("stinsily.Server")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fe387d9c7731f08ed2cc0aad0dc25971b785eaa6")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cd5541e9128e9502c155826a4a00bfdfff8a1ca0")]
 [assembly: System.Reflection.AssemblyProductAttribute("stinsily.Server")]
 [assembly: System.Reflection.AssemblyTitleAttribute("stinsily.Server")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

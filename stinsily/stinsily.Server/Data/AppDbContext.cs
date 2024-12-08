@@ -1,9 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using stinsily.Server.Models;
 
 namespace stinsily.Server.Data
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<IdentityUser>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
@@ -15,6 +17,7 @@ namespace stinsily.Server.Data
         public DbSet<Items> Items { get; set; }
         public DbSet<ChoicesConnections> ChoicesConnections { get; set; }
         public DbSet<MiniGames> MiniGames { get; set; }
+        public DbSet<IdentityRole> IdentityRole { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -24,6 +27,8 @@ namespace stinsily.Server.Data
             modelBuilder.Entity<Items>().ToTable("Items");
             modelBuilder.Entity<ChoicesConnections>().ToTable("ChoicesConnections");
             modelBuilder.Entity<MiniGames>().ToTable("MiniGames");
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<IdentityUserLogin<string>>().HasKey(login => new { login.LoginProvider, login.ProviderKey });
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
