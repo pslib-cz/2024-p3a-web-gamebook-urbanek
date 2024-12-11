@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace stinsily.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class newdb : Migration
+    public partial class Login : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -280,6 +280,11 @@ namespace stinsily.Server.Migrations
                         principalColumn: "UserID",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[] { "admin-user-id", 0, "3018e640-7fd7-41fc-b006-a6aec907efd0", "admin@admin.cz", true, false, null, "ADMIN@ADMIN.CZ", "ADMIN@ADMIN.CZ", "AQAAAAIAAYagAAAAEL+rrsCOOMynhfx/A1kDqcOpgSUkX7v2TI9n1umxZG9jt5tOawtmLDJ5XpAs2nZsGQ==", null, false, "20806b56-f617-4446-95b7-506c0db7c31a", false, "admin@admin.cz" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

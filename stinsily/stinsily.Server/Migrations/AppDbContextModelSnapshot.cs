@@ -128,6 +128,24 @@ namespace stinsily.Server.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "admin-user-id",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "3018e640-7fd7-41fc-b006-a6aec907efd0",
+                            Email = "admin@admin.cz",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ADMIN@ADMIN.CZ",
+                            NormalizedUserName = "ADMIN@ADMIN.CZ",
+                            PasswordHash = "AQAAAAIAAYagAAAAEL+rrsCOOMynhfx/A1kDqcOpgSUkX7v2TI9n1umxZG9jt5tOawtmLDJ5XpAs2nZsGQ==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "20806b56-f617-4446-95b7-506c0db7c31a",
+                            TwoFactorEnabled = false,
+                            UserName = "admin@admin.cz"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
