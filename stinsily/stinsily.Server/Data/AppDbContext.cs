@@ -28,8 +28,20 @@ namespace stinsily.Server.Data
             modelBuilder.Entity<ChoicesConnections>().ToTable("ChoicesConnections");
             modelBuilder.Entity<MiniGames>().ToTable("MiniGames");
             base.OnModelCreating(modelBuilder);
-            //seed pro pridani prihlasovacich udaju do databaze se vsemi detaily
-
+            //seed pro pridani prihlasovacich udaju do databaze se vsemi detaily, jen experimentalnim, upravit a checknout
+            modelBuilder.Entity<IdentityUser>().HasData(
+                new IdentityUser
+                {
+                    Id = adminUserId,
+                    UserName = adminEmail,
+                    NormalizedUserName = adminEmail.ToUpper(),
+                    Email = admin@admin.cz,
+                    NormalizedEmail = adminEmail.ToUpper(),
+                    EmailConfirmed = true,
+                    PasswordHash = adminPasswordHash,
+                    SecurityStamp = Guid.NewGuid().ToString("D")
+                }
+            );
             modelBuilder.Entity<IdentityUserLogin<string>>().HasKey(login => new { login.LoginProvider, login.ProviderKey });
         }
 
