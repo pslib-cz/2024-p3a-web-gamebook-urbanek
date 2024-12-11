@@ -5,7 +5,7 @@ const AdminPanel = () => {
 
   useEffect(() => {
     const checkAdmin = async () => {
-      const response = await fetch("http://localhost:5193/api/auth/is-admin", {
+      const response = await fetch("http://localhost:5193/api/auth/is-admin", { //http://localhost:5193/api/auth/is-admin
         method: "GET",
         credentials: "include",
       });

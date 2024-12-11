@@ -28,6 +28,8 @@ namespace stinsily.Server.Data
             modelBuilder.Entity<ChoicesConnections>().ToTable("ChoicesConnections");
             modelBuilder.Entity<MiniGames>().ToTable("MiniGames");
             base.OnModelCreating(modelBuilder);
+            //seed pro pridani prihlasovacich udaju do databaze se vsemi detaily
+
             modelBuilder.Entity<IdentityUserLogin<string>>().HasKey(login => new { login.LoginProvider, login.ProviderKey });
         }
 

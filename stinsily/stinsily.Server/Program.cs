@@ -5,11 +5,9 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// P�id�n� slu�by pro SQLite
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite("Data Source=gamebook.db"));
 
-// Nastaven� Identity
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 {
     options.Password.RequiredLength = 6;
@@ -21,7 +19,6 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 })
 .AddEntityFrameworkStores<AppDbContext>();
 
-// Nastaven� autorizace pro role
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
@@ -41,7 +38,6 @@ builder.Services.AddControllers();
 //      options.ClientSecret = "TV�J_GOOGLE_CLIENT_SECRET";
 //  });
 
-// P�id�n� Swaggeru
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -54,27 +50,24 @@ builder.Services.AddCors(options =>
                 .WithOrigins("https://localhost:50701") // port vašeho frontendu
                 .AllowAnyMethod()
                 .AllowAnyHeader()
-                .AllowCredentials(); // Důležité pro credentials: "include"
+                .AllowCredentials();
         });
 });
 
 var app = builder.Build();
 
-// Automatick� vytvo�en� u�ivatele admina
 using (var scope = app.Services.CreateScope())
 {
     var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-    // Vytvo�en� role Admin
     if (!await roleManager.RoleExistsAsync("Admin"))
     {
         await roleManager.CreateAsync(new IdentityRole("Admin"));
     }
 
-    // Vytvo�en� u�ivatele Admin
-    var adminEmail = "kokt@pica.com";
-    var adminPassword = "zmrdecek";
+    var adminEmail = "admin@admin.cz";
+    var adminPassword = "admin";
 
     if (await userManager.FindByEmailAsync(adminEmail) == null)
     {
@@ -92,19 +85,17 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-// Pou�it� Swaggeru
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-// Pou�it� autentizace
 app.UseRouting();
 app.UseCors("AllowReactApp");
 app.UseAuthentication();
 app.UseAuthorization();
-app.MapGroup("/api").MapCustomIdentityApi<IdentityUser>(); // Vyu�it� Identity API endpoint�
+app.MapGroup("/api").MapCustomIdentityApi<IdentityUser>();
 
 app.MapControllers();
 app.Run();

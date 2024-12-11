@@ -222,6 +222,9 @@ namespace stinsily.Server.Migrations
                     b.Property<int?>("FromSceneSceneID")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("MiniGameID")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int?>("RequiredItemID")
                         .HasColumnType("INTEGER");
 
@@ -241,6 +244,8 @@ namespace stinsily.Server.Migrations
                     b.HasKey("ChoicesConnectionsID");
 
                     b.HasIndex("FromSceneSceneID");
+
+                    b.HasIndex("MiniGameID");
 
                     b.HasIndex("RequiredItemID");
 
@@ -333,16 +338,11 @@ namespace stinsily.Server.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("MiniGameID")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("SceneID");
-
-                    b.HasIndex("MiniGameID");
 
                     b.ToTable("Scenes", (string)null);
                 });
@@ -433,6 +433,10 @@ namespace stinsily.Server.Migrations
                         .WithMany()
                         .HasForeignKey("FromSceneSceneID");
 
+                    b.HasOne("stinsily.Server.Models.MiniGames", "MiniGame")
+                        .WithMany()
+                        .HasForeignKey("MiniGameID");
+
                     b.HasOne("stinsily.Server.Models.Items", "RequiredItem")
                         .WithMany()
                         .HasForeignKey("RequiredItemID");
@@ -442,6 +446,8 @@ namespace stinsily.Server.Migrations
                         .HasForeignKey("ToSceneSceneID");
 
                     b.Navigation("FromScene");
+
+                    b.Navigation("MiniGame");
 
                     b.Navigation("RequiredItem");
 
@@ -457,15 +463,6 @@ namespace stinsily.Server.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("stinsily.Server.Models.Scenes", b =>
-                {
-                    b.HasOne("stinsily.Server.Models.MiniGames", "MiniGame")
-                        .WithMany()
-                        .HasForeignKey("MiniGameID");
-
-                    b.Navigation("MiniGame");
                 });
 #pragma warning restore 612, 618
         }

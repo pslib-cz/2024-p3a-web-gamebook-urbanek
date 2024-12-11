@@ -4,6 +4,8 @@ namespace stinsily.Server.Models
 {
     public class ChoicesConnections
     {
+        //redirection na minihru, item atd
+        //kontroluje se zda hrac ma item, ktery je potreba
         [Key]
         public int ChoicesConnectionsID { get; set; }
         public int SceneFrom { get; set; } //foreign key
@@ -14,5 +16,7 @@ namespace stinsily.Server.Models
         public Scenes? FromScene { get; set; }
         public Scenes? ToScene { get; set; }
         public Items? RequiredItem { get; set; }
+        public int? MiniGameID { get; set; } //foreign key
+        public MiniGames? MiniGame { get; set; }
     }
 }

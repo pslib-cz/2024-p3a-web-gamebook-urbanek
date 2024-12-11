@@ -1,30 +1,54 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\",
+  "WorkspaceRootPath": "C:\\Users\\adam.urbanek.022\\source\\repos\\2024-p3a-web-gamebook-urbanek\\stinsily\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|c:\\users\\adamu\\documents\\github\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.server\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|solutionrelative:stinsily.server\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\adam.urbanek.022\\source\\repos\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Migrations\\20241211112436_newdb.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:stinsily.Server\\Migrations\\20241211112436_newdb.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|c:\\users\\adamu\\documents\\github\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.server\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|solutionrelative:stinsily.server\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|c:\\users\\adam.urbanek.022\\source\\repos\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.server\\models\\choicesconnections.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|solutionrelative:stinsily.server\\models\\choicesconnections.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|c:\\users\\adamu\\documents\\github\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.server\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|solutionrelative:stinsily.server\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|c:\\users\\adam.urbanek.022\\source\\repos\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.server\\models\\minigames.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|solutionrelative:stinsily.server\\models\\minigames.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|c:\\users\\adamu\\documents\\github\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.server\\data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|c:\\users\\adam.urbanek.022\\source\\repos\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.server\\models\\scenes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|solutionrelative:stinsily.server\\models\\scenes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|c:\\users\\adam.urbanek.022\\source\\repos\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.server\\models\\users.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|solutionrelative:stinsily.server\\models\\users.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|c:\\users\\adam.urbanek.022\\source\\repos\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.server\\controllers\\scenescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|solutionrelative:stinsily.server\\controllers\\scenescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|c:\\users\\adam.urbanek.022\\source\\repos\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.server\\data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|solutionrelative:stinsily.server\\data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|c:\\users\\adamu\\documents\\github\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.server\\controllers\\itemscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|solutionrelative:stinsily.server\\controllers\\itemscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|c:\\users\\adam.urbanek.022\\source\\repos\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.server\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|solutionrelative:stinsily.server\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|c:\\users\\adamu\\documents\\github\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.server\\extensions\\mapcustomidentityapi.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|c:\\users\\adam.urbanek.022\\source\\repos\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.server\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|solutionrelative:stinsily.server\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|c:\\users\\adam.urbanek.022\\source\\repos\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.server\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|solutionrelative:stinsily.server\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|c:\\users\\adam.urbanek.022\\source\\repos\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.server\\extensions\\mapcustomidentityapi.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|solutionrelative:stinsily.server\\extensions\\mapcustomidentityapi.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|c:\\users\\adam.urbanek.022\\source\\repos\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.server\\controllers\\itemscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|solutionrelative:stinsily.server\\controllers\\itemscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -34,8 +58,60 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 0,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "20241211112436_newdb.cs",
+              "DocumentMoniker": "C:\\Users\\adam.urbanek.022\\source\\repos\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Migrations\\20241211112436_newdb.cs",
+              "RelativeDocumentMoniker": "stinsily.Server\\Migrations\\20241211112436_newdb.cs",
+              "ToolTip": "C:\\Users\\adam.urbanek.022\\source\\repos\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Migrations\\20241211112436_newdb.cs",
+              "RelativeToolTip": "stinsily.Server\\Migrations\\20241211112436_newdb.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-11T11:24:36.374Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "ScenesController.cs",
+              "DocumentMoniker": "C:\\Users\\adam.urbanek.022\\source\\repos\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Controllers\\ScenesController.cs",
+              "RelativeDocumentMoniker": "stinsily.Server\\Controllers\\ScenesController.cs",
+              "ToolTip": "C:\\Users\\adam.urbanek.022\\source\\repos\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Controllers\\ScenesController.cs",
+              "RelativeToolTip": "stinsily.Server\\Controllers\\ScenesController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-11T11:07:06.537Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ChoicesConnections.cs",
+              "DocumentMoniker": "C:\\Users\\adam.urbanek.022\\source\\repos\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Models\\ChoicesConnections.cs",
+              "RelativeDocumentMoniker": "stinsily.Server\\Models\\ChoicesConnections.cs",
+              "ToolTip": "C:\\Users\\adam.urbanek.022\\source\\repos\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Models\\ChoicesConnections.cs",
+              "RelativeToolTip": "stinsily.Server\\Models\\ChoicesConnections.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAYAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-11T10:55:38.278Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "MiniGames.cs",
+              "DocumentMoniker": "C:\\Users\\adam.urbanek.022\\source\\repos\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Models\\MiniGames.cs",
+              "RelativeDocumentMoniker": "stinsily.Server\\Models\\MiniGames.cs",
+              "ToolTip": "C:\\Users\\adam.urbanek.022\\source\\repos\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Models\\MiniGames.cs",
+              "RelativeToolTip": "stinsily.Server\\Models\\MiniGames.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-11T10:54:51.705Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
@@ -43,23 +119,49 @@
             {
               "$type": "Document",
               "DocumentIndex": 3,
+              "Title": "Scenes.cs",
+              "DocumentMoniker": "C:\\Users\\adam.urbanek.022\\source\\repos\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Models\\Scenes.cs",
+              "RelativeDocumentMoniker": "stinsily.Server\\Models\\Scenes.cs",
+              "ToolTip": "C:\\Users\\adam.urbanek.022\\source\\repos\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Models\\Scenes.cs",
+              "RelativeToolTip": "stinsily.Server\\Models\\Scenes.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAA/AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-11T10:54:41.412Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Users.cs",
+              "DocumentMoniker": "C:\\Users\\adam.urbanek.022\\source\\repos\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Models\\Users.cs",
+              "RelativeDocumentMoniker": "stinsily.Server\\Models\\Users.cs",
+              "ToolTip": "C:\\Users\\adam.urbanek.022\\source\\repos\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Models\\Users.cs",
+              "RelativeToolTip": "stinsily.Server\\Models\\Users.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-11T10:20:21.55Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
               "Title": "AppDbContext.cs",
-              "DocumentMoniker": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Data\\AppDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\adam.urbanek.022\\source\\repos\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Data\\AppDbContext.cs",
               "RelativeDocumentMoniker": "stinsily.Server\\Data\\AppDbContext.cs",
-              "ToolTip": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Data\\AppDbContext.cs",
+              "ToolTip": "C:\\Users\\adam.urbanek.022\\source\\repos\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Data\\AppDbContext.cs",
               "RelativeToolTip": "stinsily.Server\\Data\\AppDbContext.cs",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAAAB8AAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAABkAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-08T11:55:30.59Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 7,
               "Title": "AdminController.cs",
-              "DocumentMoniker": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Controllers\\AdminController.cs",
+              "DocumentMoniker": "C:\\Users\\adam.urbanek.022\\source\\repos\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Controllers\\AdminController.cs",
               "RelativeDocumentMoniker": "stinsily.Server\\Controllers\\AdminController.cs",
-              "ToolTip": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Controllers\\AdminController.cs",
+              "ToolTip": "C:\\Users\\adam.urbanek.022\\source\\repos\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Controllers\\AdminController.cs",
               "RelativeToolTip": "stinsily.Server\\Controllers\\AdminController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAApAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -68,50 +170,50 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 8,
               "Title": "AuthController.cs",
-              "DocumentMoniker": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Controllers\\AuthController.cs",
+              "DocumentMoniker": "C:\\Users\\adam.urbanek.022\\source\\repos\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Controllers\\AuthController.cs",
               "RelativeDocumentMoniker": "stinsily.Server\\Controllers\\AuthController.cs",
-              "ToolTip": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Controllers\\AuthController.cs",
+              "ToolTip": "C:\\Users\\adam.urbanek.022\\source\\repos\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Controllers\\AuthController.cs",
               "RelativeToolTip": "stinsily.Server\\Controllers\\AuthController.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAAEUAAAABAAAAAAAAAA==",
+              "ViewState": "AgIAABwAAAAAAAAAAADwvyYAAAAdAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-08T10:43:05.438Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 9,
               "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Program.cs",
+              "DocumentMoniker": "C:\\Users\\adam.urbanek.022\\source\\repos\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Program.cs",
               "RelativeDocumentMoniker": "stinsily.Server\\Program.cs",
-              "ToolTip": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Program.cs",
+              "ToolTip": "C:\\Users\\adam.urbanek.022\\source\\repos\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Program.cs",
               "RelativeToolTip": "stinsily.Server\\Program.cs",
-              "ViewState": "AgIAAB8AAAAAAAAAAAAwwGUAAAACAAAAAAAAAA==",
+              "ViewState": "AgIAACoAAAAAAAAAAAAAAEUAAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-06T19:43:51.634Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 10,
               "Title": "MapCustomIdentityApi.cs",
-              "DocumentMoniker": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Extensions\\MapCustomIdentityApi.cs",
+              "DocumentMoniker": "C:\\Users\\adam.urbanek.022\\source\\repos\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Extensions\\MapCustomIdentityApi.cs",
               "RelativeDocumentMoniker": "stinsily.Server\\Extensions\\MapCustomIdentityApi.cs",
-              "ToolTip": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Extensions\\MapCustomIdentityApi.cs",
+              "ToolTip": "C:\\Users\\adam.urbanek.022\\source\\repos\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Extensions\\MapCustomIdentityApi.cs",
               "RelativeToolTip": "stinsily.Server\\Extensions\\MapCustomIdentityApi.cs",
-              "ViewState": "AgIAAI4BAAAAAAAAAAAowLgBAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAALgBAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-08T12:13:33.185Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 11,
               "Title": "ItemsController.cs",
-              "DocumentMoniker": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Controllers\\ItemsController.cs",
+              "DocumentMoniker": "C:\\Users\\adam.urbanek.022\\source\\repos\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Controllers\\ItemsController.cs",
               "RelativeDocumentMoniker": "stinsily.Server\\Controllers\\ItemsController.cs",
-              "ToolTip": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Controllers\\ItemsController.cs",
+              "ToolTip": "C:\\Users\\adam.urbanek.022\\source\\repos\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Controllers\\ItemsController.cs",
               "RelativeToolTip": "stinsily.Server\\Controllers\\ItemsController.cs",
               "ViewState": "AgIAACUAAAAAAAAAAAAzwCIAAAA7AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
