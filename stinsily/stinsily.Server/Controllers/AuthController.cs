@@ -17,7 +17,6 @@ namespace stinsily.Server.Controllers
         [HttpGet("is-admin")]
         public IActionResult IsAdmin()
         {
-            // Vaše logika pro kontrolu admin práv
             if (!User.Identity?.IsAuthenticated ?? true)
             {
                 return Unauthorized("User is not authenticated");
@@ -32,7 +31,7 @@ namespace stinsily.Server.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginRequest request)
+        public async Task<IActionResult> Login([FromBody] CustomLoginRequest request)
         {
             var result = await _signInManager.PasswordSignInAsync(
             request.Email,
@@ -62,7 +61,7 @@ namespace stinsily.Server.Controllers
         }
     }
 
-    public class LoginRequest
+    public class CustomLoginRequest
     {
         public string Email { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;

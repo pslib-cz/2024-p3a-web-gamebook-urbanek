@@ -23,14 +23,14 @@ namespace stinsily.Server.Controllers
 
         // GET: api/Players
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Player>>> GetPlayers()
+        public async Task<ActionResult<IEnumerable<Players>>> GetPlayers()
         {
             return await _context.Players.ToListAsync();
         }
 
         // GET: api/Players/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Player>> GetPlayer(int id)
+        public async Task<ActionResult<Players>> GetPlayer(int id)
         {
             var player = await _context.Players.FindAsync(id);
 
@@ -45,7 +45,7 @@ namespace stinsily.Server.Controllers
         // PUT: api/Players/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPlayer(int id, Player player)
+        public async Task<IActionResult> PutPlayer(int id, Players player)
         {
             if (id != player.PlayerID)
             {
@@ -76,7 +76,7 @@ namespace stinsily.Server.Controllers
         // POST: api/Players
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Player>> PostPlayer(Player player)
+        public async Task<ActionResult<Players>> PostPlayer(Players player)
         {
             _context.Players.Add(player);
             await _context.SaveChangesAsync();

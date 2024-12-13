@@ -35,6 +35,9 @@ namespace stinsily.Server.Controllers
         public IActionResult AddItem([FromBody] Items item)
         {
             // Logika pro přidání položky
+            _context.Items.Add(item);
+            _context.SaveChanges();
+
             return Ok("Item added successfully.");
         }
 
@@ -88,17 +91,6 @@ namespace stinsily.Server.Controllers
             }
 
             return NoContent();
-        }
-
-        // POST: api/Items
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Items>> PostItems(Items items)
-        {
-            _context.Items.Add(items);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetItems", new { id = items.ItemID }, items);
         }
 
         // DELETE: api/Items/5

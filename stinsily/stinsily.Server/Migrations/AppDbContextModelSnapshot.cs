@@ -134,15 +134,15 @@ namespace stinsily.Server.Migrations
                         {
                             Id = "admin-user-id",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "3018e640-7fd7-41fc-b006-a6aec907efd0",
+                            ConcurrencyStamp = "c294e0b4-5b10-4de1-9526-5163b849021f",
                             Email = "admin@admin.cz",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ADMIN.CZ",
                             NormalizedUserName = "ADMIN@ADMIN.CZ",
-                            PasswordHash = "AQAAAAIAAYagAAAAEL+rrsCOOMynhfx/A1kDqcOpgSUkX7v2TI9n1umxZG9jt5tOawtmLDJ5XpAs2nZsGQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEGvplTymXvd4l/OQfO3aFgf+4qPkzn2DsFSvDyC6pZi0dU5HEKRbSYMVDl1LMa5HzA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "20806b56-f617-4446-95b7-506c0db7c31a",
+                            SecurityStamp = "b6095ef4-f49f-45c8-a678-c9bd5b9201a9",
                             TwoFactorEnabled = false,
                             UserName = "admin@admin.cz"
                         });
@@ -234,7 +234,6 @@ namespace stinsily.Server.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Effect")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int?>("FromSceneSceneID")
@@ -246,14 +245,13 @@ namespace stinsily.Server.Migrations
                     b.Property<int?>("RequiredItemID")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("SceneFrom")
+                    b.Property<int>("SceneFromID")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("SceneTo")
+                    b.Property<int>("SceneToID")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Text")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int?>("ToSceneSceneID")
@@ -270,6 +268,18 @@ namespace stinsily.Server.Migrations
                     b.HasIndex("ToSceneSceneID");
 
                     b.ToTable("ChoicesConnections", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            ChoicesConnectionsID = 1,
+                            Effect = "pokracovani v pribehu",
+                            MiniGameID = 1,
+                            RequiredItemID = 1,
+                            SceneFromID = 1,
+                            SceneToID = 2,
+                            Text = "prechod na 2. scenu"
+                        });
                 });
 
             modelBuilder.Entity("stinsily.Server.Models.Items", b =>
@@ -298,6 +308,26 @@ namespace stinsily.Server.Migrations
                     b.HasKey("ItemID");
 
                     b.ToTable("Items", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            ItemID = 1,
+                            Description = "nic",
+                            ForceModifier = 0,
+                            HealthModifier = 0,
+                            Name = "nic",
+                            ObiWanRelationshipModifier = 0
+                        },
+                        new
+                        {
+                            ItemID = 2,
+                            Description = "mec",
+                            ForceModifier = 10,
+                            HealthModifier = 0,
+                            Name = "Svetelny mec",
+                            ObiWanRelationshipModifier = 0
+                        });
                 });
 
             modelBuilder.Entity("stinsily.Server.Models.MiniGames", b =>
@@ -313,12 +343,27 @@ namespace stinsily.Server.Migrations
                     b.HasKey("MiniGameID");
 
                     b.ToTable("MiniGames", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            MiniGameID = 1,
+                            Description = "nic"
+                        },
+                        new
+                        {
+                            MiniGameID = 2,
+                            Description = "mini hra 1"
+                        });
                 });
 
-            modelBuilder.Entity("stinsily.Server.Models.Player", b =>
+            modelBuilder.Entity("stinsily.Server.Models.Players", b =>
                 {
                     b.Property<int>("PlayerID")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("CurrentSceneID")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Force")
@@ -338,9 +383,24 @@ namespace stinsily.Server.Migrations
 
                     b.HasKey("PlayerID");
 
-                    b.HasIndex("UserID");
+                    b.HasIndex("CurrentSceneID");
+
+                    b.HasIndex("UserID")
+                        .IsUnique();
 
                     b.ToTable("Players", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            PlayerID = 1,
+                            CurrentSceneID = 1,
+                            Force = 25,
+                            Health = 100,
+                            ItemID = 1,
+                            ObiWanRelationship = 50,
+                            UserID = 1
+                        });
                 });
 
             modelBuilder.Entity("stinsily.Server.Models.Scenes", b =>
@@ -363,6 +423,22 @@ namespace stinsily.Server.Migrations
                     b.HasKey("SceneID");
 
                     b.ToTable("Scenes", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            SceneID = 1,
+                            ConnectionID = 1,
+                            Description = "trenink",
+                            Title = "Scena1"
+                        },
+                        new
+                        {
+                            SceneID = 2,
+                            ConnectionID = 2,
+                            Description = "rozhodnuti pristupu",
+                            Title = "Scena2"
+                        });
                 });
 
             modelBuilder.Entity("stinsily.Server.Models.Users", b =>
@@ -392,6 +468,17 @@ namespace stinsily.Server.Migrations
                     b.HasKey("UserID");
 
                     b.ToTable("Users", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserID = 1,
+                            Email = "adam.urbanek@outlook.cz",
+                            IsAdmin = false,
+                            Password = "heslo",
+                            PlayerID = 0,
+                            UserName = "Adamek"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -472,15 +559,28 @@ namespace stinsily.Server.Migrations
                     b.Navigation("ToScene");
                 });
 
-            modelBuilder.Entity("stinsily.Server.Models.Player", b =>
+            modelBuilder.Entity("stinsily.Server.Models.Players", b =>
                 {
-                    b.HasOne("stinsily.Server.Models.Users", "User")
+                    b.HasOne("stinsily.Server.Models.Scenes", "CurrentScene")
                         .WithMany()
-                        .HasForeignKey("UserID")
+                        .HasForeignKey("CurrentSceneID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("stinsily.Server.Models.Users", "User")
+                        .WithOne("Player")
+                        .HasForeignKey("stinsily.Server.Models.Players", "UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CurrentScene");
+
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("stinsily.Server.Models.Users", b =>
+                {
+                    b.Navigation("Player");
                 });
 #pragma warning restore 612, 618
         }

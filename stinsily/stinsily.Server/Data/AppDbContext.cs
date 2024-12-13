@@ -13,7 +13,7 @@ namespace stinsily.Server.Data
         }
 
         public new DbSet<Users> Users { get; set; }
-        public DbSet<Player> Players { get; set; }
+        public DbSet<Players> Players { get; set; }
         public DbSet<Scenes> Scenes { get; set; }
         public DbSet<Items> Items { get; set; }
         public DbSet<ChoicesConnections> ChoicesConnections { get; set; }
@@ -22,7 +22,7 @@ namespace stinsily.Server.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Users>().ToTable("Users");
-            modelBuilder.Entity<Player>().ToTable("Players");
+            modelBuilder.Entity<Players>().ToTable("Players");
             modelBuilder.Entity<Scenes>().ToTable("Scenes");
             modelBuilder.Entity<Items>().ToTable("Items");
             modelBuilder.Entity<ChoicesConnections>().ToTable("ChoicesConnections");
@@ -46,10 +46,28 @@ namespace stinsily.Server.Data
                 SecurityStamp = Guid.NewGuid().ToString("D")
             };
             adminUser.PasswordHash = hasher.HashPassword(adminUser, adminPassword);
-
             modelBuilder.Entity<IdentityUser>().HasData(adminUser);
-
             modelBuilder.Entity<IdentityUserLogin<string>>().HasKey(login => new { login.LoginProvider, login.ProviderKey });
+
+            modelBuilder.Entity<Users>().HasData(new Users { UserID = 1, UserName = "Adamek", Email = "adam.urbanek@outlook.cz", IsAdmin = false, Password = "heslo" });
+            modelBuilder.Entity<Players>().HasData(new Players { PlayerID = 1, UserID = 1, CurrentSceneID = 1, ItemID = 1, Health = 100, Force = 25, ObiWanRelationship = 50 });
+            modelBuilder.Entity<Scenes>().HasData(
+                new Scenes { SceneID = 1, ConnectionID = 1, Title = "Scena1", Description = "trenink" },
+                new Scenes { SceneID = 2, ConnectionID = 2, Title = "Scena2", Description = "rozhodnuti pristupu" }
+            );
+            modelBuilder.Entity<Items>().HasData(
+                new Items { ItemID = 1, Name = "nic", Description = "nic", HealthModifier = 0, ForceModifier = 0, ObiWanRelationshipModifier = 0 },
+                new Items { ItemID = 2, Name = "Svetelny mec", Description = "mec", HealthModifier = 0, ForceModifier = 10, ObiWanRelationshipModifier = 0});
+            modelBuilder.Entity<ChoicesConnections>().HasData(new ChoicesConnections { ChoicesConnectionsID = 1, SceneFromID = 1, SceneToID = 2, Text = "prechod na 2. scenu", Effect = "pokracovani v pribehu", RequiredItemID = 1, MiniGameID = 1});
+            modelBuilder.Entity<MiniGames>().HasData(
+                new MiniGames { MiniGameID = 1, Description = "nic" },
+                new MiniGames { MiniGameID = 2, Description = "mini hra 1" }
+            );
+
+            modelBuilder.Entity<Players>()
+                .HasOne(p => p.User)
+                .WithOne(u => u.Player)
+                .HasForeignKey<Players>(p => p.UserID);
         }
 
         public void UpdateAdminUser(string email, string password)
@@ -75,7 +93,6 @@ namespace stinsily.Server.Data
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlite("Data Source=gamebook.db");
-            optionsBuilder.ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning));
         }
     }
 }
