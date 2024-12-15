@@ -11,8 +11,8 @@ using stinsily.Server.Data;
 namespace stinsily.Server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241213201329_endpoints")]
-    partial class endpoints
+    [Migration("20241215181947_RemoveUserSeeding")]
+    partial class RemoveUserSeeding
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -131,24 +131,6 @@ namespace stinsily.Server.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "admin-user-id",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "c294e0b4-5b10-4de1-9526-5163b849021f",
-                            Email = "admin@admin.cz",
-                            EmailConfirmed = true,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "ADMIN@ADMIN.CZ",
-                            NormalizedUserName = "ADMIN@ADMIN.CZ",
-                            PasswordHash = "AQAAAAIAAYagAAAAEGvplTymXvd4l/OQfO3aFgf+4qPkzn2DsFSvDyC6pZi0dU5HEKRbSYMVDl1LMa5HzA==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "b6095ef4-f49f-45c8-a678-c9bd5b9201a9",
-                            TwoFactorEnabled = false,
-                            UserName = "admin@admin.cz"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -392,18 +374,6 @@ namespace stinsily.Server.Migrations
                         .IsUnique();
 
                     b.ToTable("Players", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            PlayerID = 1,
-                            CurrentSceneID = 1,
-                            Force = 25,
-                            Health = 100,
-                            ItemID = 1,
-                            ObiWanRelationship = 50,
-                            UserID = 1
-                        });
                 });
 
             modelBuilder.Entity("stinsily.Server.Models.Scenes", b =>
@@ -461,9 +431,6 @@ namespace stinsily.Server.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("PlayerID")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("UserName")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -471,17 +438,6 @@ namespace stinsily.Server.Migrations
                     b.HasKey("UserID");
 
                     b.ToTable("Users", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            UserID = 1,
-                            Email = "adam.urbanek@outlook.cz",
-                            IsAdmin = false,
-                            Password = "heslo",
-                            PlayerID = 0,
-                            UserName = "Adamek"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

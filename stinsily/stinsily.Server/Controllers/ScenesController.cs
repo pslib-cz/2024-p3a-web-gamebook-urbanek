@@ -1,6 +1,6 @@
-﻿using System.Security.Claims;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using stinsily.Server.Data;
 using stinsily.Server.Models;
@@ -41,101 +41,104 @@ namespace stinsily.Server.Controllers
             return scenes;
         }
 
+        [Authorize]
         [HttpGet("current-scene")]
         public async Task<IActionResult> GetCurrentScene()
         {
-            var identityUser = await _context.Users.OfType<IdentityUser>()
-                .FirstOrDefaultAsync(u => u.Id == User.FindFirstValue(ClaimTypes.NameIdentifier));
-            
-            if (identityUser == null) return Unauthorized();
+            try
+            {
+                var user = await _userManager.GetUserAsync(User);
+                var player = await _context.Players
+                    .Include(p => p.CurrentScene)
+                    .FirstOrDefaultAsync(p => p.UserID == int.Parse(user.Id));
 
-            var player = await _context.Players
-                .Include(p => p.CurrentScene)
-                .FirstOrDefaultAsync(p => p.UserID == int.Parse(identityUser.Id));
+                if (player?.CurrentScene == null)
+                {
+                    // If no current scene, set it to Scene1
+                    var defaultScene = await _context.Scenes.FirstOrDefaultAsync(s => s.SceneID == 1);
+                    if (defaultScene == null)
+                        return NotFound("Default scene not found");
 
-            if (player == null) return NotFound("Player not found");
+                    player.CurrentScene = defaultScene;
+                    await _context.SaveChangesAsync();
+                }
 
-            return Ok(player.CurrentScene);
+                var connections = await _context.ChoicesConnections
+                    .Where(c => c.SceneFromID == player.CurrentScene.SceneID)
+                    .ToListAsync();
+
+                var response = new
+                {
+                    scene = player.CurrentScene,
+                    availableConnections = connections.Select(c => new
+                    {
+                        connectionId = c.ChoicesConnectionsID,
+                        text = c.Text,
+                        nextSceneId = c.SceneToID
+                    })
+                };
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
+        [Authorize]
         [HttpGet("available-scenes")]
         public async Task<IActionResult> GetAvailableScenes()
         {
-            var identityUser = await _context.Users.OfType<IdentityUser>()
-                .FirstOrDefaultAsync(u => u.Id == User.FindFirstValue(ClaimTypes.NameIdentifier));
-
-            if (identityUser == null) return Unauthorized();
-
+            var user = await _userManager.GetUserAsync(User);
             var player = await _context.Players
                 .Include(p => p.CurrentScene)
-                .FirstOrDefaultAsync(p => p.UserID == int.Parse(identityUser.Id));
+                .Include(p => p.ItemID)
+                .FirstOrDefaultAsync(p => p.UserID == int.Parse(user.Id));
 
-            if (player == null) return NotFound("Player not found");
-
-            if (player.CurrentScene == null) return NotFound("Current scene not found");
+            if (player?.CurrentScene == null)
+                return NotFound("Current scene not found");
 
             var availableScenes = await _context.ChoicesConnections
                 .Where(cc => cc.SceneFromID == player.CurrentScene.SceneID)
+                .Where(cc => cc.RequiredItemID == null || 
+                            player.ItemID == cc.RequiredItemID)
                 .Select(cc => new
                 {
-                    SceneTo = cc.SceneToID,
-                    Text = cc.Text,
-                    RequiredItemID = cc.RequiredItemID
+                    SceneID = cc.SceneToID,
+                    Text = cc.Text
                 })
                 .ToListAsync();
 
             return Ok(availableScenes);
         }
 
-        [HttpGet("options")]
-        public async Task<IActionResult> GetSceneOptions()
+        [Authorize]
+        [HttpGet("options/{sceneId}")]
+        public async Task<IActionResult> GetSceneOptions(int sceneId)
         {
-            var identityUser = await _context.Users.OfType<IdentityUser>()
-                .FirstOrDefaultAsync(u => u.Id == User.FindFirstValue(ClaimTypes.NameIdentifier));
-            
-            if (identityUser == null) return Unauthorized();
-
+            var user = await _userManager.GetUserAsync(User);
             var player = await _context.Players
-                .Include(p => p.CurrentScene)
-                .FirstOrDefaultAsync(p => p.UserID == int.Parse(identityUser.Id));
+                .Include(p => p.ItemID)
+                .FirstOrDefaultAsync(p => p.UserID == int.Parse(user.Id));
 
-            if (player == null) return NotFound("Player not found");
-
-            var choices = await _context.ChoicesConnections
-                .Where(cc => cc.SceneFromID == player.CurrentSceneID)
+            var options = await _context.ChoicesConnections
+                .Where(cc => cc.SceneFromID == sceneId)
+                .Where(cc => cc.RequiredItemID == null || 
+                            player.ItemID == cc.RequiredItemID)
                 .Select(cc => new
                 {
-                    cc.SceneToID,
-                    cc.Text,
-                    cc.RequiredItemID,
-                    MiniGame = _context.MiniGames.FirstOrDefault(mg => mg.MiniGameID == cc.MiniGameID)
+                    optionId = cc.ChoicesConnectionsID,
+                    text = cc.Text,
+                    nextSceneId = cc.SceneToID
                 })
                 .ToListAsync();
 
-            return Ok(new
-            {
-                CurrentScene = new
-                {
-                    player.CurrentScene.SceneID,
-                    player.CurrentScene.Title,
-                    player.CurrentScene.Description
-                },
-                Options = choices.Select(choice => new
-                {
-                    TargetSceneID = choice.SceneToID,
-                    ActionText = choice.Text,
-                    RequiredItemID = choice.RequiredItemID,
-                    MiniGame = choice.MiniGame != null ? new
-                    {
-                        choice.MiniGame.MiniGameID,
-                        choice.MiniGame.Description
-                    } : null
-                })
-            });
+            return Ok(options);
         }
 
-
         // PUT: api/Scenes/5
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutScenes(int id, Scenes scenes)
         {
@@ -167,6 +170,7 @@ namespace stinsily.Server.Controllers
 
         // POST: api/Scenes
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<Scenes>> PostScenes(Scenes scenes)
         {
@@ -176,46 +180,31 @@ namespace stinsily.Server.Controllers
             return CreatedAtAction("GetScenes", new { id = scenes.SceneID }, scenes);
         }
 
+        [Authorize]
         [HttpPost("move-to-scene")]
-        public async Task<IActionResult> MoveToScene([FromBody] int targetSceneId)
+        public async Task<IActionResult> MoveToScene([FromBody] int nextSceneId)
         {
-            var identityUser = await _context.Users.OfType<IdentityUser>()
-                .FirstOrDefaultAsync(u => u.Id == User.FindFirstValue(ClaimTypes.NameIdentifier));
-
-            if (identityUser == null) return Unauthorized();
-
+            var user = await _userManager.GetUserAsync(User);
             var player = await _context.Players
                 .Include(p => p.CurrentScene)
                 .Include(p => p.ItemID)
-                .Include(p => p.Health)
-                .Include(p => p.Force)
-                .Include(p => p.ObiWanRelationship)
-                .FirstOrDefaultAsync(p => p.UserID == int.Parse(identityUser.Id));
+                .FirstOrDefaultAsync(p => p.UserID == int.Parse(user.Id));
 
-            if (player == null) return NotFound("Player not found");
+            if (player == null)
+                return NotFound("Player not found");
 
-            var connection = await _context.ChoicesConnections
-                .FirstOrDefaultAsync(cc => cc.SceneFromID == player.CurrentScene.SceneID && cc.SceneToID == targetSceneId);
+            var nextScene = await _context.Scenes.FindAsync(nextSceneId);
+            if (nextScene == null)
+                return NotFound("Scene not found");
 
-            if (connection == null) return BadRequest("Invalid target scene");
-
-            var playerItems = await _context.Items
-                .Where(i => i.ItemID == player.ItemID)
-                .ToListAsync();
-
-            if (connection.RequiredItemID != null &&
-                !playerItems.Any(i => i.ItemID == connection.RequiredItemID))
-            {
-                return BadRequest("You do not have the required item to move to this scene");
-            }
-
-            player.CurrentSceneID = targetSceneId;
+            player.CurrentScene = nextScene;
             await _context.SaveChangesAsync();
 
-            return Ok(new { Message = "Scene changed successfully" });
+            return Ok();
         }
 
         // DELETE: api/Scenes/5
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteScenes(int id)
         {

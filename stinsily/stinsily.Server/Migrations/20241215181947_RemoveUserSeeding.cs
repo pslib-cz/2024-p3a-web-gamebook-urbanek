@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace stinsily.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class endpoints : Migration
+    public partial class RemoveUserSeeding : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -103,9 +103,8 @@ namespace stinsily.Server.Migrations
                 {
                     UserID = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    PlayerID = table.Column<int>(type: "INTEGER", nullable: false),
-                    UserName = table.Column<string>(type: "TEXT", nullable: false),
                     Email = table.Column<string>(type: "TEXT", nullable: false),
+                    UserName = table.Column<string>(type: "TEXT", nullable: false),
                     Password = table.Column<string>(type: "TEXT", nullable: false),
                     IsAdmin = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
@@ -291,11 +290,6 @@ namespace stinsily.Server.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "admin-user-id", 0, "c294e0b4-5b10-4de1-9526-5163b849021f", "admin@admin.cz", true, false, null, "ADMIN@ADMIN.CZ", "ADMIN@ADMIN.CZ", "AQAAAAIAAYagAAAAEGvplTymXvd4l/OQfO3aFgf+4qPkzn2DsFSvDyC6pZi0dU5HEKRbSYMVDl1LMa5HzA==", null, false, "b6095ef4-f49f-45c8-a678-c9bd5b9201a9", false, "admin@admin.cz" });
-
-            migrationBuilder.InsertData(
                 table: "Items",
                 columns: new[] { "ItemID", "Description", "ForceModifier", "HealthModifier", "Name", "ObiWanRelationshipModifier" },
                 values: new object[,]
@@ -323,19 +317,9 @@ namespace stinsily.Server.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Users",
-                columns: new[] { "UserID", "Email", "IsAdmin", "Password", "PlayerID", "UserName" },
-                values: new object[] { 1, "adam.urbanek@outlook.cz", false, "heslo", 0, "Adamek" });
-
-            migrationBuilder.InsertData(
                 table: "ChoicesConnections",
                 columns: new[] { "ChoicesConnectionsID", "Effect", "FromSceneSceneID", "MiniGameID", "RequiredItemID", "SceneFromID", "SceneToID", "Text", "ToSceneSceneID" },
                 values: new object[] { 1, "pokracovani v pribehu", null, 1, 1, 1, 2, "prechod na 2. scenu", null });
-
-            migrationBuilder.InsertData(
-                table: "Players",
-                columns: new[] { "PlayerID", "CurrentSceneID", "Force", "Health", "ItemID", "ObiWanRelationship", "UserID" },
-                values: new object[] { 1, 1, 25, 100, 1, 50, 1 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

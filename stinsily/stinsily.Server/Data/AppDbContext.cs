@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using stinsily.Server.Models;
 
 namespace stinsily.Server.Data
@@ -29,36 +28,29 @@ namespace stinsily.Server.Data
             modelBuilder.Entity<MiniGames>().ToTable("MiniGames");
             base.OnModelCreating(modelBuilder);
 
-            // Seed admin user if it doesn't already exist
-            var adminUserId = "admin-user-id";
-            var adminEmail = "admin@admin.cz";
-            var adminPassword = "admin";
-
-            var hasher = new PasswordHasher<IdentityUser>();
-            var adminUser = new IdentityUser
-            {
-                Id = adminUserId,
-                UserName = adminEmail,
-                NormalizedUserName = adminEmail.ToUpper(),
-                Email = adminEmail,
-                NormalizedEmail = adminEmail.ToUpper(),
-                EmailConfirmed = true,
-                SecurityStamp = Guid.NewGuid().ToString("D")
-            };
-            adminUser.PasswordHash = hasher.HashPassword(adminUser, adminPassword);
-            modelBuilder.Entity<IdentityUser>().HasData(adminUser);
-            modelBuilder.Entity<IdentityUserLogin<string>>().HasKey(login => new { login.LoginProvider, login.ProviderKey });
-
-            modelBuilder.Entity<Users>().HasData(new Users { UserID = 1, UserName = "Adamek", Email = "adam.urbanek@outlook.cz", IsAdmin = false, Password = "heslo" });
-            modelBuilder.Entity<Players>().HasData(new Players { PlayerID = 1, UserID = 1, CurrentSceneID = 1, ItemID = 1, Health = 100, Force = 25, ObiWanRelationship = 50 });
+            // Only seed game data
             modelBuilder.Entity<Scenes>().HasData(
                 new Scenes { SceneID = 1, ConnectionID = 1, Title = "Scena1", Description = "trenink" },
                 new Scenes { SceneID = 2, ConnectionID = 2, Title = "Scena2", Description = "rozhodnuti pristupu" }
             );
+            
             modelBuilder.Entity<Items>().HasData(
                 new Items { ItemID = 1, Name = "nic", Description = "nic", HealthModifier = 0, ForceModifier = 0, ObiWanRelationshipModifier = 0 },
-                new Items { ItemID = 2, Name = "Svetelny mec", Description = "mec", HealthModifier = 0, ForceModifier = 10, ObiWanRelationshipModifier = 0});
-            modelBuilder.Entity<ChoicesConnections>().HasData(new ChoicesConnections { ChoicesConnectionsID = 1, SceneFromID = 1, SceneToID = 2, Text = "prechod na 2. scenu", Effect = "pokracovani v pribehu", RequiredItemID = 1, MiniGameID = 1});
+                new Items { ItemID = 2, Name = "Svetelny mec", Description = "mec", HealthModifier = 0, ForceModifier = 10, ObiWanRelationshipModifier = 0}
+            );
+            
+            modelBuilder.Entity<ChoicesConnections>().HasData(
+                new ChoicesConnections { 
+                    ChoicesConnectionsID = 1, 
+                    SceneFromID = 1, 
+                    SceneToID = 2, 
+                    Text = "prechod na 2. scenu", 
+                    Effect = "pokracovani v pribehu", 
+                    RequiredItemID = 1, 
+                    MiniGameID = 1
+                }
+            );
+            
             modelBuilder.Entity<MiniGames>().HasData(
                 new MiniGames { MiniGameID = 1, Description = "nic" },
                 new MiniGames { MiniGameID = 2, Description = "mini hra 1" }

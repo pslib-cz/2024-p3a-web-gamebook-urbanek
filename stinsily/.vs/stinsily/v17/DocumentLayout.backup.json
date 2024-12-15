@@ -7,44 +7,28 @@
       "RelativeMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|solutionrelative:stinsily.server\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|c:\\users\\adamu\\documents\\github\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.server\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|solutionrelative:stinsily.server\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|c:\\users\\adamu\\documents\\github\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.server\\data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|solutionrelative:stinsily.server\\data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|c:\\users\\adamu\\documents\\github\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.server\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|solutionrelative:stinsily.server\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|c:\\users\\adamu\\documents\\github\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.server\\controllers\\choicesconnectionscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|solutionrelative:stinsily.server\\controllers\\choicesconnectionscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|c:\\users\\adamu\\documents\\github\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.server\\controllers\\itemscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|solutionrelative:stinsily.server\\controllers\\itemscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|c:\\users\\adamu\\documents\\github\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.server\\controllers\\scenescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|solutionrelative:stinsily.server\\controllers\\scenescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|c:\\users\\adamu\\documents\\github\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.server\\models\\choicesconnections.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|solutionrelative:stinsily.server\\models\\choicesconnections.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|c:\\users\\adamu\\documents\\github\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.server\\controllers\\playerscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|solutionrelative:stinsily.server\\controllers\\playerscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|c:\\users\\adamu\\documents\\github\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.server\\models\\items.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|solutionrelative:stinsily.server\\models\\items.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|c:\\users\\adamu\\documents\\github\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.server\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|solutionrelative:stinsily.server\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|c:\\users\\adamu\\documents\\github\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.server\\models\\scenes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|solutionrelative:stinsily.server\\models\\scenes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|c:\\users\\adamu\\documents\\github\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.server\\controllers\\choicesconnectionscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|solutionrelative:stinsily.server\\controllers\\choicesconnectionscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|c:\\users\\adamu\\documents\\github\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.server\\models\\players.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|solutionrelative:stinsily.server\\models\\players.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|c:\\users\\adamu\\documents\\github\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.server\\models\\users.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|solutionrelative:stinsily.server\\models\\users.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -54,11 +38,24 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Users.cs",
+              "DocumentMoniker": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Models\\Users.cs",
+              "RelativeDocumentMoniker": "stinsily.Server\\Models\\Users.cs",
+              "ToolTip": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Models\\Users.cs",
+              "RelativeToolTip": "stinsily.Server\\Models\\Users.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-15T14:01:05.692Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -68,40 +65,53 @@
               "RelativeDocumentMoniker": "stinsily.Server\\Controllers\\AuthController.cs",
               "ToolTip": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Controllers\\AuthController.cs",
               "RelativeToolTip": "stinsily.Server\\Controllers\\AuthController.cs",
-              "ViewState": "AgIAAAsAAAAAAAAAAAAcwCEAAABAAAAAAAAAAA==",
+              "ViewState": "AgIAAHYAAAAAAAAAAAAAwNUAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-13T21:21:28.627Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "ItemsController.cs",
-              "DocumentMoniker": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Controllers\\ItemsController.cs",
-              "RelativeDocumentMoniker": "stinsily.Server\\Controllers\\ItemsController.cs",
-              "ToolTip": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Controllers\\ItemsController.cs",
-              "RelativeToolTip": "stinsily.Server\\Controllers\\ItemsController.cs",
-              "ViewState": "AgIAABMAAAAAAAAAAAA7wCkAAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-13T21:06:53.583Z",
+              "WhenOpened": "2024-12-15T13:47:31.567Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
+              "Title": "AppDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Data\\AppDbContext.cs",
+              "RelativeDocumentMoniker": "stinsily.Server\\Data\\AppDbContext.cs",
+              "ToolTip": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Data\\AppDbContext.cs",
+              "RelativeToolTip": "stinsily.Server\\Data\\AppDbContext.cs",
+              "ViewState": "AgIAABgAAAAAAAAAAAAIwDEAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-08T11:55:30.59Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Players.cs",
+              "DocumentMoniker": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Models\\Players.cs",
+              "RelativeDocumentMoniker": "stinsily.Server\\Models\\Players.cs",
+              "ToolTip": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Models\\Players.cs",
+              "RelativeToolTip": "stinsily.Server\\Models\\Players.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-13T21:33:55.196Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "UsersController.cs",
               "DocumentMoniker": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Controllers\\UsersController.cs",
               "RelativeDocumentMoniker": "stinsily.Server\\Controllers\\UsersController.cs",
               "ToolTip": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Controllers\\UsersController.cs",
               "RelativeToolTip": "stinsily.Server\\Controllers\\UsersController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB8AAAAdAAAAAAAAAA==",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAA0AAAA0AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-13T20:06:44.39Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 2,
               "Title": "PlayersController.cs",
               "DocumentMoniker": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Controllers\\PlayersController.cs",
               "RelativeDocumentMoniker": "stinsily.Server\\Controllers\\PlayersController.cs",
@@ -120,87 +130,9 @@
               "RelativeDocumentMoniker": "stinsily.Server\\Controllers\\ChoicesConnectionsController.cs",
               "ToolTip": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Controllers\\ChoicesConnectionsController.cs",
               "RelativeToolTip": "stinsily.Server\\Controllers\\ChoicesConnectionsController.cs",
-              "ViewState": "AgIAADsAAAAAAAAAAAAuwAcAAAAWAAAAAAAAAA==",
+              "ViewState": "AgIAAC8AAAAAAAAAAAA8wAcAAAAWAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-13T20:05:41.962Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "Items.cs",
-              "DocumentMoniker": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Models\\Items.cs",
-              "RelativeDocumentMoniker": "stinsily.Server\\Models\\Items.cs",
-              "ToolTip": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Models\\Items.cs",
-              "RelativeToolTip": "stinsily.Server\\Models\\Items.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-13T19:56:09.432Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "ChoicesConnections.cs",
-              "DocumentMoniker": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Models\\ChoicesConnections.cs",
-              "RelativeDocumentMoniker": "stinsily.Server\\Models\\ChoicesConnections.cs",
-              "ToolTip": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Models\\ChoicesConnections.cs",
-              "RelativeToolTip": "stinsily.Server\\Models\\ChoicesConnections.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-13T19:50:32.32Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Program.cs",
-              "RelativeDocumentMoniker": "stinsily.Server\\Program.cs",
-              "ToolTip": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Program.cs",
-              "RelativeToolTip": "stinsily.Server\\Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAC4AAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-06T19:43:51.634Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "ScenesController.cs",
-              "DocumentMoniker": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Controllers\\ScenesController.cs",
-              "RelativeDocumentMoniker": "stinsily.Server\\Controllers\\ScenesController.cs",
-              "ToolTip": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Controllers\\ScenesController.cs",
-              "RelativeToolTip": "stinsily.Server\\Controllers\\ScenesController.cs",
-              "ViewState": "AgIAALEAAAAAAAAAAAAYwNEAAAAhAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-11T11:07:06.537Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "Scenes.cs",
-              "DocumentMoniker": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Models\\Scenes.cs",
-              "RelativeDocumentMoniker": "stinsily.Server\\Models\\Scenes.cs",
-              "ToolTip": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Models\\Scenes.cs",
-              "RelativeToolTip": "stinsily.Server\\Models\\Scenes.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAASAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-11T10:54:41.412Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "AppDbContext.cs",
-              "DocumentMoniker": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Data\\AppDbContext.cs",
-              "RelativeDocumentMoniker": "stinsily.Server\\Data\\AppDbContext.cs",
-              "ToolTip": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Data\\AppDbContext.cs",
-              "RelativeToolTip": "stinsily.Server\\Data\\AppDbContext.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAF4AAABAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-08T11:55:30.59Z",
               "EditorCaption": ""
             }
           ]

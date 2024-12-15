@@ -4,6 +4,9 @@ using stinsily.Server.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add services to the container.
+builder.Services.AddControllers();
+
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite("Data Source=gamebook.db"));
 
@@ -46,7 +49,8 @@ builder.Services.AddCors(options =>
         builder =>
         {
             builder
-                .WithOrigins("https://localhost:50701") // port vašeho frontendu
+                .WithOrigins("https://localhost:50701",
+                    "http://localhost:50701") // port vašeho frontendu
                 .AllowAnyMethod()
                 .AllowAnyHeader()
                 .AllowCredentials();
