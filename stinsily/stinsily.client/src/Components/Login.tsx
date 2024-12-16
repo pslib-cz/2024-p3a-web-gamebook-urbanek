@@ -1,9 +1,11 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const Login = ({ onLoginSuccess }: { onLoginSuccess: () => void }) => {
+const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const navigate = useNavigate();
 
     const seedUsers = async () => {
         try {
@@ -38,8 +40,8 @@ const Login = ({ onLoginSuccess }: { onLoginSuccess: () => void }) => {
             }
 
             const data = await response.json();
-            localStorage.setItem('token', data.token);
-            onLoginSuccess();
+            console.log('Login response headers:', response.headers);
+            navigate('/scenes/1');
         } catch (error) {
             setError('Invalid credentials');
             console.error('Login error:', error);

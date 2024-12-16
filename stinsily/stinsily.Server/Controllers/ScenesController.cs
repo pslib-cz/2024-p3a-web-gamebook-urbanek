@@ -27,7 +27,6 @@ namespace stinsily.Server.Controllers
             return await _context.Scenes.ToListAsync();
         }
 
-        // GET: api/Scenes/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Scenes>> GetScenes(int id)
         {
@@ -39,51 +38,6 @@ namespace stinsily.Server.Controllers
             }
 
             return scenes;
-        }
-
-        [Authorize]
-        [HttpGet("current-scene")]
-        public async Task<IActionResult> GetCurrentScene()
-        {
-            try
-            {
-                var user = await _userManager.GetUserAsync(User);
-                var player = await _context.Players
-                    .Include(p => p.CurrentScene)
-                    .FirstOrDefaultAsync(p => p.UserID == int.Parse(user.Id));
-
-                if (player?.CurrentScene == null)
-                {
-                    // If no current scene, set it to Scene1
-                    var defaultScene = await _context.Scenes.FirstOrDefaultAsync(s => s.SceneID == 1);
-                    if (defaultScene == null)
-                        return NotFound("Default scene not found");
-
-                    player.CurrentScene = defaultScene;
-                    await _context.SaveChangesAsync();
-                }
-
-                var connections = await _context.ChoicesConnections
-                    .Where(c => c.SceneFromID == player.CurrentScene.SceneID)
-                    .ToListAsync();
-
-                var response = new
-                {
-                    scene = player.CurrentScene,
-                    availableConnections = connections.Select(c => new
-                    {
-                        connectionId = c.ChoicesConnectionsID,
-                        text = c.Text,
-                        nextSceneId = c.SceneToID
-                    })
-                };
-
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
         }
 
         [Authorize]

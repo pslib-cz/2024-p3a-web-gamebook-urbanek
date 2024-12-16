@@ -4,7 +4,7 @@ export default function HomePage() {
     const navigate = useNavigate();
 
     const handleStart = () => {
-        navigate("/scenes");
+        navigate("/scenes/1");
     };
 
     return (

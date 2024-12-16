@@ -46,19 +46,14 @@ namespace stinsily.Server.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] CustomLoginRequest request)
         {
-            var result = await _signInManager.PasswordSignInAsync(
-                request.Email,
-                request.Password,
-                isPersistent: false,
-                lockoutOnFailure: false);
+            var user = await _userManager.FindByEmailAsync(request.Email);
+            if (user == null)
+                return Unauthorized("Invalid credentials");
 
+            var result = await _signInManager.PasswordSignInAsync(user, request.Password, isPersistent: true, lockoutOnFailure: false);
             if (result.Succeeded)
             {
-                var user = await _userManager.FindByEmailAsync(request.Email);
-                // Generate simple token for now
-                var token = Guid.NewGuid().ToString();
-                
-                return Ok(new { token = token, message = "Login successful" });
+                return Ok(new { success = true });
             }
 
             return Unauthorized("Invalid credentials");
@@ -213,7 +208,7 @@ namespace stinsily.Server.Controllers
 
     public class CustomLoginRequest
     {
-        public string Email { get; set; } = string.Empty;
-        public string Password { get; set; } = string.Empty;
+        public string Email { get; set; }
+        public string Password { get; set; }
     }
 }
