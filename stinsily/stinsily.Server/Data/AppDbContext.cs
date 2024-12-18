@@ -32,6 +32,7 @@ namespace stinsily.Server.Data
             modelBuilder.Entity<Scenes>().HasData(
                 new Scenes { SceneID = 1, ConnectionID = 1, Title = "Scena1", Description = "trenink" },
                 new Scenes { SceneID = 2, ConnectionID = 2, Title = "Scena2", Description = "rozhodnuti pristupu" }
+                new Scenes { SceneID = 3, ConnectionID = 3, Title = "Scena3", Description = "podmineny postup" }
             );
             
             modelBuilder.Entity<Items>().HasData(
@@ -47,6 +48,16 @@ namespace stinsily.Server.Data
                     Text = "prechod na 2. scenu", 
                     Effect = "pokracovani v pribehu", 
                     RequiredItemID = 1, 
+                    MiniGameID = 1
+                },
+                new ChoicesConnections
+                {
+                    ChoicesConnectionsID = 2,
+                    SceneFromID = 2,
+                    SceneToID = 3,
+                    Text = "Postup do další místnosti (potřebujete světelný meč)",
+                    Effect = "podmínený postup",
+                    RequiredItemID = 2,
                     MiniGameID = 1
                 }
             );
