@@ -60,7 +60,7 @@
               "RelativeDocumentMoniker": "stinsily.Server\\Data\\AppDbContext.cs",
               "ToolTip": "C:\\Users\\adam.urbanek.022\\source\\repos\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Data\\AppDbContext.cs",
               "RelativeToolTip": "stinsily.Server\\Data\\AppDbContext.cs",
-              "ViewState": "AgIAABUAAAAAAAAAAAAgwDMAAAASAAAAAAAAAA==",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAuwCgAAAAOAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-08T11:55:30.59Z",
               "IsPinned": true,
@@ -80,8 +80,7 @@
               "RelativeToolTip": "stinsily.client\\src\\Components\\Scene.tsx",
               "ViewState": "AgIAAAMAAAAAAAAAAAA6wCgAAAAnAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
-              "WhenOpened": "2024-12-18T10:02:02.337Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-18T10:02:02.337Z"
             },
             {
               "$type": "Document",
@@ -93,8 +92,7 @@
               "RelativeToolTip": "stinsily.Server\\Controllers\\ScenesController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-18T09:59:52.664Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-18T09:59:52.664Z"
             },
             {
               "$type": "Document",
@@ -106,8 +104,7 @@
               "RelativeToolTip": "stinsily.Server\\Models\\Scenes.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-18T09:58:55.691Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-18T09:58:55.691Z"
             },
             {
               "$type": "Document",
