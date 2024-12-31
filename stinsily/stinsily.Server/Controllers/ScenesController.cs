@@ -44,51 +44,79 @@ namespace stinsily.Server.Controllers
         [HttpGet("available-scenes")]
         public async Task<IActionResult> GetAvailableScenes()
         {
-            var user = await _userManager.GetUserAsync(User);
-            var player = await _context.Players
-                .Include(p => p.CurrentScene)
-                .Include(p => p.ItemID)
-                .FirstOrDefaultAsync(p => p.UserID == int.Parse(user.Id));
+            try
+            {
+                var user = await _userManager.GetUserAsync(User);
+                if (user == null)
+                    return Unauthorized("User not authenticated");
 
-            if (player?.CurrentScene == null)
-                return NotFound("Current scene not found");
+                var player = await _context.Players
+                    .Include(p => p.CurrentScene)
+                    .Include(p => p.ItemID)
+                    .FirstOrDefaultAsync(p => p.UserID == int.Parse(user.Id));
 
-            var availableScenes = await _context.ChoicesConnections
-                .Where(cc => cc.SceneFromID == player.CurrentScene.SceneID)
-                .Where(cc => cc.RequiredItemID == null || 
-                            player.ItemID == cc.RequiredItemID)
-                .Select(cc => new
-                {
-                    SceneID = cc.SceneToID,
-                    Text = cc.Text
-                })
-                .ToListAsync();
+                if (player == null)
+                    return NotFound("Player not found");
 
-            return Ok(availableScenes);
+                if (player.CurrentScene == null)
+                    return NotFound("Current scene not found");
+
+                var availableScenes = await _context.ChoicesConnections
+                    .Where(cc => cc.SceneFromID == player.CurrentScene.SceneID)
+                    .Where(cc => cc.RequiredItemID == null || 
+                                player.ItemID == cc.RequiredItemID)
+                    .Select(cc => new
+                    {
+                        SceneID = cc.SceneToID,
+                        Text = cc.Text
+                    })
+                    .ToListAsync();
+
+                return Ok(availableScenes);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
-        [Authorize]
-        [HttpGet("options/{sceneId}")]
-        public async Task<IActionResult> GetSceneOptions(int sceneId)
+ 
+        [HttpGet("options/{id}")]
+        public async Task<ActionResult<IEnumerable<object>>> GetSceneOptions(int id)
         {
-            var user = await _userManager.GetUserAsync(User);
-            var player = await _context.Players
-                .Include(p => p.ItemID)
-                .FirstOrDefaultAsync(p => p.UserID == int.Parse(user.Id));
-
-            var options = await _context.ChoicesConnections
-                .Where(cc => cc.SceneFromID == sceneId)
-                .Where(cc => cc.RequiredItemID == null || 
-                            player.ItemID == cc.RequiredItemID)
-                .Select(cc => new
+            try
+            {
+                if (id <= 0)
                 {
-                    optionId = cc.ChoicesConnectionsID,
-                    text = cc.Text,
-                    nextSceneId = cc.SceneToID
-                })
-                .ToListAsync();
+                    return BadRequest("Invalid scene ID");
+                }
 
-            return Ok(options);
+                // First check if the scene exists
+                var sceneExists = await _context.Scenes.AnyAsync(s => s.SceneID == id);
+                if (!sceneExists)
+                {
+                    return NotFound($"Scene {id} does not exist");
+                }
+
+                var connections = await _context.ChoicesConnections
+                    .Where(c => c.SceneFromID == id)
+                    .ToListAsync();
+
+                // Return empty array instead of 404 when there are no choices
+                var options = connections.Select(c => new
+                {
+                    optionId = c.ChoicesConnectionsID,
+                    text = c.Text ?? "Continue...",
+                    nextSceneId = c.SceneToID
+                }).ToList();
+
+                return Ok(options); // This will return [] if there are no options
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in GetSceneOptions: {ex.Message}");
+                return StatusCode(500, "Error fetching scene options");
+            }
         }
 
         // PUT: api/Scenes/5

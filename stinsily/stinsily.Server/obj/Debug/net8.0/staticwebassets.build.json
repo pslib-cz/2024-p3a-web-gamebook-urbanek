@@ -1,13 +1,13 @@
 {
   "Version": 1,
-  "Hash": "BK8ZTUPpWmBjF+FvD1va8zRUzaw4BpwqB9Dh9UqR1iI=",
+  "Hash": "7Hn6etferOz4dZWRWBCooreRiyl6LS1s3eB9I014uIo=",
   "Source": "stinsily.Server",
   "BasePath": "_content/stinsily.Server",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [
     {
-      "Identity": "C:\\Users\\adam.urbanek.022\\source\\repos\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.client\\stinsily.client.esproj",
+      "Identity": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.client\\stinsily.client.esproj",
       "Version": 2,
       "Source": "stinsily.client",
       "GetPublishAssetsTargets": "GetCurrentProjectPublishStaticWebAssetItems",
@@ -19,5 +19,6 @@
     }
   ],
   "DiscoveryPatterns": [],
-  "Assets": []
+  "Assets": [],
+  "Endpoints": []
 }

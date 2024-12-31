@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using stinsily.Server.Data;
 using stinsily.Server.Models;
-using System.Linq;
 
 namespace stinsily.Server.Controllers
 {
@@ -44,19 +43,15 @@ namespace stinsily.Server.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] CustomLoginRequest request)
+        public async Task<IActionResult> Login([FromBody] CustomLoginRequest model)
         {
-            var user = await _userManager.FindByEmailAsync(request.Email);
-            if (user == null)
-                return Unauthorized("Invalid credentials");
-
-            var result = await _signInManager.PasswordSignInAsync(user, request.Password, isPersistent: true, lockoutOnFailure: false);
-            if (result.Succeeded)
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
-                return Ok(new { success = true });
+                await _signInManager.SignInAsync(user, isPersistent: true);
+                return Ok(new { message = "Logged in successfully" });
             }
-
-            return Unauthorized("Invalid credentials");
+            return Unauthorized();
         }
 
         [HttpPost("logout")]

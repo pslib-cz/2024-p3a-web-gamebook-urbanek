@@ -42,7 +42,10 @@ const Scene = () => {
 
             // Fetch options for this scene
             const optionsResponse = await fetch(`${API_BASE_URL}/Scenes/options/${sceneId}`, {
-                credentials: 'include'
+                credentials: 'include',
+                headers: {
+                    'Accept': 'application/json'
+                }
             });
             
             if (optionsResponse.ok) {
