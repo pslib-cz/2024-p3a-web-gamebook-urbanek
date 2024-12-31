@@ -11,6 +11,9 @@ interface SceneOption {
     optionId: number;
     text: string;
     nextSceneId: number;
+    type: 'navigation' | 'item';
+    itemId?: number;
+    action?: string;
 }
 
 const Scene = () => {
@@ -60,15 +63,52 @@ const Scene = () => {
         }
     }, [navigate]);
 
-    const handleOptionClick = (nextSceneId: number) => {
-        navigate(`/scenes/${nextSceneId}`);
+    const handleOptionClick = async (option: SceneOption) => {
+        if (option.type === 'navigation' && option.nextSceneId) {
+            navigate(`/scenes/${option.nextSceneId}`);
+        } else if (option.type === 'item' && option.action && option.itemId) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/Scenes/item`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify({
+                        action: option.action,
+                        itemId: option.itemId
+                    })
+                });
+
+                if (response.ok) {
+                    // Refresh the current scene to update available options
+                    fetchScene(id!);
+                }
+            } catch (error) {
+                console.error('Error handling item:', error);
+            }
+        }
     };
 
     useEffect(() => {
-        if (id) {
-            fetchScene(id);
+        // If no ID provided, fetch starting scene
+        if (!id) {
+            fetch(`${API_BASE_URL}/Scenes/start`, {
+                credentials: 'include'
+            })
+            .then(response => response.json())
+            .then(startingSceneId => {
+                navigate(`/scenes/${startingSceneId}`);
+            })
+            .catch(error => {
+                console.error('Error fetching starting scene:', error);
+                navigate('/scenes/1'); // Fallback to scene 1
+            });
+            return;
         }
-    }, [id, fetchScene]);
+
+        fetchScene(id);
+    }, [id, navigate]);
 
     if (loading) return <div>Loading...</div>;
     if (!currentScene) return <div>No scene found</div>;
@@ -81,7 +121,7 @@ const Scene = () => {
                 {sceneOptions.map(option => (
                     <button 
                         key={option.optionId} 
-                        onClick={() => handleOptionClick(option.nextSceneId)}
+                        onClick={() => handleOptionClick(option)}
                     >
                         {option.text}
                     </button>
