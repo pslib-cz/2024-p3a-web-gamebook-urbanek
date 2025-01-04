@@ -28,8 +28,7 @@ const Login = () => {
         setError('');
         
         try {
-            console.log('Attempting login...');
-            const response = await fetch(`${API_BASE_URL}/login?useCookies=true`, {
+            const response = await fetch(`${API_BASE_URL}/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -41,16 +40,20 @@ const Login = () => {
                 }),
             });
 
-            console.log('Response status:', response.status);
-            
             if (!response.ok) {
                 const errorText = await response.text();
-                console.error('Login failed:', errorText);
                 setError(`Login failed: ${response.status} - ${errorText}`);
                 return;
             }
 
-            navigate('/scenes/1');
+            // Check for saved progress
+            const savedProgress = localStorage.getItem('gameProgress');
+            if (savedProgress) {
+                const gameState = JSON.parse(savedProgress);
+                navigate(`/scenes/${gameState.currentSceneId}`);
+            } else {
+                navigate('/scenes/1');
+            }
         } catch (err) {
             console.error('Login error:', err);
             setError(`An error occurred during login: ${err instanceof Error ? err.message : String(err)}`);

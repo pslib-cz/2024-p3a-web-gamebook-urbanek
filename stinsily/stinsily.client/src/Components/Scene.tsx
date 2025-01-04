@@ -43,6 +43,16 @@ const Scene = () => {
             const sceneData = await response.json();
             setCurrentScene(sceneData);
 
+            // Save progress whenever scene changes
+            await fetch(`${API_BASE_URL}/Scenes/save-progress`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify({ lastSceneId: sceneId })
+            });
+
             // Fetch options for this scene
             const optionsResponse = await fetch(`${API_BASE_URL}/Scenes/options/${sceneId}`, {
                 credentials: 'include',
@@ -61,7 +71,7 @@ const Scene = () => {
             console.error('Error fetching scene:', error);
             setLoading(false);
         }
-    }, [navigate]);
+    }, []);
 
     const handleOptionClick = async (option: SceneOption) => {
         if (option.type === 'navigation' && option.nextSceneId) {
@@ -91,24 +101,39 @@ const Scene = () => {
     };
 
     useEffect(() => {
-        // If no ID provided, fetch starting scene
-        if (!id) {
-            fetch(`${API_BASE_URL}/Scenes/start`, {
-                credentials: 'include'
-            })
-            .then(response => response.json())
-            .then(startingSceneId => {
-                navigate(`/scenes/${startingSceneId}`);
-            })
-            .catch(error => {
-                console.error('Error fetching starting scene:', error);
-                navigate('/scenes/1'); // Fallback to scene 1
+        if (id) {
+            // Save last visited scene ID
+            fetch(`${API_BASE_URL}/Scenes/save-progress`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify({ lastSceneId: id })
             });
-            return;
         }
 
-        fetchScene(id);
+        fetchScene(id!);
     }, [id, navigate]);
+
+    const saveProgress = () => {
+        const gameState = {
+            currentSceneId: id,
+            sceneData: currentScene,
+            options: sceneOptions
+        };
+        localStorage.setItem('gameProgress', JSON.stringify(gameState));
+        alert('Progress saved!');
+    };
+
+    // Load saved progress on login
+    useEffect(() => {
+        const savedProgress = localStorage.getItem('gameProgress');
+        if (savedProgress) {
+            const gameState = JSON.parse(savedProgress);
+            navigate(`/scenes/${gameState.currentSceneId}`);
+        }
+    }, []);
 
     if (loading) return <div>Loading...</div>;
     if (!currentScene) return <div>No scene found</div>;
@@ -126,6 +151,9 @@ const Scene = () => {
                         {option.text}
                     </button>
                 ))}
+                <button onClick={saveProgress} style={{ marginTop: '20px' }}>
+                    Save Progress
+                </button>
             </div>
         </div>
     );

@@ -77,7 +77,7 @@
               "RelativeDocumentMoniker": "stinsily.Server\\Program.cs",
               "ToolTip": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Program.cs",
               "RelativeToolTip": "stinsily.Server\\Program.cs",
-              "ViewState": "AgIAABIAAAAAAAAAAAAAABgAAAAqAAAAAAAAAA==",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAAD8AAAAXAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-01-03T14:03:11.668Z",
               "EditorCaption": ""
@@ -92,8 +92,7 @@
               "RelativeToolTip": "stinsily.client\\src\\Components\\Scene.tsx",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAACgAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
-              "WhenOpened": "2024-12-18T10:02:02.337Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-18T10:02:02.337Z"
             },
             {
               "$type": "Document",
@@ -105,8 +104,7 @@
               "RelativeToolTip": "stinsily.Server\\Controllers\\ScenesController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAACsAAAAZAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-18T09:59:52.664Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-18T09:59:52.664Z"
             },
             {
               "$type": "Document",

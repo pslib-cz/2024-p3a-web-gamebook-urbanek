@@ -323,5 +323,52 @@ namespace stinsily.Server.Controllers
         {
             return _context.Scenes.Any(e => e.SceneID == id);
         }
+
+        [HttpPost("save-progress")]
+        [Authorize]
+        public async Task<IActionResult> SaveProgress([FromBody] SaveProgressRequest request)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+                return Unauthorized();
+
+            var player = await _context.Players
+                .FirstOrDefaultAsync(p => p.UserID == int.Parse(user.Id));
+
+            if (player == null)
+            {
+                player = new Players { UserID = int.Parse(user.Id) };
+                _context.Players.Add(player);
+            }
+
+            var scene = await _context.Scenes.FindAsync(request.LastSceneId);
+            if (scene != null)
+            {
+                player.CurrentScene = scene;
+            }
+
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+
+        [HttpGet("last-scene")]
+        [Authorize]
+        public async Task<IActionResult> GetLastScene()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+                return Unauthorized();
+
+            var player = await _context.Players
+                .Include(p => p.CurrentScene)
+                .FirstOrDefaultAsync(p => p.UserID == int.Parse(user.Id));
+
+            return Ok(new { lastSceneId = player?.CurrentScene?.SceneID ?? 1 });
+        }
+
+        public class SaveProgressRequest
+        {
+            public int LastSceneId { get; set; }
+        }
     }
 }
