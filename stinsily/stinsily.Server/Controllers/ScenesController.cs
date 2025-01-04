@@ -20,6 +20,20 @@ namespace stinsily.Server.Controllers
             _userManager = userManager;
         }
 
+        [HttpGet("check-admin")]
+        [Authorize]
+        public async Task<IActionResult> CheckAdmin()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            var isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
+            return Ok(new { isAdmin });
+        }
+
         // GET: api/Scenes
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Scenes>>> GetScenes()

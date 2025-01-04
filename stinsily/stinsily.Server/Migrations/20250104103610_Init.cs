@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace stinsily.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class RemoveUserSeeding : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -313,13 +313,18 @@ namespace stinsily.Server.Migrations
                 values: new object[,]
                 {
                     { 1, 1, "trenink", "Scena1" },
-                    { 2, 2, "rozhodnuti pristupu", "Scena2" }
+                    { 2, 2, "rozhodnuti pristupu", "Scena2" },
+                    { 3, 3, "podmineny postup", "Scena3" }
                 });
 
             migrationBuilder.InsertData(
                 table: "ChoicesConnections",
                 columns: new[] { "ChoicesConnectionsID", "Effect", "FromSceneSceneID", "MiniGameID", "RequiredItemID", "SceneFromID", "SceneToID", "Text", "ToSceneSceneID" },
-                values: new object[] { 1, "pokracovani v pribehu", null, 1, 1, 1, 2, "prechod na 2. scenu", null });
+                values: new object[,]
+                {
+                    { 1, "pokracovani v pribehu", null, 1, 1, 1, 2, "prechod na 2. scenu", null },
+                    { 2, "podmínený postup", null, 1, 2, 2, 3, "Postup do další místnosti (potřebujete světelný meč)", null }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
