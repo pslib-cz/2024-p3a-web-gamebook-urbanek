@@ -370,5 +370,17 @@ namespace stinsily.Server.Controllers
         {
             public int LastSceneId { get; set; }
         }
+
+        [HttpGet("current-user")]
+        public async Task<IActionResult> GetCurrentUser()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+            
+            return Ok(new { email = user.Email });
+        }
     }
 }

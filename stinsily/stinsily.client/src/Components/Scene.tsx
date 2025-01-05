@@ -17,6 +17,7 @@ interface SceneOption {
 }
 
 const Scene = () => {
+    const [userEmail, setUserEmail] = useState<string | null>(null);
     const { id } = useParams();
     const navigate = useNavigate();
     const [currentScene, setCurrentScene] = useState<Scene | null>(null);
@@ -42,16 +43,6 @@ const Scene = () => {
 
             const sceneData = await response.json();
             setCurrentScene(sceneData);
-
-            // Save progress whenever scene changes
-            await fetch(`${API_BASE_URL}/Scenes/save-progress`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                credentials: 'include',
-                body: JSON.stringify({ lastSceneId: sceneId })
-            });
 
             // Fetch options for this scene
             const optionsResponse = await fetch(`${API_BASE_URL}/Scenes/options/${sceneId}`, {
@@ -102,37 +93,53 @@ const Scene = () => {
 
     useEffect(() => {
         if (id) {
-            // Save last visited scene ID
-            fetch(`${API_BASE_URL}/Scenes/save-progress`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                credentials: 'include',
-                body: JSON.stringify({ lastSceneId: id })
-            });
+            fetchScene(id);
         }
+    }, [id, fetchScene]);
 
-        fetchScene(id!);
-    }, [id, navigate]);
+    const getCurrentUserEmail = () => {
+        const email = localStorage.getItem('currentUserEmail');
+        setUserEmail(email);
+        return email;
+    };
 
     const saveProgress = () => {
+        const email = getCurrentUserEmail();
+        if (!email) {
+            alert('Please log in to save progress');
+            navigate('/');
+            return;
+        }
+
         const gameState = {
             currentSceneId: id,
             sceneData: currentScene,
             options: sceneOptions
         };
-        localStorage.setItem('gameProgress', JSON.stringify(gameState));
+        
+        const userProgressKey = `gameProgress_${email}`;
+        localStorage.setItem(userProgressKey, JSON.stringify(gameState));
         alert('Progress saved!');
     };
 
-    // Load saved progress on login
     useEffect(() => {
-        const savedProgress = localStorage.getItem('gameProgress');
-        if (savedProgress) {
-            const gameState = JSON.parse(savedProgress);
-            navigate(`/scenes/${gameState.currentSceneId}`);
-        }
+        const loadSavedProgress = () => {
+            const email = getCurrentUserEmail();
+            if (email) {
+                const userProgressKey = `gameProgress_${email}`;
+                const savedProgress = localStorage.getItem(userProgressKey);
+                if (savedProgress) {
+                    const gameState = JSON.parse(savedProgress);
+                    navigate(`/scenes/${gameState.currentSceneId}`);
+                }
+            }
+        };
+
+        loadSavedProgress();
+    }, []);
+
+    useEffect(() => {
+        getCurrentUserEmail();
     }, []);
 
     if (loading) return <div>Loading...</div>;
