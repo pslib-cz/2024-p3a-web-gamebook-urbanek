@@ -112,8 +112,8 @@ namespace stinsily.Server.Controllers
         }
 
  
-        [HttpGet("options/{id}")]
-        public async Task<ActionResult<IEnumerable<object>>> GetSceneOptions(int id)
+        [HttpGet("options/{sceneId}")]
+        public async Task<ActionResult<IEnumerable<object>>> GetSceneOptions(int sceneId)
         {
             try
             {
@@ -121,22 +121,22 @@ namespace stinsily.Server.Controllers
                 var player = await _context.Players.FirstOrDefaultAsync();
                 var currentItemId = player?.ItemID ?? 1;
 
-                Console.WriteLine($"Current scene: {id}, Player item: {currentItemId}");
+                Console.WriteLine($"Current scene: {sceneId}, Player item: {currentItemId}");
 
                 // Add "Previous Scene" button if not on first scene
-                if (id > 1)
+                if (sceneId > 1)
                 {
                     options.Add(new
                     {
                         optionId = -1,
                         text = "Previous Scene",
-                        nextSceneId = id - 1,
+                        nextSceneId = sceneId - 1,
                         type = "navigation"
                     });
                 }
 
                 // For scene 1, add the connection to scene 2
-                if (id == 1)
+                if (sceneId == 1)
                 {
                     options.Add(new
                     {
@@ -148,7 +148,7 @@ namespace stinsily.Server.Controllers
                 }
 
                 // For scene 2, handle item and conditional navigation
-                if (id == 2)
+                if (sceneId == 2)
                 {
                     var hasLightsaber = currentItemId == 2;
                     
@@ -176,7 +176,7 @@ namespace stinsily.Server.Controllers
                 }
 
                 // For scene 3, add navigation options without item requirements
-                if (id == 3)
+                if (sceneId == 3)
                 {
                     options.Add(new
                     {
@@ -237,45 +237,38 @@ namespace stinsily.Server.Controllers
         }
 
         // PUT: api/Scenes/5
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutScenes(int id, Scenes scenes)
         {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null || user.Email != "admin@admin.com")
+            {
+                return Unauthorized();
+            }
+
             if (id != scenes.SceneID)
             {
                 return BadRequest();
             }
 
             _context.Entry(scenes).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ScenesExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
+            await _context.SaveChangesAsync();
             return NoContent();
         }
 
-        // POST: api/Scenes
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [Authorize(Roles = "Admin")]
         [HttpPost]
-        public async Task<ActionResult<Scenes>> PostScenes(Scenes scenes)
+        [Authorize]
+        public async Task<IActionResult> PostScenes([FromBody] Scenes scenes)
         {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null || user.Email != "admin@admin.com")
+            {
+                return Unauthorized();
+            }
+
             _context.Scenes.Add(scenes);
             await _context.SaveChangesAsync();
-
             return CreatedAtAction("GetScenes", new { id = scenes.SceneID }, scenes);
         }
 
@@ -303,10 +296,16 @@ namespace stinsily.Server.Controllers
         }
 
         // DELETE: api/Scenes/5
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteScenes(int id)
         {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null || user.Email != "admin@admin.com")
+            {
+                return Unauthorized();
+            }
+
             var scenes = await _context.Scenes.FindAsync(id);
             if (scenes == null)
             {
@@ -315,7 +314,6 @@ namespace stinsily.Server.Controllers
 
             _context.Scenes.Remove(scenes);
             await _context.SaveChangesAsync();
-
             return NoContent();
         }
 

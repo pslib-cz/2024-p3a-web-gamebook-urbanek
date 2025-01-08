@@ -1,6 +1,7 @@
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
 import Login from './Components/Login';
 import Scene from './Components/Scene';
+import AdminPanel from './Components/AdminPanel';
 
 const API_BASE_URL = 'http://localhost:5193';
 
@@ -28,6 +29,10 @@ function App() {
                 return null;
             },
             errorElement: <Navigate to="/login" />
+        },
+        {
+            path: "/admin",
+            element: <AdminPanel />
         }
     ]);
 

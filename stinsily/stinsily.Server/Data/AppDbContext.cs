@@ -30,9 +30,9 @@ namespace stinsily.Server.Data
 
             // Only seed game data
             modelBuilder.Entity<Scenes>().HasData(
-                new Scenes { SceneID = 1, ConnectionID = 1, Title = "Scena1", Description = "trenink" },
-                new Scenes { SceneID = 2, ConnectionID = 2, Title = "Scena2", Description = "rozhodnuti pristupu" },
-                new Scenes { SceneID = 3, ConnectionID = 3, Title = "Scena3", Description = "podmineny postup" }
+                new Scenes { SceneID = 1, ConnectionID = 1, Title = "Scena1", Description = "trenink", ImageURL = "" },
+                new Scenes { SceneID = 2, ConnectionID = 2, Title = "Scena2", Description = "rozhodnuti pristupu", ImageURL = "" },
+                new Scenes { SceneID = 3, ConnectionID = 3, Title = "Scena3", Description = "podmineny postup", ImageURL = "" }
             );
             
             modelBuilder.Entity<Items>().HasData(

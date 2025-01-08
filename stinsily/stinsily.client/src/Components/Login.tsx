@@ -32,18 +32,22 @@ const Login = () => {
                 return;
             }
 
-            // Store the email in localStorage for reference
+            const data = await response.json();
             localStorage.setItem('currentUserEmail', email);
             
-            // Check for user-specific saved progress
-            const userProgressKey = `gameProgress_${email}`;
-            const savedProgress = localStorage.getItem(userProgressKey);
-            
-            if (savedProgress) {
-                const gameState = JSON.parse(savedProgress);
-                navigate(`/scenes/${gameState.currentSceneId}`);
+            if (email === 'admin@admin.com') {
+                navigate('/admin');
             } else {
-                navigate('/scenes/1');
+                // Check for user-specific saved progress
+                const userProgressKey = `gameProgress_${email}`;
+                const savedProgress = localStorage.getItem(userProgressKey);
+                
+                if (savedProgress) {
+                    const gameState = JSON.parse(savedProgress);
+                    navigate(`/scenes/${gameState.currentSceneId}`);
+                } else {
+                    navigate('/scenes/1');
+                }
             }
         } catch (err) {
             console.error('Login error:', err);

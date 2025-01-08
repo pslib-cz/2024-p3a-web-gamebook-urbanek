@@ -1,0 +1,29 @@
+.admin-panel {
+    padding: 20px;
+}
+.tabs {
+    margin-bottom: 20px;
+}
+.tabs button {
+    margin-right: 10px;
+    padding: 10px 20px;
+}
+.add-form {
+    margin-bottom: 20px;
+}
+.add-form input,
+.add-form textarea {
+    display: block;
+    margin-bottom: 10px;
+    width: 100%;
+    max-width: 300px;
+}
+.items-list .item {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+}
+.items-list .item input,
+.items-list .item textarea {
+    margin-right: 10px;
+}

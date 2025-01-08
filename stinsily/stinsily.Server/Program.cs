@@ -37,7 +37,8 @@ builder.Services.AddCors(options =>
             builder
                 .WithOrigins(
                     "https://localhost:50701",
-                    "http://localhost:50701"
+                    "http://localhost:50701",
+                    "http://localhost:5173"
                 )
                 .AllowAnyMethod()
                 .AllowAnyHeader()
@@ -54,11 +55,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseRouting();
-app.UseCors(x => x
-    .AllowAnyMethod()
-    .AllowAnyHeader()
-    .SetIsOriginAllowed(origin => true)
-    .AllowCredentials());
+app.UseCors("AllowReactApp");
 
 app.UseAuthentication();
 app.UseAuthorization();
