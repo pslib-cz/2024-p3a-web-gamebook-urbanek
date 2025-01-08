@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace stinsily.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class prd : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -90,6 +90,7 @@ namespace stinsily.Server.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     ConnectionID = table.Column<int>(type: "INTEGER", nullable: false),
                     Title = table.Column<string>(type: "TEXT", nullable: false),
+                    ImageURL = table.Column<string>(type: "TEXT", nullable: false),
                     Description = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
@@ -309,12 +310,12 @@ namespace stinsily.Server.Migrations
 
             migrationBuilder.InsertData(
                 table: "Scenes",
-                columns: new[] { "SceneID", "ConnectionID", "Description", "Title" },
+                columns: new[] { "SceneID", "ConnectionID", "Description", "ImageURL", "Title" },
                 values: new object[,]
                 {
-                    { 1, 1, "trenink", "Scena1" },
-                    { 2, 2, "rozhodnuti pristupu", "Scena2" },
-                    { 3, 3, "podmineny postup", "Scena3" }
+                    { 1, 1, "trenink", "", "Scena1" },
+                    { 2, 2, "rozhodnuti pristupu", "", "Scena2" },
+                    { 3, 3, "podmineny postup", "", "Scena3" }
                 });
 
             migrationBuilder.InsertData(

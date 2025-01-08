@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using stinsily.Server.Data;
 using stinsily.Server.Models;
+using Microsoft.Extensions.Logging;
 
 namespace stinsily.Server.Controllers
 {
@@ -13,15 +14,18 @@ namespace stinsily.Server.Controllers
     {
         private readonly AppDbContext _context;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly IWebHostEnvironment _environment;
+        private readonly ILogger<ScenesController> _logger;
 
-        public ScenesController(AppDbContext context, UserManager<IdentityUser> userManager)
+        public ScenesController(AppDbContext context, UserManager<IdentityUser> userManager, IWebHostEnvironment environment, ILogger<ScenesController> logger)
         {
             _context = context;
             _userManager = userManager;
+            _environment = environment;
+            _logger = logger;
         }
 
         [HttpGet("check-admin")]
-        [Authorize]
         public async Task<IActionResult> CheckAdmin()
         {
             var user = await _userManager.GetUserAsync(User);
@@ -71,7 +75,6 @@ namespace stinsily.Server.Controllers
             }
         }
 
-        [Authorize]
         [HttpGet("available-scenes")]
         public async Task<IActionResult> GetAvailableScenes()
         {
@@ -236,8 +239,6 @@ namespace stinsily.Server.Controllers
             }
         }
 
-        // PUT: api/Scenes/5
-        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutScenes(int id, Scenes scenes)
         {
@@ -258,21 +259,103 @@ namespace stinsily.Server.Controllers
         }
 
         [HttpPost]
-        [Authorize]
-        public async Task<IActionResult> PostScenes([FromBody] Scenes scenes)
+        public async Task<IActionResult> AddScene([FromForm] SceneCreateRequest request)
         {
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null || user.Email != "admin@admin.com")
+            try
             {
-                return Unauthorized();
-            }
+                var user = await _userManager.GetUserAsync(User);
+                if (user == null || user.Email != "admin@admin.com")
+                {
+                    return Unauthorized();
+                }
 
-            _context.Scenes.Add(scenes);
-            await _context.SaveChangesAsync();
-            return CreatedAtAction("GetScenes", new { id = scenes.SceneID }, scenes);
+                var scene = new Scenes
+                {
+                    SceneID = request.SceneID,
+                    ConnectionID = request.ConnectionID,
+                    Title = request.Title,
+                    Description = request.Description,
+                    ImageURL = string.Empty
+                };
+
+                if (request.Image != null && request.Image.Length > 0)
+                {
+                    // Validate file size (10MB max)
+                    if (request.Image.Length > 10 * 1024 * 1024)
+                    {
+                        return BadRequest("File size too large. Maximum size is 10MB.");
+                    }
+
+                    // Validate file type
+                    var allowedTypes = new[] { ".jpg", ".jpeg", ".png", ".gif" };
+                    var extension = Path.GetExtension(request.Image.FileName).ToLowerInvariant();
+                    if (!allowedTypes.Contains(extension))
+                    {
+                        return BadRequest("Invalid file type. Allowed types are: .jpg, .jpeg, .png, .gif");
+                    }
+
+                    try
+                    {
+                        var uploadsFolder = Path.Combine(_environment.ContentRootPath, "Uploads");
+                        Directory.CreateDirectory(uploadsFolder);
+
+                        var uniqueFileName = $"{Guid.NewGuid()}{extension}";
+                        var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                        // Use a memory stream first to validate the file
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            await request.Image.CopyToAsync(memoryStream);
+                            // Validate that it's actually an image
+                            try
+                            {
+                                memoryStream.Position = 0;
+                                using (var img = System.Drawing.Image.FromStream(memoryStream))
+                                {
+                                    // Image is valid
+                                }
+                            }
+                            catch
+                            {
+                                return BadRequest("Invalid image file.");
+                            }
+
+                            // Save the file
+                            memoryStream.Position = 0;
+                            using (var fileStream = new FileStream(filePath, FileMode.Create))
+                            {
+                                await memoryStream.CopyToAsync(fileStream);
+                            }
+                        }
+
+                        scene.ImageURL = $"/uploads/{uniqueFileName}";
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError($"Error saving file: {ex.Message}");
+                        return StatusCode(500, $"Error saving image: {ex.Message}");
+                    }
+                }
+
+                try
+                {
+                    _context.Scenes.Add(scene);
+                    await _context.SaveChangesAsync();
+                    return Ok(scene);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Database error: {ex.Message}");
+                    return StatusCode(500, $"Error saving scene to database: {ex.Message}");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"General error: {ex.Message}");
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
-        [Authorize]
         [HttpPost("move-to-scene")]
         public async Task<IActionResult> MoveToScene([FromBody] int nextSceneId)
         {
@@ -295,8 +378,6 @@ namespace stinsily.Server.Controllers
             return Ok();
         }
 
-        // DELETE: api/Scenes/5
-        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteScenes(int id)
         {
@@ -323,7 +404,6 @@ namespace stinsily.Server.Controllers
         }
 
         [HttpPost("save-progress")]
-        [Authorize]
         public async Task<IActionResult> SaveProgress([FromBody] SaveProgressRequest request)
         {
             var user = await _userManager.GetUserAsync(User);
@@ -350,7 +430,6 @@ namespace stinsily.Server.Controllers
         }
 
         [HttpGet("last-scene")]
-        [Authorize]
         public async Task<IActionResult> GetLastScene()
         {
             var user = await _userManager.GetUserAsync(User);
@@ -380,5 +459,14 @@ namespace stinsily.Server.Controllers
             
             return Ok(new { email = user.Email });
         }
+    }
+
+    public class SceneCreateRequest
+    {
+        public int SceneID { get; set; }
+        public int ConnectionID { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public IFormFile? Image { get; set; }
     }
 }

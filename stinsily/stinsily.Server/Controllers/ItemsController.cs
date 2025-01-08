@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using stinsily.Server.Data;
 using stinsily.Server.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace stinsily.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ItemsController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -31,7 +27,6 @@ namespace stinsily.Server.Controllers
         }
 
         [HttpPost]
-        [Authorize(Policy = "Admin")] // Pouze admini mohou přidávat položky
         public IActionResult AddItem([FromBody] Items item)
         {
             // Logika pro přidání položky

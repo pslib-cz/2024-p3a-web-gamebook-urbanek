@@ -397,7 +397,6 @@ namespace stinsily.Server.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ImageURL")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Title")

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
 using stinsily.Server.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace stinsily.Server.Data
 {
@@ -20,13 +20,14 @@ namespace stinsily.Server.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<Users>().ToTable("Users");
             modelBuilder.Entity<Players>().ToTable("Players");
             modelBuilder.Entity<Scenes>().ToTable("Scenes");
             modelBuilder.Entity<Items>().ToTable("Items");
             modelBuilder.Entity<ChoicesConnections>().ToTable("ChoicesConnections");
             modelBuilder.Entity<MiniGames>().ToTable("MiniGames");
-            base.OnModelCreating(modelBuilder);
 
             // Only seed game data
             modelBuilder.Entity<Scenes>().HasData(
@@ -91,11 +92,6 @@ namespace stinsily.Server.Data
                 this.Update(adminUser);
                 this.SaveChanges();
             }
-        }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlite("Data Source=gamebook.db");
         }
     }
 }

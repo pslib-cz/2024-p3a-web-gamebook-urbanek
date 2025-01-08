@@ -9,7 +9,7 @@ namespace stinsily.Server.Models
         public int SceneID { get; set; }
         public int ConnectionID { get; set; } //foreign key
         public string Title { get; set; } = string.Empty;
-        public string ImageURL { get; set; } = string.Empty;
+        public string? ImageURL { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
     }
 }

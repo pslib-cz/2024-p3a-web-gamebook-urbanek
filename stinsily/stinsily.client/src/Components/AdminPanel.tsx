@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 interface Scene {
     sceneID: number;
-    choicesConnectionsID: number;
+    connectionID: number;
     title: string;
     description: string;
     image: string;
@@ -38,7 +38,7 @@ const AdminPanel = () => {
     const navigate = useNavigate();
     
     // Nové scény, spojení a předměty
-    const [newScene, setNewScene] = useState<Scene>({ sceneID: 0, choicesConnectionsID: 0, title: '', description: '', image: '' });
+    const [newScene, setNewScene] = useState<Scene>({ sceneID: 0, connectionID: 0, title: '', description: '', image: '' });
     const [newConnection, setNewConnection] = useState<ChoiceConnection>({
         choicesConnectionsID: 0,
         sceneFromID: 0,
@@ -47,34 +47,41 @@ const AdminPanel = () => {
         effect: ''
     });
     const [newItem, setNewItem] = useState<Item>({ itemID: 0, name: '', description: '', healthModifier: 0, forceModifier: 0, obiWanRelationshipModifier: 0 });
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
     useEffect(() => {
         const checkAdmin = async () => {
-            // Zkontrolujeme email uložený při přihlášení
+            // Get both email and token
             const currentUserEmail = localStorage.getItem('currentUserEmail');
+            const token = localStorage.getItem('authToken');
             
-            if (currentUserEmail === 'admin@admin.com') {
+            if (currentUserEmail === 'admin@admin.com' && token) {
                 setIsAdmin(true);
                 // Načtení dat po potvrzení admin role
                 fetchScenes();
                 fetchConnections();
                 fetchItems();
             } else {
-                navigate('/scenes/1');
+                navigate('/login');
             }
         };
 
         checkAdmin();
     }, [navigate]);
 
+    // Helper function to get headers with auth token
+    const getHeaders = () => {
+        const token = localStorage.getItem('authToken');
+        return {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        };
+    };
+
     const fetchScenes = async () => {
         try {
             const response = await fetch("http://localhost:5193/api/Scenes", {
-                credentials: "include",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-User-Email": "admin@admin.com"
-                }
+                headers: getHeaders()
             });
             if (!response.ok) throw new Error('Failed to fetch scenes');
             const data = await response.json();
@@ -85,57 +92,79 @@ const AdminPanel = () => {
     };
 
     const fetchConnections = async () => {
-        const response = await fetch("http://localhost:5193/api/ChoicesConnections", {
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json"
-            }
-        });
-        const data = await response.json();
-        setConnections(data);
+        try {
+            const response = await fetch("http://localhost:5193/api/ChoicesConnections", {
+                headers: getHeaders()
+            });
+            if (!response.ok) throw new Error('Failed to fetch connections');
+            const data = await response.json();
+            setConnections(data);
+        } catch (error) {
+            console.error('Error fetching connections:', error);
+        }
     };
 
     const fetchItems = async () => {
-        const response = await fetch("http://localhost:5193/api/Items", {
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json"
-            }
-        });
-        const data = await response.json();
-        setItems(data);
+        try {
+            const response = await fetch("http://localhost:5193/api/Items", {
+                headers: getHeaders()
+            });
+            if (!response.ok) throw new Error('Failed to fetch items');
+            const data = await response.json();
+            setItems(data);
+        } catch (error) {
+            console.error('Error fetching items:', error);
+        }
     };
 
     // CRUD operace pro scény
     const addScene = async () => {
-        console.log('Adding new scene:', newScene);
         try {
-            const response = await fetch("http://localhost:5193/api/Scenes", {
-                method: "POST",
-                credentials: "include",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    sceneID: newScene.sceneID,
-                    title: newScene.title,
-                    description: newScene.description,
-                    choicesConnectionsID: newScene.choicesConnectionsID,
-                    image: newScene.image
-                })
-            });
+            const formData = new FormData();
+            formData.append('sceneID', newScene.sceneID.toString());
+            formData.append('connectionID', newScene.connectionID.toString());
+            formData.append('title', newScene.title);
+            formData.append('description', newScene.description);
             
-            console.log('Add scene response:', response.status);
-            if (!response.ok) {
-                const errorText = await response.text();
-                console.error('Failed to add scene:', errorText);
-                return;
+            if (selectedFile) {
+                formData.append('image', selectedFile);
             }
+
+            const token = localStorage.getItem('authToken');
             
-            await fetchScenes();
-            setNewScene({ sceneID: 0, choicesConnectionsID: 0, title: '', description: '', image: '' });
+            console.log('Starting file upload...');
+            
+            try {
+                const response = await fetch("http://localhost:5193/api/Scenes", {
+                    method: "POST",
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: formData
+                });
+
+                console.log('Upload response status:', response.status);
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('Failed to add scene. Status:', response.status, 'Error:', errorText);
+                    return;
+                }
+
+                const result = await response.json();
+                console.log('Scene added successfully:', result);
+                
+                await fetchScenes();
+                setNewScene({ sceneID: 0, connectionID: 0, title: '', description: '', image: '' });
+                setSelectedFile(null);
+            } catch (error) {
+                console.error('Network or parsing error:', error);
+                throw error; // Re-throw to be caught by outer try-catch
+            }
         } catch (error) {
-            console.error('Error adding scene:', error);
+            console.error('Error in addScene:', error);
+            // You might want to show this error to the user
+            alert('Failed to upload scene. Please try again.');
         }
     };
 
@@ -143,22 +172,19 @@ const AdminPanel = () => {
         try {
             const response = await fetch(`http://localhost:5193/api/Scenes/${scene.sceneID}`, {
                 method: "PUT",
-                credentials: "include",
-                headers: {
-                    "Content-Type": "application/json"
-                },
+                headers: getHeaders(),
                 body: JSON.stringify({
                     sceneID: scene.sceneID,
                     title: scene.title,
                     description: scene.description,
-                    choicesConnectionsID: scene.choicesConnectionsID,
+                    connectionID: scene.connectionID,
                     image: scene.image
                 })
             });
             
             if (!response.ok) {
                 const errorText = await response.text();
-                console.error('Failed to update scene:', errorText);
+                console.error('Failed to update scene. Status:', response.status, 'Error:', errorText);
                 return;
             }
             
@@ -172,12 +198,12 @@ const AdminPanel = () => {
         try {
             const response = await fetch(`http://localhost:5193/api/Scenes/${id}`, {
                 method: "DELETE",
-                credentials: "include"
+                headers: getHeaders()
             });
             
             if (!response.ok) {
                 const errorText = await response.text();
-                console.error('Failed to delete scene:', errorText);
+                console.error('Failed to delete scene. Status:', response.status, 'Error:', errorText);
                 return;
             }
             
@@ -189,49 +215,80 @@ const AdminPanel = () => {
 
     // CRUD operace pro spojení
     const addConnection = async () => {
-        await fetch("http://localhost:5193/api/ChoicesConnections", {
-            method: "POST",
-            credentials: "include",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(newConnection)
-        });
-        fetchConnections();
-        setNewConnection({
-            choicesConnectionsID: 0,
-            sceneFromID: 0,
-            sceneToID: 0,
-            text: '',
-            effect: ''
-        });
+        try {
+            const response = await fetch("http://localhost:5193/api/ChoicesConnections", {
+                method: "POST",
+                headers: getHeaders(),
+                body: JSON.stringify(newConnection)
+            });
+            
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('Failed to add connection. Status:', response.status, 'Error:', errorText);
+                return;
+            }
+            
+            await fetchConnections();
+            setNewConnection({
+                choicesConnectionsID: 0,
+                sceneFromID: 0,
+                sceneToID: 0,
+                text: '',
+                effect: ''
+            });
+        } catch (error) {
+            console.error('Error adding connection:', error);
+        }
     };
 
     const updateConnection = async (connection: ChoiceConnection) => {
-        await fetch(`http://localhost:5193/api/ChoicesConnections/${connection.choicesConnectionsID}`, {
-            method: "PUT",
-            credentials: "include",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(connection)
-        });
-        fetchConnections();
+        try {
+            const response = await fetch(`http://localhost:5193/api/ChoicesConnections/${connection.choicesConnectionsID}`, {
+                method: "PUT",
+                headers: getHeaders(),
+                body: JSON.stringify(connection)
+            });
+            
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('Failed to update connection. Status:', response.status, 'Error:', errorText);
+                return;
+            }
+            
+            await fetchConnections();
+        } catch (error) {
+            console.error('Error updating connection:', error);
+        }
     };
 
     const deleteConnection = async (id: number) => {
-        await fetch(`http://localhost:5193/api/ChoicesConnections/${id}`, {
-            method: "DELETE",
-            credentials: "include"
-        });
-        fetchConnections();
+        try {
+            const response = await fetch(`http://localhost:5193/api/ChoicesConnections/${id}`, {
+                method: "DELETE",
+                headers: getHeaders()
+            });
+            
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('Failed to delete connection. Status:', response.status, 'Error:', errorText);
+                return;
+            }
+            
+            await fetchConnections();
+        } catch (error) {
+            console.error('Error deleting connection:', error);
+        }
     };
 
     // CRUD operace pro předměty
     const addItem = async () => {
         try {
+            const headers = getHeaders();
+            console.log('Request headers:', headers);
+
             const response = await fetch("http://localhost:5193/api/Items", {
                 method: "POST",
-                credentials: "include",
-                headers: {
-                    "Content-Type": "application/json"
-                },
+                headers: headers,
                 body: JSON.stringify({
                     itemID: newItem.itemID,
                     name: newItem.name,
@@ -244,7 +301,7 @@ const AdminPanel = () => {
             
             if (!response.ok) {
                 const errorText = await response.text();
-                console.error('Failed to add item:', errorText);
+                console.error('Failed to add item. Status:', response.status, 'Error:', errorText);
                 return;
             }
             
@@ -259,10 +316,7 @@ const AdminPanel = () => {
         try {
             const response = await fetch(`http://localhost:5193/api/Items/${item.itemID}`, {
                 method: "PUT",
-                credentials: "include",
-                headers: {
-                    "Content-Type": "application/json"
-                },
+                headers: getHeaders(),
                 body: JSON.stringify({
                     itemID: item.itemID,
                     name: item.name,
@@ -289,12 +343,12 @@ const AdminPanel = () => {
         try {
             const response = await fetch(`http://localhost:5193/api/Items/${id}`, {
                 method: "DELETE",
-                credentials: "include"
+                headers: getHeaders()
             });
             
             if (!response.ok) {
                 const errorText = await response.text();
-                console.error('Failed to delete item:', errorText);
+                console.error('Failed to delete item. Status:', response.status, 'Error:', errorText);
                 return;
             }
             
@@ -325,12 +379,12 @@ const AdminPanel = () => {
                             value={newScene.sceneID}
                             onChange={(e) => setNewScene({...newScene, sceneID: parseInt(e.target.value)})}
                         />
-                        <h2>Choices Connections ID</h2>
+                        <h2>Connection ID</h2>
                         <input
                             type="number"
-                            placeholder="Choices Connections ID"
-                            value={newScene.choicesConnectionsID}
-                            onChange={(e) => setNewScene({...newScene, choicesConnectionsID: parseInt(e.target.value)})}
+                            placeholder="Connection ID"
+                            value={newScene.connectionID}
+                            onChange={(e) => setNewScene({...newScene, connectionID: parseInt(e.target.value)})}
                         />
                         <h2>Title</h2>
                         <input
@@ -348,9 +402,26 @@ const AdminPanel = () => {
                         <h2>Image</h2>
                         <input
                             type="file"
-                            placeholder="Image"
-                            value={newScene.image}
-                            onChange={(e) => setNewScene({...newScene, image: e.target.value})}
+                            accept="image/*"
+                            onChange={(e) => {
+                                const file = e.target.files?.[0];
+                                if (file) {
+                                    // Check file size (10MB)
+                                    if (file.size > 10 * 1024 * 1024) {
+                                        alert('File is too large. Maximum size is 10MB.');
+                                        return;
+                                    }
+                                    
+                                    // Check file type
+                                    const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
+                                    if (!validTypes.includes(file.type)) {
+                                        alert('Invalid file type. Please use JPG, PNG, or GIF.');
+                                        return;
+                                    }
+                                    
+                                    setSelectedFile(file);
+                                }
+                            }}
                         />
                         <button onClick={addScene}>Add Scene</button>
                     </div>

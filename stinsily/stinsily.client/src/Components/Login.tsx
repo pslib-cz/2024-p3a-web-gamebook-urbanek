@@ -15,6 +15,8 @@ const Login = () => {
         setError('');
         
         try {
+            console.log('Attempting login with:', { email, password });
+            
             const response = await fetch(`${API_BASE_URL}/login`, {
                 method: 'POST',
                 headers: {
@@ -23,9 +25,13 @@ const Login = () => {
                 credentials: 'include',
                 body: JSON.stringify({ 
                     email: email, 
-                    password: password
+                    password: password,
+                    useCookies: false
                 }),
             });
+
+            console.log('Response status:', response.status);
+            console.log('Response headers:', Object.fromEntries(response.headers.entries()));
 
             if (!response.ok) {
                 setError('Invalid credentials or user not registered');
@@ -33,7 +39,20 @@ const Login = () => {
             }
 
             const data = await response.json();
+            console.log('Response data:', data);
+
+            // Store email
             localStorage.setItem('currentUserEmail', email);
+            
+            // Store token - MapCustomIdentityApi returns it as accessToken
+            if (data.accessToken) {
+                localStorage.setItem('authToken', data.accessToken);
+                console.log('Token stored in localStorage');
+            } else {
+                console.log('No token found in response');
+                setError('No authentication token received');
+                return;
+            }
             
             if (email === 'admin@admin.com') {
                 navigate('/admin');
@@ -95,6 +114,13 @@ const Login = () => {
             console.error('Registration error:', error);
             setError(`An error occurred during registration: ${error instanceof Error ? error.message : String(error)}`);
         }
+    };
+
+    // Add a logout function to clear the token
+    const handleLogout = () => {
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('currentUserEmail');
+        navigate('/login');
     };
 
     return (

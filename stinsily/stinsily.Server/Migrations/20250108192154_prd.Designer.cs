@@ -11,8 +11,8 @@ using stinsily.Server.Data;
 namespace stinsily.Server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250108102717_images")]
-    partial class images
+    [Migration("20250108192154_prd")]
+    partial class prd
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

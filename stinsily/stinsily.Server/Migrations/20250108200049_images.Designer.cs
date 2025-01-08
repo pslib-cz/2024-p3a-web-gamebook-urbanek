@@ -11,8 +11,8 @@ using stinsily.Server.Data;
 namespace stinsily.Server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250104103610_Init")]
-    partial class Init
+    [Migration("20250108200049_images")]
+    partial class images
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -399,6 +399,9 @@ namespace stinsily.Server.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("ImageURL")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -413,6 +416,7 @@ namespace stinsily.Server.Migrations
                             SceneID = 1,
                             ConnectionID = 1,
                             Description = "trenink",
+                            ImageURL = "",
                             Title = "Scena1"
                         },
                         new
@@ -420,6 +424,7 @@ namespace stinsily.Server.Migrations
                             SceneID = 2,
                             ConnectionID = 2,
                             Description = "rozhodnuti pristupu",
+                            ImageURL = "",
                             Title = "Scena2"
                         },
                         new
@@ -427,6 +432,7 @@ namespace stinsily.Server.Migrations
                             SceneID = 3,
                             ConnectionID = 3,
                             Description = "podmineny postup",
+                            ImageURL = "",
                             Title = "Scena3"
                         });
                 });
