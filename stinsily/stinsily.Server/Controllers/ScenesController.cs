@@ -269,6 +269,8 @@ namespace stinsily.Server.Controllers
                     return Unauthorized();
                 }
 
+                _logger.LogInformation("Starting scene creation process");
+
                 var scene = new Scenes
                 {
                     SceneID = request.SceneID,
@@ -280,59 +282,34 @@ namespace stinsily.Server.Controllers
 
                 if (request.Image != null && request.Image.Length > 0)
                 {
-                    // Validate file size (10MB max)
-                    if (request.Image.Length > 10 * 1024 * 1024)
-                    {
-                        return BadRequest("File size too large. Maximum size is 10MB.");
-                    }
-
-                    // Validate file type
-                    var allowedTypes = new[] { ".jpg", ".jpeg", ".png", ".gif" };
-                    var extension = Path.GetExtension(request.Image.FileName).ToLowerInvariant();
-                    if (!allowedTypes.Contains(extension))
-                    {
-                        return BadRequest("Invalid file type. Allowed types are: .jpg, .jpeg, .png, .gif");
-                    }
+                    _logger.LogInformation($"Processing image: {request.Image.FileName}, Size: {request.Image.Length} bytes");
 
                     try
                     {
-                        var uploadsFolder = Path.Combine(_environment.ContentRootPath, "Uploads");
-                        Directory.CreateDirectory(uploadsFolder);
-
-                        var uniqueFileName = $"{Guid.NewGuid()}{extension}";
-                        var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-                        // Use a memory stream first to validate the file
-                        using (var memoryStream = new MemoryStream())
+                        // Use wwwroot/uploads for file storage
+                        var uploadsFolder = Path.Combine(_environment.WebRootPath, "uploads");
+                        if (!Directory.Exists(uploadsFolder))
                         {
-                            await request.Image.CopyToAsync(memoryStream);
-                            // Validate that it's actually an image
-                            try
-                            {
-                                memoryStream.Position = 0;
-                                using (var img = System.Drawing.Image.FromStream(memoryStream))
-                                {
-                                    // Image is valid
-                                }
-                            }
-                            catch
-                            {
-                                return BadRequest("Invalid image file.");
-                            }
+                            Directory.CreateDirectory(uploadsFolder);
+                            _logger.LogInformation($"Created uploads directory: {uploadsFolder}");
+                        }
 
-                            // Save the file
-                            memoryStream.Position = 0;
-                            using (var fileStream = new FileStream(filePath, FileMode.Create))
-                            {
-                                await memoryStream.CopyToAsync(fileStream);
-                            }
+                        var uniqueFileName = $"{Guid.NewGuid()}{Path.GetExtension(request.Image.FileName)}";
+                        var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                        _logger.LogInformation($"Saving file to: {filePath}");
+
+                        using (var fileStream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await request.Image.CopyToAsync(fileStream);
                         }
 
                         scene.ImageURL = $"/uploads/{uniqueFileName}";
+                        _logger.LogInformation($"File saved successfully. URL: {scene.ImageURL}");
                     }
                     catch (Exception ex)
                     {
                         _logger.LogError($"Error saving file: {ex.Message}");
+                        _logger.LogError($"Stack trace: {ex.StackTrace}");
                         return StatusCode(500, $"Error saving image: {ex.Message}");
                     }
                 }
@@ -341,6 +318,7 @@ namespace stinsily.Server.Controllers
                 {
                     _context.Scenes.Add(scene);
                     await _context.SaveChangesAsync();
+                    _logger.LogInformation($"Scene saved to database. ID: {scene.SceneID}");
                     return Ok(scene);
                 }
                 catch (Exception ex)

@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "7Hn6etferOz4dZWRWBCooreRiyl6LS1s3eB9I014uIo=",
+  "Hash": "0ZztaXqTV6ICyOWiOLoJkhfyD+CJWRal5CTwjlohZFE=",
   "Source": "stinsily.Server",
   "BasePath": "_content/stinsily.Server",
   "Mode": "Default",
@@ -18,7 +18,15 @@
       "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework"
     }
   ],
-  "DiscoveryPatterns": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "stinsily.Server\\wwwroot",
+      "Source": "stinsily.Server",
+      "ContentRoot": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\",
+      "BasePath": "_content/stinsily.Server",
+      "Pattern": "**"
+    }
+  ],
   "Assets": [],
   "Endpoints": []
 }

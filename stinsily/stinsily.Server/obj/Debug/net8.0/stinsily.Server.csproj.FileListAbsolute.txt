@@ -592,3 +592,4 @@ C:\Users\adamu\Documents\GitHub\2024-p3a-web-gamebook-urbanek\stinsily\stinsily.
 C:\Users\adamu\Documents\GitHub\2024-p3a-web-gamebook-urbanek\stinsily\stinsily.Server\obj\Debug\net8.0\stinsily.Server.pdb
 C:\Users\adamu\Documents\GitHub\2024-p3a-web-gamebook-urbanek\stinsily\stinsily.Server\obj\Debug\net8.0\stinsily.Server.genruntimeconfig.cache
 C:\Users\adamu\Documents\GitHub\2024-p3a-web-gamebook-urbanek\stinsily\stinsily.Server\obj\Debug\net8.0\ref\stinsily.Server.dll
+C:\Users\adamu\Documents\GitHub\2024-p3a-web-gamebook-urbanek\stinsily\stinsily.Server\bin\Debug\net8.0\stinsily.Server.staticwebassets.runtime.json

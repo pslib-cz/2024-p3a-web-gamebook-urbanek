@@ -74,25 +74,29 @@ builder.Services.Configure<FormOptions>(options =>
 
 var app = builder.Build();
 
-// Add this after app.Build() but before other middleware
-// Configure static file serving for uploads
-var uploadsPath = Path.Combine(builder.Environment.ContentRootPath, "Uploads");
+// Configure paths for static files
+var webRootPath = Path.Combine(builder.Environment.ContentRootPath, "wwwroot");
+var uploadsPath = Path.Combine(webRootPath, "uploads");
+
+// Ensure directories exist
+if (!Directory.Exists(webRootPath))
+{
+    Directory.CreateDirectory(webRootPath);
+}
 if (!Directory.Exists(uploadsPath))
 {
     Directory.CreateDirectory(uploadsPath);
-    // Ensure directory has write permissions
-    var directoryInfo = new DirectoryInfo(uploadsPath);
-    directoryInfo.Attributes &= ~FileAttributes.ReadOnly;
 }
 
-app.UseRouting();
+// Configure static files middleware
 app.UseStaticFiles(); // For wwwroot
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(uploadsPath),
-    RequestPath = "/uploads",
-    ServeUnknownFileTypes = true
+    RequestPath = "/uploads"
 });
+
+app.UseRouting();
 app.UseCors("AllowReactApp");
 app.UseAuthentication();
 app.UseAuthorization();
