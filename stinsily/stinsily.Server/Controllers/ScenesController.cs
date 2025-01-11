@@ -209,7 +209,7 @@ namespace stinsily.Server.Controllers
 
         public class ItemActionRequest
         {
-            public string Action { get; set; }
+            public string Action { get; set; } = string.Empty;
             public int ItemId { get; set; }
         }
 
@@ -218,33 +218,79 @@ namespace stinsily.Server.Controllers
         {
             try
             {
+                // First verify that required records exist
+                var scene = await _context.Scenes.FindAsync(2);
+                if (scene == null)
+                {
+                    return StatusCode(500, "Required scene not found");
+                }
+
+                var defaultItem = await _context.Items.FindAsync(1);
+                if (defaultItem == null)
+                {
+                    return StatusCode(500, "Default item not found");
+                }
+
+                // First check if we have an existing player
                 var player = await _context.Players.FirstOrDefaultAsync();
+
                 if (player == null)
                 {
-                    player = new Players { UserID = 1 };
-                    _context.Players.Add(player);
-                }
-
-                if (request.Action.ToLower() == "pickup")
+                    // Create a user first if it doesn't exist
+                    var user = await _context.Users.FirstOrDefaultAsync();
+                    if (user == null)
                 {
-                    player.ItemID = request.ItemId;
-                }
-                else if (request.Action.ToLower() == "drop")
-                {
-                    player.ItemID = 1; // Reset to default item (nothing)
-                }
-
+                    // Create a default user
+                user = new Users 
+                { 
+                    UserID = 1,
+                    UserName = "DefaultUser",
+                    Email = "default@example.com"
+                };
+                _context.Users.Add(user);
                 await _context.SaveChangesAsync();
+            }
 
-                // Immediately return new options after item action
-                return await GetSceneOptions(2); // Hardcoded to scene 2 since that's where items are handled
+            // Now create the player with valid foreign keys
+            player = new Players 
+            { 
+                UserID = user.UserID,  // Use the actual user ID
+                CurrentSceneID = scene.SceneID,
+                ItemID = defaultItem.ItemID,
+                Health = 100,
+                Force = 100,
+                ObiWanRelationship = 50
+            };
+
+            _context.Players.Add(player);
+            await _context.SaveChangesAsync();
             }
-            catch (Exception ex)
+
+            // Handle item action
+            if (request.Action.ToLower() == "pickup")
             {
-                Console.WriteLine($"Error handling item: {ex.Message}");
-                return StatusCode(500, "Error handling item");
+                var newItem = await _context.Items.FindAsync(request.ItemId);
+                if (newItem == null)
+                {
+                return NotFound("Item not found");
+                }
+                player.ItemID = newItem.ItemID;
             }
+            else if (request.Action.ToLower() == "drop")
+            {
+                player.ItemID = defaultItem.ItemID;
+            }
+
+            _context.Update(player);
+            await _context.SaveChangesAsync();
+            return await GetSceneOptions(player.CurrentSceneID);
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error in HandleItem: {ex.Message}");
+            return StatusCode(500, "Error handling item");
+        }
+    }
 
         [HttpPut("{id}")]
         [Authorize]
