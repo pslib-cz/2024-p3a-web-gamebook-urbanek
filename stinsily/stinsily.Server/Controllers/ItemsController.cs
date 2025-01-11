@@ -60,32 +60,33 @@ namespace stinsily.Server.Controllers
         // PUT: api/Items/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> PutItems(int id, Items items)
         {
-            if (id != items.ItemID)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(items).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ItemsExists(id))
+                var item = await _context.Items.FindAsync(id);
+                if (item == null)
                 {
-                    return NotFound();
+                    return NotFound($"Item with ID {id} not found");
                 }
-                else
-                {
-                    throw;
-                }
-            }
 
-            return NoContent();
+                // Update properties
+                item.Name = items.Name;
+                item.Description = items.Description;
+                item.HealthModifier = items.HealthModifier;
+                item.ForceModifier = items.ForceModifier;
+                item.ObiWanRelationshipModifier = items.ObiWanRelationshipModifier;
+
+                _context.Update(item);
+                await _context.SaveChangesAsync();
+
+                return Ok(item);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error updating item: {ex.Message}");
+            }
         }
 
         // DELETE: api/Items/5

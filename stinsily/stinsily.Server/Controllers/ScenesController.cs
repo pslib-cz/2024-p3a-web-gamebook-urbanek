@@ -23,6 +23,13 @@ namespace stinsily.Server.Controllers
             _userManager = userManager;
             _environment = environment;
             _logger = logger;
+
+            // Ensure uploads directory exists
+            var uploadsPath = Path.Combine(_environment.WebRootPath, "Uploads");
+            if (!Directory.Exists(uploadsPath))
+            {
+                Directory.CreateDirectory(uploadsPath);
+            }
         }
 
         [HttpGet("check-admin")]
@@ -240,25 +247,71 @@ namespace stinsily.Server.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutScenes(int id, Scenes scenes)
+        [Authorize]
+        public async Task<IActionResult> PutScenes(int id, [FromForm] SceneCreateRequest request)
         {
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null || user.Email != "admin@admin.com")
+            try
             {
-                return Unauthorized();
-            }
+                var user = await _userManager.GetUserAsync(User);
+                if (user == null || user.Email != "admin@admin.com")
+                {
+                    return Unauthorized();
+                }
 
-            if (id != scenes.SceneID)
+                var scene = await _context.Scenes.FindAsync(id);
+                if (scene == null)
+                {
+                    return NotFound($"Scene with ID {id} not found");
+                }
+
+                // Update basic properties
+                scene.SceneID = request.SceneID;
+                scene.ConnectionID = request.ConnectionID;
+                scene.Title = request.Title;
+                scene.Description = request.Description;
+
+                // Handle image update if provided
+                if (request.Image != null && request.Image.Length > 0)
+                {
+                    // Delete old image if it exists
+                    if (!string.IsNullOrEmpty(scene.ImageURL))
+                    {
+                        var oldImagePath = Path.Combine(_environment.WebRootPath, scene.ImageURL.TrimStart('/'));
+                        if (System.IO.File.Exists(oldImagePath))
+                        {
+                            System.IO.File.Delete(oldImagePath);
+                        }
+                    }
+
+                    // Save new image
+                    var uploadsPath = Path.Combine(_environment.WebRootPath, "uploads");
+                    Directory.CreateDirectory(uploadsPath);
+
+                    var fileName = $"scene_{scene.SceneID}_{Guid.NewGuid()}.jpg";
+                    var filePath = Path.Combine(uploadsPath, fileName);
+
+                    using (var fileStream = System.IO.File.Create(filePath))
+                    {
+                        await request.Image.CopyToAsync(fileStream);
+                    }
+
+                    scene.ImageURL = $"/uploads/{fileName}";
+                }
+
+                _context.Update(scene);
+                await _context.SaveChangesAsync();
+
+                return Ok(scene);
+            }
+            catch (Exception ex)
             {
-                return BadRequest();
+                _logger.LogError($"Error updating scene: {ex.Message}");
+                return StatusCode(500, "Error updating scene");
             }
-
-            _context.Entry(scenes).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
-            return NoContent();
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> AddScene([FromForm] SceneCreateRequest request)
         {
             try
@@ -437,14 +490,70 @@ namespace stinsily.Server.Controllers
             
             return Ok(new { email = user.Email });
         }
+
+        [HttpPut("{id}/image")]
+        [Authorize]
+        public async Task<IActionResult> UpdateSceneImage(int id, [FromForm] IFormFile image)
+        {
+            try
+            {
+                var user = await _userManager.GetUserAsync(User);
+                if (user == null || user.Email != "admin@admin.com")
+                {
+                    return Unauthorized();
+                }
+
+                var scene = await _context.Scenes.FindAsync(id);
+                if (scene == null)
+                {
+                    return NotFound($"Scene with ID {id} not found");
+                }
+
+                if (image != null && image.Length > 0)
+                {
+                    // Delete old image if it exists
+                    if (!string.IsNullOrEmpty(scene.ImageURL))
+                    {
+                        var oldImagePath = Path.Combine(_environment.WebRootPath, scene.ImageURL.TrimStart('/'));
+                        if (System.IO.File.Exists(oldImagePath))
+                        {
+                            System.IO.File.Delete(oldImagePath);
+                        }
+                    }
+
+                    // Save new image
+                    var uploadsPath = Path.Combine(_environment.WebRootPath, "uploads");
+                    Directory.CreateDirectory(uploadsPath);
+
+                    var fileName = $"scene_{scene.SceneID}_{Guid.NewGuid()}.jpg";
+                    var filePath = Path.Combine(uploadsPath, fileName);
+
+                    using (var fileStream = System.IO.File.Create(filePath))
+                    {
+                        await image.CopyToAsync(fileStream);
+                    }
+
+                    scene.ImageURL = $"/uploads/{fileName}";
+                    _context.Update(scene);
+                    await _context.SaveChangesAsync();
+                }
+
+                return Ok(scene);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error updating scene image: {ex.Message}");
+                return StatusCode(500, "Error updating scene image");
+            }
+        }
     }
 
     public class SceneCreateRequest
     {
         public int SceneID { get; set; }
         public int ConnectionID { get; set; }
-        public string Title { get; set; }
-        public string Description { get; set; }
+        public string Title { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
         public IFormFile? Image { get; set; }
     }
 }

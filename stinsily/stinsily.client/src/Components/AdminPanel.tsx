@@ -16,8 +16,8 @@ interface ChoiceConnection {
     sceneToID: number;
     text: string;
     effect: string;
-    requiredItemID?: number;
-    miniGameID?: number;
+    requiredItemID?: number | null;
+    miniGameID?: number | null;
 }
 
 interface Item {
@@ -170,16 +170,25 @@ const AdminPanel = () => {
 
     const updateScene = async (scene: Scene) => {
         try {
+            const formData = new FormData();
+            formData.append('sceneID', scene.sceneID.toString());
+            formData.append('connectionID', scene.connectionID.toString());
+            formData.append('title', scene.title);
+            formData.append('description', scene.description);
+            
+            // Get the file input element for this specific scene
+            const fileInput = document.querySelector(`#file-input-${scene.sceneID}`) as HTMLInputElement;
+            if (fileInput?.files?.[0]) {
+                formData.append('image', fileInput.files[0]);
+            }
+
+            const token = localStorage.getItem('authToken');
             const response = await fetch(`http://localhost:5193/api/Scenes/${scene.sceneID}`, {
                 method: "PUT",
-                headers: getHeaders(),
-                body: JSON.stringify({
-                    sceneID: scene.sceneID,
-                    title: scene.title,
-                    description: scene.description,
-                    connectionID: scene.connectionID,
-                    image: scene.image
-                })
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+                body: formData
             });
             
             if (!response.ok) {
@@ -189,8 +198,12 @@ const AdminPanel = () => {
             }
             
             await fetchScenes();
+            // Clear the file input after successful update
+            if (fileInput) fileInput.value = '';
+            
         } catch (error) {
             console.error('Error updating scene:', error);
+            alert('Failed to update scene');
         }
     };
 
@@ -243,21 +256,35 @@ const AdminPanel = () => {
 
     const updateConnection = async (connection: ChoiceConnection) => {
         try {
+            const token = localStorage.getItem('authToken');
             const response = await fetch(`http://localhost:5193/api/ChoicesConnections/${connection.choicesConnectionsID}`, {
                 method: "PUT",
-                headers: getHeaders(),
-                body: JSON.stringify(connection)
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    choicesConnectionsID: connection.choicesConnectionsID,
+                    sceneFromID: connection.sceneFromID,
+                    sceneToID: connection.sceneToID,
+                    text: connection.text,
+                    effect: connection.effect,
+                    requiredItemID: connection.requiredItemID,
+                    miniGameID: connection.miniGameID
+                })
             });
             
             if (!response.ok) {
                 const errorText = await response.text();
-                console.error('Failed to update connection. Status:', response.status, 'Error:', errorText);
+                console.error('Failed to update connection:', errorText);
+                alert('Failed to update connection');
                 return;
             }
             
             await fetchConnections();
         } catch (error) {
             console.error('Error updating connection:', error);
+            alert('Failed to update connection');
         }
     };
 
@@ -314,9 +341,13 @@ const AdminPanel = () => {
 
     const updateItem = async (item: Item) => {
         try {
+            const token = localStorage.getItem('authToken');
             const response = await fetch(`http://localhost:5193/api/Items/${item.itemID}`, {
                 method: "PUT",
-                headers: getHeaders(),
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
                 body: JSON.stringify({
                     itemID: item.itemID,
                     name: item.name,
@@ -330,12 +361,14 @@ const AdminPanel = () => {
             if (!response.ok) {
                 const errorText = await response.text();
                 console.error('Failed to update item:', errorText);
+                alert('Failed to update item');
                 return;
             }
             
             await fetchItems();
         } catch (error) {
             console.error('Error updating item:', error);
+            alert('Failed to update item');
         }
     };
 
@@ -355,6 +388,30 @@ const AdminPanel = () => {
             await fetchItems();
         } catch (error) {
             console.error('Error deleting item:', error);
+        }
+    };
+
+    // Add this new function to handle image updates
+    const updateSceneWithImage = async (sceneId: number, formData: FormData) => {
+        try {
+            const token = localStorage.getItem('authToken');
+            const response = await fetch(`http://localhost:5193/api/Scenes/${sceneId}/image`, {
+                method: "PUT",
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+                body: formData
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('Failed to update scene image:', errorText);
+                return;
+            }
+
+            await fetchScenes();
+        } catch (error) {
+            console.error('Error updating scene image:', error);
         }
     };
 
@@ -401,42 +458,69 @@ const AdminPanel = () => {
                         />
                         <h2>Image</h2>
                         <input
+                            id={`file-input-${newScene.sceneID}`}
                             type="file"
-                            accept="image/*"
+                            accept="image/jpeg,image/png,image/gif"
                             onChange={(e) => {
                                 const file = e.target.files?.[0];
                                 if (file) {
-                                    // Check file size (10MB)
-                                    if (file.size > 10 * 1024 * 1024) {
-                                        alert('File is too large. Maximum size is 10MB.');
-                                        return;
-                                    }
-                                    
-                                    // Check file type
-                                    const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
-                                    if (!validTypes.includes(file.type)) {
-                                        alert('Invalid file type. Please use JPG, PNG, or GIF.');
-                                        return;
-                                    }
-                                    
+                                    console.log('File selected:', file.name);
                                     setSelectedFile(file);
                                 }
                             }}
                         />
+                        {selectedFile && (
+                            <div>Selected file: {selectedFile.name}</div>
+                        )}
                         <button onClick={addScene}>Add Scene</button>
                     </div>
                     <div className={styles['items-list']}>
                         {scenes.map(scene => (
                             <div key={scene.sceneID} className={styles.item}>
+                                <h3>Scene ID</h3>
                                 <input
+                                    type="number"
+                                    value={scene.sceneID}
+                                    onChange={(e) => updateScene({...scene, sceneID: parseInt(e.target.value)})}
+                                />
+                                <h3>Connection ID</h3>
+                                <input
+                                    type="number"
+                                    value={scene.connectionID}
+                                    onChange={(e) => updateScene({...scene, connectionID: parseInt(e.target.value)})}
+                                />
+                                <h3>Title</h3>
+                                <input
+                                    type="text"
                                     value={scene.title}
                                     onChange={(e) => updateScene({...scene, title: e.target.value})}
                                 />
+                                <h3>Description</h3>
                                 <textarea
                                     value={scene.description}
                                     onChange={(e) => updateScene({...scene, description: e.target.value})}
                                 />
-                                <button onClick={() => deleteScene(scene.sceneID)}>Delete</button>
+                                <h3>Image</h3>
+                                <input
+                                    id={`file-input-${scene.sceneID}`}
+                                    type="file"
+                                    accept="image/jpeg,image/png,image/gif"
+                                    onChange={(e) => {
+                                        // We don't need to do anything here anymore
+                                        // The file will be handled when clicking Save Changes
+                                    }}
+                                />
+                                {scene.image && (
+                                    <img 
+                                        src={scene.image} 
+                                        alt="Scene" 
+                                        style={{ maxWidth: '200px', marginTop: '10px' }} 
+                                    />
+                                )}
+                                <div className={styles.buttonGroup}>
+                                    <button onClick={() => deleteScene(scene.sceneID)}>Delete</button>
+                                    <button onClick={() => updateScene(scene)}>Save Changes</button>
+                                </div>
                             </div>
                         ))}
                     </div>
@@ -480,28 +564,66 @@ const AdminPanel = () => {
                             type="number"
                             placeholder="Required Item ID"
                             value={newConnection.requiredItemID || ''}
-                            onChange={(e) => setNewConnection({...newConnection, requiredItemID: parseInt(e.target.value)})}
+                            onChange={(e) => setNewConnection({...newConnection, requiredItemID: parseInt(e.target.value) || null})}
+                        />
+                        <h2>Mini Game ID</h2>
+                        <input
+                            type="number"
+                            placeholder="Mini Game ID"
+                            value={newConnection.miniGameID || ''}
+                            onChange={(e) => setNewConnection({...newConnection, miniGameID: parseInt(e.target.value) || null})}
                         />
                         <button onClick={addConnection}>Add Connection</button>
                     </div>
                     <div className={styles['items-list']}>
                         {connections.map(connection => (
                             <div key={connection.choicesConnectionsID} className={styles.item}>
+                                <h3>Connection ID</h3>
+                                <input
+                                    type="number"
+                                    value={connection.choicesConnectionsID}
+                                    onChange={(e) => updateConnection({...connection, choicesConnectionsID: parseInt(e.target.value)})}
+                                />
+                                <h3>From Scene ID</h3>
                                 <input
                                     type="number"
                                     value={connection.sceneFromID}
                                     onChange={(e) => updateConnection({...connection, sceneFromID: parseInt(e.target.value)})}
                                 />
+                                <h3>To Scene ID</h3>
                                 <input
                                     type="number"
                                     value={connection.sceneToID}
                                     onChange={(e) => updateConnection({...connection, sceneToID: parseInt(e.target.value)})}
                                 />
+                                <h3>Text</h3>
                                 <input
+                                    type="text"
                                     value={connection.text}
                                     onChange={(e) => updateConnection({...connection, text: e.target.value})}
                                 />
-                                <button onClick={() => deleteConnection(connection.choicesConnectionsID)}>Delete</button>
+                                <h3>Effect</h3>
+                                <input
+                                    type="text"
+                                    value={connection.effect}
+                                    onChange={(e) => updateConnection({...connection, effect: e.target.value})}
+                                />
+                                <h3>Required Item ID</h3>
+                                <input
+                                    type="number"
+                                    value={connection.requiredItemID || ''}
+                                    onChange={(e) => updateConnection({...connection, requiredItemID: parseInt(e.target.value) || null})}
+                                />
+                                <h3>Mini Game ID</h3>
+                                <input
+                                    type="number"
+                                    value={connection.miniGameID || ''}
+                                    onChange={(e) => updateConnection({...connection, miniGameID: parseInt(e.target.value) || null})}
+                                />
+                                <div className={styles.buttonGroup}>
+                                    <button onClick={() => deleteConnection(connection.choicesConnectionsID)}>Delete</button>
+                                    <button onClick={() => updateConnection(connection)}>Save Changes</button>
+                                </div>
                             </div>
                         ))}
                     </div>
@@ -546,10 +668,10 @@ const AdminPanel = () => {
                             value={newItem.forceModifier}
                             onChange={(e) => setNewItem({...newItem, forceModifier: parseInt(e.target.value)})}
                         />
-                        <h2>Obi Wan Relationship Modifier</h2>
+                        <h2>Obi-Wan Relationship Modifier</h2>
                         <input
                             type="number"
-                            placeholder="Obi Wan Relationship Modifier"
+                            placeholder="Obi-Wan Relationship Modifier"
                             value={newItem.obiWanRelationshipModifier}
                             onChange={(e) => setNewItem({...newItem, obiWanRelationshipModifier: parseInt(e.target.value)})}
                         />
@@ -558,15 +680,45 @@ const AdminPanel = () => {
                     <div className={styles['items-list']}>
                         {items.map(item => (
                             <div key={item.itemID} className={styles.item}>
+                                <h3>Item ID</h3>
                                 <input
+                                    type="number"
+                                    value={item.itemID}
+                                    onChange={(e) => updateItem({...item, itemID: parseInt(e.target.value)})}
+                                />
+                                <h3>Name</h3>
+                                <input
+                                    type="text"
                                     value={item.name}
                                     onChange={(e) => updateItem({...item, name: e.target.value})}
                                 />
+                                <h3>Description</h3>
                                 <textarea
                                     value={item.description}
                                     onChange={(e) => updateItem({...item, description: e.target.value})}
                                 />
-                                <button onClick={() => deleteItem(item.itemID)}>Delete</button>
+                                <h3>Health Modifier</h3>
+                                <input
+                                    type="number"
+                                    value={item.healthModifier}
+                                    onChange={(e) => updateItem({...item, healthModifier: parseInt(e.target.value)})}
+                                />
+                                <h3>Force Modifier</h3>
+                                <input
+                                    type="number"
+                                    value={item.forceModifier}
+                                    onChange={(e) => updateItem({...item, forceModifier: parseInt(e.target.value)})}
+                                />
+                                <h3>Obi-Wan Relationship Modifier</h3>
+                                <input
+                                    type="number"
+                                    value={item.obiWanRelationshipModifier}
+                                    onChange={(e) => updateItem({...item, obiWanRelationshipModifier: parseInt(e.target.value)})}
+                                />
+                                <div className={styles.buttonGroup}>
+                                    <button onClick={() => deleteItem(item.itemID)}>Delete</button>
+                                    <button onClick={() => updateItem(item)}>Save Changes</button>
+                                </div>
                             </div>
                         ))}
                     </div>

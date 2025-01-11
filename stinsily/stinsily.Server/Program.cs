@@ -50,7 +50,8 @@ builder.Services.AddCors(options =>
                 .AllowAnyMethod()
                 .AllowAnyHeader()
                 .AllowCredentials()
-                .WithExposedHeaders("Content-Disposition");
+                .WithExposedHeaders("Content-Disposition")
+                .SetIsOriginAllowed(_ => true);
         });
 });
 
@@ -89,7 +90,14 @@ if (!Directory.Exists(uploadsPath))
 }
 
 // Configure static files middleware
-app.UseStaticFiles(); // For wwwroot
+app.UseStaticFiles();
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(webRootPath),
+    RequestPath = ""
+});
+
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(uploadsPath),

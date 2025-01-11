@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using stinsily.Server.Data;
 using stinsily.Server.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace stinsily.Server.Controllers
 {
@@ -40,32 +41,34 @@ namespace stinsily.Server.Controllers
         // PUT: api/ChoicesConnections/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> PutChoicesConnections(int id, ChoicesConnections choicesConnections)
         {
-            if (id != choicesConnections.ChoicesConnectionsID)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(choicesConnections).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ChoicesConnectionsExists(id))
+                var connection = await _context.ChoicesConnections.FindAsync(id);
+                if (connection == null)
                 {
-                    return NotFound();
+                    return NotFound($"Connection with ID {id} not found");
                 }
-                else
-                {
-                    throw;
-                }
-            }
 
-            return NoContent();
+                // Update properties
+                connection.SceneFromID = choicesConnections.SceneFromID;
+                connection.SceneToID = choicesConnections.SceneToID;
+                connection.Text = choicesConnections.Text;
+                connection.Effect = choicesConnections.Effect;
+                connection.RequiredItemID = choicesConnections.RequiredItemID;
+                connection.MiniGameID = choicesConnections.MiniGameID;
+
+                _context.Update(connection);
+                await _context.SaveChangesAsync();
+
+                return Ok(connection);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error updating connection: {ex.Message}");
+            }
         }
 
         // POST: api/ChoicesConnections
