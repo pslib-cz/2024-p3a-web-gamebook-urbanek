@@ -10,6 +10,12 @@ namespace stinsily.Server.Models
         public int ConnectionID { get; set; } //foreign key
         public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
-        public string ImageURL { get; set; } = string.Empty;  // Not nullable, has default value
+        public string? ImageURL { get; set; }
+
+        // New field to associate an item with a scene
+        public int? ItemID { get; set; }
+
+        // Navigation properties
+        public virtual Items? Item { get; set; }
     }
 }

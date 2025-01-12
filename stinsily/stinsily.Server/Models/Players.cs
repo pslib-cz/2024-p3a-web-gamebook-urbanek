@@ -9,7 +9,7 @@ namespace stinsily.Server.Models
         public int PlayerID { get; set; }
         public int UserID { get; set; }
         public int CurrentSceneID { get; set; }
-        public int ItemID { get; set; }
+        public int? ItemID { get; set; }
         public int Health { get; set; }
         public int Force { get; set; }
         public int ObiWanRelationship { get; set; }

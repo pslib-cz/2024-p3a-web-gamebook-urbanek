@@ -21,14 +21,22 @@ namespace stinsily.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ChoicesConnections>>> GetChoicesConnections()
         {
-            return await _context.ChoicesConnections.ToListAsync();
+            return await _context.ChoicesConnections
+                .Include(cc => cc.FromScene)
+                .Include(cc => cc.ToScene)
+                .Include(cc => cc.RequiredItem)
+                .ToListAsync();
         }
 
         // GET: api/ChoicesConnections/5
         [HttpGet("{id}")]
         public async Task<ActionResult<ChoicesConnections>> GetChoicesConnections(int id)
         {
-            var choicesConnections = await _context.ChoicesConnections.FindAsync(id);
+            var choicesConnections = await _context.ChoicesConnections
+                .Include(cc => cc.FromScene)
+                .Include(cc => cc.ToScene)
+                .Include(cc => cc.RequiredItem)
+                .FirstOrDefaultAsync(cc => cc.ChoicesConnectionsID == id);
 
             if (choicesConnections == null)
             {
@@ -39,40 +47,36 @@ namespace stinsily.Server.Controllers
         }
 
         // PUT: api/ChoicesConnections/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        [Authorize]
         public async Task<IActionResult> PutChoicesConnections(int id, ChoicesConnections choicesConnections)
         {
+            if (id != choicesConnections.ChoicesConnectionsID)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(choicesConnections).State = EntityState.Modified;
+
             try
             {
-                var connection = await _context.ChoicesConnections.FindAsync(id);
-                if (connection == null)
-                {
-                    return NotFound($"Connection with ID {id} not found");
-                }
-
-                // Update properties
-                connection.SceneFromID = choicesConnections.SceneFromID;
-                connection.SceneToID = choicesConnections.SceneToID;
-                connection.Text = choicesConnections.Text;
-                connection.Effect = choicesConnections.Effect;
-                connection.RequiredItemID = choicesConnections.RequiredItemID;
-                connection.MiniGameID = choicesConnections.MiniGameID;
-
-                _context.Update(connection);
                 await _context.SaveChangesAsync();
-
-                return Ok(connection);
             }
-            catch (Exception ex)
+            catch (DbUpdateConcurrencyException)
             {
-                return StatusCode(500, $"Error updating connection: {ex.Message}");
+                if (!ChoicesConnectionsExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
             }
+
+            return NoContent();
         }
 
         // POST: api/ChoicesConnections
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<ChoicesConnections>> PostChoicesConnections(ChoicesConnections choicesConnections)
         {

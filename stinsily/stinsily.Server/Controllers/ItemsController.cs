@@ -8,7 +8,6 @@ namespace stinsily.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class ItemsController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -16,24 +15,6 @@ namespace stinsily.Server.Controllers
         public ItemsController(AppDbContext context)
         {
             _context = context;
-        }
-
-        [HttpGet("is-admin")]
-        [Authorize] // Pouze přihlášení uživatelé
-        public IActionResult IsAdmin()
-        {
-            var isAdmin = User.IsInRole("Admin"); // Ověření role admin
-            return Ok(isAdmin); // Vrací true nebo false
-        }
-
-        [HttpPost]
-        public IActionResult AddItem([FromBody] Items item)
-        {
-            // Logika pro přidání položky
-            _context.Items.Add(item);
-            _context.SaveChanges();
-
-            return Ok("Item added successfully.");
         }
 
         // GET: api/Items
@@ -45,67 +26,75 @@ namespace stinsily.Server.Controllers
 
         // GET: api/Items/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Items>> GetItems(int id)
+        public async Task<ActionResult<Items>> GetItem(int id)
         {
-            var items = await _context.Items.FindAsync(id);
+            var item = await _context.Items.FindAsync(id);
 
-            if (items == null)
+            if (item == null)
             {
                 return NotFound();
             }
 
-            return items;
+            return item;
         }
 
         // PUT: api/Items/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        [Authorize]
-        public async Task<IActionResult> PutItems(int id, Items items)
+        public async Task<IActionResult> PutItem(int id, Items item)
         {
+            if (id != item.ItemID)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(item).State = EntityState.Modified;
+
             try
             {
-                var item = await _context.Items.FindAsync(id);
-                if (item == null)
-                {
-                    return NotFound($"Item with ID {id} not found");
-                }
-
-                // Update properties
-                item.Name = items.Name;
-                item.Description = items.Description;
-                item.HealthModifier = items.HealthModifier;
-                item.ForceModifier = items.ForceModifier;
-                item.ObiWanRelationshipModifier = items.ObiWanRelationshipModifier;
-
-                _context.Update(item);
                 await _context.SaveChangesAsync();
-
-                return Ok(item);
             }
-            catch (Exception ex)
+            catch (DbUpdateConcurrencyException)
             {
-                return StatusCode(500, $"Error updating item: {ex.Message}");
+                if (!ItemExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
             }
+
+            return NoContent();
+        }
+
+        // POST: api/Items
+        [HttpPost]
+        public async Task<ActionResult<Items>> PostItem(Items item)
+        {
+            _context.Items.Add(item);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetItem", new { id = item.ItemID }, item);
         }
 
         // DELETE: api/Items/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteItems(int id)
+        public async Task<IActionResult> DeleteItem(int id)
         {
-            var items = await _context.Items.FindAsync(id);
-            if (items == null)
+            var item = await _context.Items.FindAsync(id);
+            if (item == null)
             {
                 return NotFound();
             }
 
-            _context.Items.Remove(items);
+            _context.Items.Remove(item);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool ItemsExists(int id)
+        private bool ItemExists(int id)
         {
             return _context.Items.Any(e => e.ItemID == id);
         }

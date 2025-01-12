@@ -8,6 +8,7 @@ interface Scene {
     title: string;
     description: string;
     image: string;
+    itemID?: number;
 }
 
 interface ChoiceConnection {
@@ -125,61 +126,53 @@ const AdminPanel = () => {
             formData.append('connectionID', newScene.connectionID.toString());
             formData.append('title', newScene.title);
             formData.append('description', newScene.description);
-            
+            if (newScene.itemID !== undefined) {
+                formData.append('itemID', newScene.itemID.toString());
+            }
             if (selectedFile) {
                 formData.append('image', selectedFile);
             }
 
             const token = localStorage.getItem('authToken');
-            
-            console.log('Starting file upload...');
-            
-            try {
-                const response = await fetch("http://localhost:5193/api/Scenes", {
-                    method: "POST",
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    },
-                    body: formData
-                });
+            const response = await fetch("http://localhost:5193/api/Scenes", {
+                method: "POST",
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+                body: formData
+            });
 
-                console.log('Upload response status:', response.status);
-
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    console.error('Failed to add scene. Status:', response.status, 'Error:', errorText);
-                    return;
-                }
-
-                const result = await response.json();
-                console.log('Scene added successfully:', result);
-                
-                await fetchScenes();
-                setNewScene({ sceneID: 0, connectionID: 0, title: '', description: '', image: '' });
-                setSelectedFile(null);
-            } catch (error) {
-                console.error('Network or parsing error:', error);
-                throw error; // Re-throw to be caught by outer try-catch
-            }
+            if (!response.ok) throw new Error('Failed to add scene');
+            fetchScenes();
         } catch (error) {
-            console.error('Error in addScene:', error);
-            // You might want to show this error to the user
-            alert('Failed to upload scene. Please try again.');
+            console.error('Error adding scene:', error);
         }
     };
 
     const updateScene = async (scene: Scene) => {
         try {
             const formData = new FormData();
-            formData.append('sceneID', scene.sceneID.toString());
-            formData.append('connectionID', scene.connectionID.toString());
-            formData.append('title', scene.title);
-            formData.append('description', scene.description);
             
-            // Get the file input element for this specific scene
-            const fileInput = document.querySelector(`#file-input-${scene.sceneID}`) as HTMLInputElement;
-            if (fileInput?.files?.[0]) {
-                formData.append('image', fileInput.files[0]);
+            // Safely append values with null checks
+            if (scene.sceneID !== undefined && scene.sceneID !== null) {
+                formData.append('sceneID', scene.sceneID.toString());
+            }
+            
+            if (scene.connectionID !== undefined && scene.connectionID !== null) {
+                formData.append('connectionID', scene.connectionID.toString());
+            }
+            
+            // Title and description should never be null, but let's be safe
+            formData.append('title', scene.title || '');
+            formData.append('description', scene.description || '');
+            
+            // Optional fields
+            if (scene.itemID !== undefined && scene.itemID !== null) {
+                formData.append('itemID', scene.itemID.toString());
+            }
+            
+            if (selectedFile) {
+                formData.append('image', selectedFile);
             }
 
             const token = localStorage.getItem('authToken');
@@ -190,20 +183,15 @@ const AdminPanel = () => {
                 },
                 body: formData
             });
-            
+
             if (!response.ok) {
                 const errorText = await response.text();
-                console.error('Failed to update scene. Status:', response.status, 'Error:', errorText);
-                return;
+                throw new Error(`Failed to update scene: ${errorText}`);
             }
             
             await fetchScenes();
-            // Clear the file input after successful update
-            if (fileInput) fileInput.value = '';
-            
         } catch (error) {
             console.error('Error updating scene:', error);
-            alert('Failed to update scene');
         }
     };
 
@@ -456,6 +444,21 @@ const AdminPanel = () => {
                             value={newScene.description}
                             onChange={(e) => setNewScene({...newScene, description: e.target.value})}
                         />
+                        <h2>Scene Item</h2>
+                        <select
+                            value={newScene.itemID || ''}
+                            onChange={(e) => setNewScene({
+                                ...newScene, 
+                                itemID: e.target.value ? parseInt(e.target.value) : undefined
+                            })}
+                        >
+                            <option value="">No Item</option>
+                            {items.map(item => (
+                                <option key={item.itemID} value={item.itemID}>
+                                    {item.name}
+                                </option>
+                            ))}
+                        </select>
                         <h2>Image</h2>
                         <input
                             id={`file-input-${newScene.sceneID}`}
@@ -500,6 +503,21 @@ const AdminPanel = () => {
                                     value={scene.description}
                                     onChange={(e) => updateScene({...scene, description: e.target.value})}
                                 />
+                                <h3>Scene Item</h3>
+                                <select
+                                    value={scene.itemID || ''}
+                                    onChange={(e) => updateScene({
+                                        ...scene, 
+                                        itemID: e.target.value ? parseInt(e.target.value) : undefined
+                                    })}
+                                >
+                                    <option value="">No Item</option>
+                                    {items.map(item => (
+                                        <option key={item.itemID} value={item.itemID}>
+                                            {item.name}
+                                        </option>
+                                    ))}
+                                </select>
                                 <h3>Image</h3>
                                 <input
                                     id={`file-input-${scene.sceneID}`}

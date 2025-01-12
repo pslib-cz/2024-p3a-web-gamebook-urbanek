@@ -129,75 +129,64 @@ namespace stinsily.Server.Controllers
             {
                 var options = new List<object>();
                 var player = await _context.Players.FirstOrDefaultAsync();
-                var currentItemId = player?.ItemID ?? 1;
+                var currentItemId = player?.ItemID;
 
                 Console.WriteLine($"Current scene: {sceneId}, Player item: {currentItemId}");
 
-                // Add "Previous Scene" button if not on first scene
+                // Get all possible connections from current scene
+                var connections = await _context.ChoicesConnections
+                    .Where(c => c.SceneFromID == sceneId)
+                    .Include(c => c.RequiredItem)
+                    .ToListAsync();
+
+                // Add navigation options based on connections
+                foreach (var connection in connections)
+                {
+                    bool canTransition = connection.RequiredItemID == null || 
+                                       (currentItemId.HasValue && currentItemId.Value == connection.RequiredItemID);
+
+                    if (canTransition)
+                    {
+                        options.Add(new
+                        {
+                            optionId = connection.ChoicesConnectionsID,
+                            text = connection.Text ?? "Next Scene",
+                            nextSceneId = connection.SceneToID,
+                            type = "navigation"
+                        });
+                    }
+                }
+
+                // Add "Previous Scene" option if not on first scene
                 if (sceneId > 1)
                 {
                     options.Add(new
                     {
-                        optionId = -1,
+                        optionId = -999,
                         text = "Previous Scene",
                         nextSceneId = sceneId - 1,
                         type = "navigation"
                     });
                 }
 
-                // For scene 1, add the connection to scene 2
-                if (sceneId == 1)
-                {
-                    options.Add(new
-                    {
-                        optionId = 1,
-                        text = "Next Scene",
-                        nextSceneId = 2,
-                        type = "navigation"
-                    });
-                }
+                // Get current scene for item interactions
+                var scene = await _context.Scenes
+                    .Include(s => s.Item)
+                    .FirstOrDefaultAsync(s => s.SceneID == sceneId);
 
-                // For scene 2, handle item and conditional navigation
-                if (sceneId == 2)
+                if (scene?.Item != null)
                 {
-                    var hasLightsaber = currentItemId == 2;
-                    
-                    // Add item pickup/drop button
+                    var hasItem = currentItemId == scene.Item.ItemID;
                     options.Add(new
                     {
-                        optionId = -2,
-                        text = hasLightsaber ? "Drop Lightsaber" : "Pick up Lightsaber",
+                        optionId = -scene.Item.ItemID,
+                        text = hasItem ? $"Drop {scene.Item.Name}" : $"Pick up {scene.Item.Name}",
                         type = "item",
-                        itemId = 2,
-                        action = hasLightsaber ? "drop" : "pickup"
-                    });
-
-                    // Show scene 3 button only if player has lightsaber
-                    if (hasLightsaber)
-                    {
-                        options.Add(new
-                        {
-                            optionId = 2,
-                            text = "Next Scene",
-                            nextSceneId = 3,
-                            type = "navigation"
-                        });
-                    }
-                }
-
-                // For scene 3, add navigation options without item requirements
-                if (sceneId == 3)
-                {
-                    options.Add(new
-                    {
-                        optionId = 3,
-                        text = "Next Scene",
-                        nextSceneId = 4,
-                        type = "navigation"
+                        itemId = scene.Item.ItemID,
+                        action = hasItem ? "drop" : "pickup"
                     });
                 }
 
-                Console.WriteLine($"Returning {options.Count} options with player having item {currentItemId}");
                 return Ok(options);
             }
             catch (Exception ex)
@@ -218,79 +207,54 @@ namespace stinsily.Server.Controllers
         {
             try
             {
-                // First verify that required records exist
-                var scene = await _context.Scenes.FindAsync(2);
-                if (scene == null)
-                {
-                    return StatusCode(500, "Required scene not found");
-                }
-
-                var defaultItem = await _context.Items.FindAsync(1);
-                if (defaultItem == null)
-                {
-                    return StatusCode(500, "Default item not found");
-                }
-
-                // First check if we have an existing player
                 var player = await _context.Players.FirstOrDefaultAsync();
-
+                
                 if (player == null)
                 {
-                    // Create a user first if it doesn't exist
-                    var user = await _context.Users.FirstOrDefaultAsync();
-                    if (user == null)
-                {
-                    // Create a default user
-                user = new Users 
-                { 
-                    UserID = 1,
-                    UserName = "DefaultUser",
-                    Email = "default@example.com"
-                };
-                _context.Users.Add(user);
-                await _context.SaveChangesAsync();
-            }
+                    var defaultScene = await _context.Scenes.FirstOrDefaultAsync();
+                    if (defaultScene == null)
+                    {
+                        return StatusCode(500, "No scenes found in database");
+                    }
 
-            // Now create the player with valid foreign keys
-            player = new Players 
-            { 
-                UserID = user.UserID,  // Use the actual user ID
-                CurrentSceneID = scene.SceneID,
-                ItemID = defaultItem.ItemID,
-                Health = 100,
-                Force = 100,
-                ObiWanRelationship = 50
-            };
+                    player = new Players 
+                    { 
+                        UserID = 1,
+                        CurrentSceneID = defaultScene.SceneID,
+                        ItemID = null,
+                        Health = 100,
+                        Force = 100,
+                        ObiWanRelationship = 50
+                    };
 
-            _context.Players.Add(player);
-            await _context.SaveChangesAsync();
-            }
-
-            // Handle item action
-            if (request.Action.ToLower() == "pickup")
-            {
-                var newItem = await _context.Items.FindAsync(request.ItemId);
-                if (newItem == null)
-                {
-                return NotFound("Item not found");
+                    _context.Players.Add(player);
+                    await _context.SaveChangesAsync();
                 }
-                player.ItemID = newItem.ItemID;
-            }
-            else if (request.Action.ToLower() == "drop")
-            {
-                player.ItemID = defaultItem.ItemID;
-            }
 
-            _context.Update(player);
-            await _context.SaveChangesAsync();
-            return await GetSceneOptions(player.CurrentSceneID);
+                // Handle item action
+                if (request.Action.ToLower() == "pickup")
+                {
+                    var item = await _context.Items.FindAsync(request.ItemId);
+                    if (item == null)
+                    {
+                        return NotFound($"Item {request.ItemId} not found");
+                    }
+                    player.ItemID = item.ItemID;
+                }
+                else if (request.Action.ToLower() == "drop")
+                {
+                    player.ItemID = null;
+                }
+
+                await _context.SaveChangesAsync();
+                return await GetSceneOptions(player.CurrentSceneID);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in HandleItem: {ex.Message}");
+                return StatusCode(500, "Error handling item");
+            }
         }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error in HandleItem: {ex.Message}");
-            return StatusCode(500, "Error handling item");
-        }
-    }
 
         [HttpPut("{id}")]
         [Authorize]
@@ -315,6 +279,7 @@ namespace stinsily.Server.Controllers
                 scene.ConnectionID = request.ConnectionID;
                 scene.Title = request.Title;
                 scene.Description = request.Description;
+                scene.ItemID = request.ItemID;
 
                 // Handle image update if provided
                 if (request.Image != null && request.Image.Length > 0)
@@ -376,6 +341,7 @@ namespace stinsily.Server.Controllers
                     ConnectionID = request.ConnectionID,
                     Title = request.Title,
                     Description = request.Description,
+                    ItemID = request.ItemID,
                     ImageURL = string.Empty
                 };
 
@@ -601,5 +567,6 @@ namespace stinsily.Server.Controllers
         public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public IFormFile? Image { get; set; }
+        public int? ItemID { get; set; }
     }
 }

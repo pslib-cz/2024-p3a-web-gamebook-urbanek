@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import styles from '../Modules/Scene.module.css';
 
 interface Scene {
     sceneID: number;
@@ -93,6 +94,9 @@ const Scene = () => {
 
     useEffect(() => {
         if (id) {
+            setLoading(true);
+            setCurrentScene(null);
+            setSceneOptions([]);
             fetchScene(id);
         }
     }, [id, fetchScene]);
@@ -142,25 +146,27 @@ const Scene = () => {
         getCurrentUserEmail();
     }, []);
 
-    if (loading) return <div>Loading...</div>;
-    if (!currentScene) return <div>No scene found</div>;
+    if (loading) return <div className={styles['scene-container']}>Loading...</div>;
+    if (!currentScene) return <div className={styles['scene-container']}>No scene found</div>;
 
     return (
-        <div>
-            <h2>{currentScene.title}</h2>
-            <p>{currentScene.description}</p>
-            <div>
-                {sceneOptions.map(option => (
-                    <button 
-                        key={option.optionId} 
-                        onClick={() => handleOptionClick(option)}
-                    >
-                        {option.text}
+        <div className={styles['scene-container']}>
+            <div className={styles['scene-content']}>
+                <h2>{currentScene.title}</h2>
+                <p>{currentScene.description}</p>
+                <div className={styles['options-container']}>
+                    {sceneOptions.map(option => (
+                        <button 
+                            key={option.optionId} 
+                            onClick={() => handleOptionClick(option)}
+                        >
+                            {option.text}
+                        </button>
+                    ))}
+                    <button onClick={saveProgress}>
+                        Save Progress
                     </button>
-                ))}
-                <button onClick={saveProgress} style={{ marginTop: '20px' }}>
-                    Save Progress
-                </button>
+                </div>
             </div>
         </div>
     );
