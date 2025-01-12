@@ -1,24 +1,12 @@
 {
   "Files": [
     {
-      "Id": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\96fde4b9-2cfa-4f84-a97c-d7541fbf3d1d.jpg",
-      "PackagePath": "staticwebassets\\Uploads\\96fde4b9-2cfa-4f84-a97c-d7541fbf3d1d.jpg"
+      "Id": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_1_ea44b05e-865b-425f-8480-d8c1dbffbe49.jpg",
+      "PackagePath": "staticwebassets\\Uploads\\scene_1_ea44b05e-865b-425f-8480-d8c1dbffbe49.jpg"
     },
     {
-      "Id": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_1_1533be65-fbaa-4b32-b15a-4008f374a682.jpg",
-      "PackagePath": "staticwebassets\\Uploads\\scene_1_1533be65-fbaa-4b32-b15a-4008f374a682.jpg"
-    },
-    {
-      "Id": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_1_bf5ab83a-b43a-48da-a196-1b98d6646c51.jpg",
-      "PackagePath": "staticwebassets\\Uploads\\scene_1_bf5ab83a-b43a-48da-a196-1b98d6646c51.jpg"
-    },
-    {
-      "Id": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_1_d2e9ccf1-68bb-4f90-b57e-abc6c503885d.jpg",
-      "PackagePath": "staticwebassets\\Uploads\\scene_1_d2e9ccf1-68bb-4f90-b57e-abc6c503885d.jpg"
-    },
-    {
-      "Id": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_4_9730cdf8-1dec-4191-9bf4-7888830c5b89.jpg",
-      "PackagePath": "staticwebassets\\Uploads\\scene_4_9730cdf8-1dec-4191-9bf4-7888830c5b89.jpg"
+      "Id": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_2_bd81c4a6-3e7a-45d3-be36-8df09c0ac137.jpg",
+      "PackagePath": "staticwebassets\\Uploads\\scene_2_bd81c4a6-3e7a-45d3-be36-8df09c0ac137.jpg"
     },
     {
       "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.stinsily.Server.props",

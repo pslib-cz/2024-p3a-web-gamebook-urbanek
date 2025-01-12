@@ -53,33 +53,24 @@ namespace stinsily.Server.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<object>> GetScene(int id)
+        public async Task<ActionResult<Scenes>> GetScene(int id)
         {
-            try
-            {
-                Console.WriteLine($"Getting scene {id}");
-                var scene = await _context.Scenes
-                    .FirstOrDefaultAsync(s => s.SceneID == id);
+            var scene = await _context.Scenes.FindAsync(id);
 
-                if (scene == null)
-                {
-                    Console.WriteLine($"Scene {id} not found");
-                    return NotFound($"Scene {id} not found");
-                }
-
-                Console.WriteLine($"Found scene: {scene.Title}");
-                return Ok(new
-                {
-                    id = scene.SceneID,
-                    title = scene.Title,
-                    description = scene.Description
-                });
-            }
-            catch (Exception ex)
+            if (scene == null)
             {
-                Console.WriteLine($"Error getting scene: {ex.Message}");
-                return StatusCode(500, "Error fetching scene");
+                return NotFound();
             }
+
+            // Make sure ImageURL is included in the response
+            return new JsonResult(new {
+                sceneID = scene.SceneID,
+                title = scene.Title,
+                description = scene.Description,
+                imageURL = scene.ImageURL,  // Make sure this property exists and is being set
+                connectionID = scene.ConnectionID,
+                itemID = scene.ItemID
+            });
         }
 
         [HttpGet("available-scenes")]
@@ -131,9 +122,7 @@ namespace stinsily.Server.Controllers
                 var player = await _context.Players.FirstOrDefaultAsync();
                 var currentItemId = player?.ItemID;
 
-                Console.WriteLine($"Current scene: {sceneId}, Player item: {currentItemId}");
-
-                // Get all possible connections from current scene
+                // Get all possible connections FROM current scene
                 var connections = await _context.ChoicesConnections
                     .Where(c => c.SceneFromID == sceneId)
                     .Include(c => c.RequiredItem)
@@ -155,18 +144,6 @@ namespace stinsily.Server.Controllers
                             type = "navigation"
                         });
                     }
-                }
-
-                // Add "Previous Scene" option if not on first scene
-                if (sceneId > 1)
-                {
-                    options.Add(new
-                    {
-                        optionId = -999,
-                        text = "Previous Scene",
-                        nextSceneId = sceneId - 1,
-                        type = "navigation"
-                    });
                 }
 
                 // Get current scene for item interactions
@@ -278,7 +255,7 @@ namespace stinsily.Server.Controllers
                 scene.SceneID = request.SceneID;
                 scene.ConnectionID = request.ConnectionID;
                 scene.Title = request.Title;
-                scene.Description = request.Description;
+                scene.Description = request.Description ?? string.Empty;
                 scene.ItemID = request.ItemID;
 
                 // Handle image update if provided

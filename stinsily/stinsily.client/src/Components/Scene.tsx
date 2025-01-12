@@ -6,6 +6,10 @@ interface Scene {
     sceneID: number;
     title: string;
     description: string;
+    imageURL?: string;
+    image?: string;
+    connectionID: number;
+    itemID?: number;
 }
 
 interface SceneOption {
@@ -24,6 +28,7 @@ const Scene = () => {
     const [currentScene, setCurrentScene] = useState<Scene | null>(null);
     const [sceneOptions, setSceneOptions] = useState<SceneOption[]>([]);
     const [loading, setLoading] = useState(true);
+    const [isTransitioning, setIsTransitioning] = useState(false);
 
     const API_BASE_URL = 'http://localhost:5193/api';
 
@@ -43,6 +48,12 @@ const Scene = () => {
             }
 
             const sceneData = await response.json();
+            console.log('Full scene data:', sceneData);
+            
+            if (sceneData.imageURL === undefined && sceneData.image !== undefined) {
+                sceneData.imageURL = sceneData.image;
+            }
+            
             setCurrentScene(sceneData);
 
             // Fetch options for this scene
@@ -94,10 +105,10 @@ const Scene = () => {
 
     useEffect(() => {
         if (id) {
-            setLoading(true);
-            setCurrentScene(null);
-            setSceneOptions([]);
-            fetchScene(id);
+            setIsTransitioning(true);
+            fetchScene(id).finally(() => {
+                setIsTransitioning(false);
+            });
         }
     }, [id, fetchScene]);
 
@@ -146,26 +157,55 @@ const Scene = () => {
         getCurrentUserEmail();
     }, []);
 
-    if (loading) return <div className={styles['scene-container']}>Loading...</div>;
-    if (!currentScene) return <div className={styles['scene-container']}>No scene found</div>;
+    const getBackgroundStyle = () => {
+        if (!currentScene) return { backgroundColor: 'black' };
+        
+        const imageURL = currentScene.imageURL || currentScene.image; // Try both properties
+        console.log('Raw image URL:', imageURL);
+        
+        if (!imageURL) return { backgroundColor: 'black' };
+        
+        const fullImageUrl = `http://localhost:5193/uploads/${imageURL.split('/').pop()}`;
+        console.log('Full image URL:', fullImageUrl);
+        
+        return {
+            backgroundImage: `url(${fullImageUrl})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat'
+        };
+    };
+
+    if (!currentScene) return null;
+
+    const backgroundStyle = getBackgroundStyle();
+
+    console.log('Image URL:', currentScene.imageURL);
+    console.log('Background style:', backgroundStyle);
 
     return (
-        <div className={styles['scene-container']}>
+        <div className={`${styles['scene-container']} ${isTransitioning ? styles['transitioning'] : ''}`}>
+            <div 
+                className={styles['scene-background']} 
+                style={backgroundStyle}
+            />
+            <div className={styles['scene-title-container']}>
+                <h2 className={styles['scene-title']}>{currentScene.title}</h2>
+            </div>
+            <button className={styles['save-button']} onClick={saveProgress}>
+                Save Progress
+            </button>
             <div className={styles['scene-content']}>
-                <h2>{currentScene.title}</h2>
-                <p>{currentScene.description}</p>
+                <p className={styles['scene-description']}>{currentScene.description}</p>
                 <div className={styles['options-container']}>
                     {sceneOptions.map(option => (
                         <button 
                             key={option.optionId} 
+                            className={styles['next-button']}
                             onClick={() => handleOptionClick(option)}
-                        >
-                            {option.text}
-                        </button>
+                            title={option.text}
+                        />
                     ))}
-                    <button onClick={saveProgress}>
-                        Save Progress
-                    </button>
                 </div>
             </div>
         </div>

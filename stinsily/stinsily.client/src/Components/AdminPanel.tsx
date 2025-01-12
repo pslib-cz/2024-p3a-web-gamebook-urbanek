@@ -7,8 +7,8 @@ interface Scene {
     connectionID: number;
     title: string;
     description: string;
-    image: string;
-    itemID?: number;
+    image?: string;
+    itemID?: number | null;
 }
 
 interface ChoiceConnection {
@@ -39,7 +39,14 @@ const AdminPanel = () => {
     const navigate = useNavigate();
     
     // Nové scény, spojení a předměty
-    const [newScene, setNewScene] = useState<Scene>({ sceneID: 0, connectionID: 0, title: '', description: '', image: '' });
+    const [newScene, setNewScene] = useState<Scene>({
+        sceneID: 0,
+        connectionID: 0,
+        title: '',
+        description: '',
+        image: '',
+        itemID: null
+    });
     const [newConnection, setNewConnection] = useState<ChoiceConnection>({
         choicesConnectionsID: 0,
         sceneFromID: 0,
@@ -126,7 +133,7 @@ const AdminPanel = () => {
             formData.append('connectionID', newScene.connectionID.toString());
             formData.append('title', newScene.title);
             formData.append('description', newScene.description);
-            if (newScene.itemID !== undefined) {
+            if (newScene.itemID !== undefined && newScene.itemID !== null) {
                 formData.append('itemID', newScene.itemID.toString());
             }
             if (selectedFile) {
@@ -151,31 +158,36 @@ const AdminPanel = () => {
 
     const updateScene = async (scene: Scene) => {
         try {
+            // Validate required fields
+            if (!scene.sceneID || !scene.connectionID) {
+                console.error('Scene ID and Connection ID are required');
+                return;
+            }
+
             const formData = new FormData();
             
-            // Safely append values with null checks
-            if (scene.sceneID !== undefined && scene.sceneID !== null) {
-                formData.append('sceneID', scene.sceneID.toString());
-            }
-            
-            if (scene.connectionID !== undefined && scene.connectionID !== null) {
-                formData.append('connectionID', scene.connectionID.toString());
-            }
-            
-            // Title and description should never be null, but let's be safe
+            // Add validation and type checking for each field
+            formData.append('sceneID', scene.sceneID.toString());
+            formData.append('connectionID', scene.connectionID.toString() || '0');
             formData.append('title', scene.title || '');
             formData.append('description', scene.description || '');
-            
-            // Optional fields
+
             if (scene.itemID !== undefined && scene.itemID !== null) {
                 formData.append('itemID', scene.itemID.toString());
             }
-            
-            if (selectedFile) {
-                formData.append('image', selectedFile);
+
+            // Handle image upload
+            const fileInput = document.querySelector(`#file-input-${scene.sceneID}`) as HTMLInputElement;
+            if (fileInput?.files?.[0]) {
+                formData.append('image', fileInput.files[0]);
+                console.log('Uploading image for scene:', scene.sceneID);
             }
 
             const token = localStorage.getItem('authToken');
+            if (!token) {
+                throw new Error('No authentication token found');
+            }
+
             const response = await fetch(`http://localhost:5193/api/Scenes/${scene.sceneID}`, {
                 method: "PUT",
                 headers: {
@@ -186,12 +198,14 @@ const AdminPanel = () => {
 
             if (!response.ok) {
                 const errorText = await response.text();
-                throw new Error(`Failed to update scene: ${errorText}`);
+                throw new Error(`Server error: ${errorText}`);
             }
-            
-            await fetchScenes();
+
+            await fetchScenes(); // Refresh the scenes list
         } catch (error) {
             console.error('Error updating scene:', error);
+            // You might want to show this error to the user
+            alert(`Failed to update scene: ${error instanceof Error ? error.message : 'Unknown error'}`);
         }
     };
 
@@ -403,6 +417,22 @@ const AdminPanel = () => {
         }
     };
 
+    const handleDescriptionChange = (scene: Scene, newDescription: string) => {
+        const updatedScene = {
+            ...scene,
+            description: newDescription
+        };
+        setScenes(prevScenes => 
+            prevScenes.map(s => 
+                s.sceneID === scene.sceneID ? updatedScene : s
+            )
+        );
+    };
+
+    const handleSaveDescription = async (scene: Scene) => {
+        await updateScene(scene);
+    };
+
     if (!isAdmin) return null;
 
     return (
@@ -489,7 +519,7 @@ const AdminPanel = () => {
                                 <h3>Connection ID</h3>
                                 <input
                                     type="number"
-                                    value={scene.connectionID}
+                                    value={scene.connectionID || ''}
                                     onChange={(e) => updateScene({...scene, connectionID: parseInt(e.target.value)})}
                                 />
                                 <h3>Title</h3>
@@ -500,8 +530,10 @@ const AdminPanel = () => {
                                 />
                                 <h3>Description</h3>
                                 <textarea
-                                    value={scene.description}
-                                    onChange={(e) => updateScene({...scene, description: e.target.value})}
+                                    value={scene.description || ''}
+                                    onChange={(e) => handleDescriptionChange(scene, e.target.value)}
+                                    onBlur={() => handleSaveDescription(scene)}
+                                    placeholder="Description"
                                 />
                                 <h3>Scene Item</h3>
                                 <select
@@ -518,23 +550,24 @@ const AdminPanel = () => {
                                         </option>
                                     ))}
                                 </select>
-                                <h3>Image</h3>
+                                {scene.image && (
+                                    <img 
+                                        src={`http://localhost:5193${scene.image}`}
+                                        alt="Scene preview"
+                                        style={{ maxWidth: '200px', marginBottom: '1rem' }}
+                                    />
+                                )}
+                                <h3>Update Image</h3>
                                 <input
                                     id={`file-input-${scene.sceneID}`}
                                     type="file"
                                     accept="image/jpeg,image/png,image/gif"
                                     onChange={(e) => {
-                                        // We don't need to do anything here anymore
-                                        // The file will be handled when clicking Save Changes
+                                        if (e.target.files && e.target.files[0]) {
+                                            console.log('File selected for scene:', scene.sceneID);
+                                        }
                                     }}
                                 />
-                                {scene.image && (
-                                    <img 
-                                        src={scene.image} 
-                                        alt="Scene" 
-                                        style={{ maxWidth: '200px', marginTop: '10px' }} 
-                                    />
-                                )}
                                 <div className={styles.buttonGroup}>
                                     <button onClick={() => deleteScene(scene.sceneID)}>Delete</button>
                                     <button onClick={() => updateScene(scene)}>Save Changes</button>

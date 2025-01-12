@@ -1,36 +1,162 @@
+@import url('https://fonts.googleapis.com/css2?family=Techno+Race&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk&display=swap');
+
 .scene-container {
-    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: black;
+    position: relative;
+    overflow: hidden;
+    opacity: 1;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.scene-container.transitioning {
+    opacity: 0;
+}
+
+.scene-background {
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    box-sizing: border-box;
-    background-color: #1a1a1a;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: 0;
+}
+
+.scene-title-container {
+    position: fixed;
+    left: 1rem;
     z-index: 1;
+    margin-top: 1rem;
+    padding: 0.75rem 1.5rem;
+    background: rgba(0, 0, 0, 0.7);
+    border: 2px solid #ffffff;
+    border-radius: 15px;
+    max-width: 90%;
+}
+
+.scene-title {
+    font-family: 'Techno Race', sans-serif;
+    font-size: 1.25rem;
+    color: #ffffff;
+    text-align: center;
+    margin: 0;
+}
+
+.save-button {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 2;
+    background-color: rgba(0, 0, 0, 0.75);
+    color: #32CD32;
+    border: 2px solid #32CD32;
+    border-radius: 15px;
+    padding: 0.75rem 1.5rem;
+    font-family: 'Techno Race', sans-serif;
+    font-size: 1.25rem;
+    cursor: pointer;
+    text-shadow: none;
+}
+
+.save-button:hover {
+    background-color: #32CD32;
 }
 
 .scene-content {
-    width: 100%;
-    max-width: 1200px;
-    text-align: center;
-    padding: 20px;
-    box-sizing: border-box;
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+    width: 90%;
+    max-width: 800px;
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid #32CD32;
+    border-radius: 15px;
+    padding: 1.5rem;
+}
+
+.scene-description {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.25rem;
+    color: #ffffff;
+    margin-bottom: 1rem;
+    line-height: 1.4;
 }
 
 .options-container {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    margin-top: 20px;
-    align-items: center;
+    position: relative;
 }
 
-.options-container button {
-    min-width: 200px;
-    max-width: 400px;
+.next-button {
+    position: absolute;
+    top: -2.5rem;
+    right: -1rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+    transition: 0.3s ease-in-out;
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%2332CD32' d='M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z'/%3E%3C/svg%3E");
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%2332CD32' d='M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z'/%3E%3C/svg%3E");
+    background-color: #32CD32;
+    mask-size: cover;
+    -webkit-mask-size: cover;
+}
+
+.next-button:hover {
+    background-color: #4CAF50;
+    transform: scale(1.25);
+}
+
+/* Media Queries */
+@media (min-width: 768px) {
+    .scene-title-container {
+        position: relative;
+        padding: 1rem 2.5rem;
+        border-radius: 20px;
+    }
+
+    .scene-title {
+        font-size: 2.5rem;
+    }
+
+    .save-button {
+        padding: 0.7rem 1.4rem;
+        font-size: 1.5rem;
+    }
+
+    .scene-content {
+        padding: 2rem;
+    }
+
+    .scene-description {
+        font-size: 1.25rem;
+    }
+
+    .next-button {
+        width: 3rem;
+        height: 3rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .scene-title {
+        font-size: 3rem;
+    }
+
+    .scene-description {
+        font-size: 1.5rem;
+        line-height: 1.5;
+    }
 } 
