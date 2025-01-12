@@ -15,8 +15,6 @@ const Login = () => {
         setError('');
         
         try {
-            console.log('Attempting login with:', { email, password });
-            
             const response = await fetch(`${API_BASE_URL}/login`, {
                 method: 'POST',
                 headers: {
@@ -30,43 +28,29 @@ const Login = () => {
                 }),
             });
 
-            console.log('Response status:', response.status);
-            console.log('Response headers:', Object.fromEntries(response.headers.entries()));
-
             if (!response.ok) {
                 setError('Invalid credentials or user not registered');
                 return;
             }
 
             const data = await response.json();
-            console.log('Response data:', data);
 
-            // Store email
+            // Store email and token
             localStorage.setItem('currentUserEmail', email);
             
-            // Store token - MapCustomIdentityApi returns it as accessToken
             if (data.accessToken) {
                 localStorage.setItem('authToken', data.accessToken);
-                console.log('Token stored in localStorage');
-            } else {
-                console.log('No token found in response');
-                setError('No authentication token received');
-                return;
-            }
-            
-            if (email === 'admin@admin.com') {
-                navigate('/admin');
-            } else {
-                // Check for user-specific saved progress
-                const userProgressKey = `gameProgress_${email}`;
-                const savedProgress = localStorage.getItem(userProgressKey);
                 
-                if (savedProgress) {
-                    const gameState = JSON.parse(savedProgress);
-                    navigate(`/scenes/${gameState.currentSceneId}`);
+                // Check if user is admin and redirect accordingly
+                if (email.toLowerCase() === 'admin@admin.com') {
+                    console.log('Admin user detected, redirecting to admin panel');
+                    navigate('/admin');
                 } else {
-                    navigate('/scenes/1');
+                    console.log('Regular user detected, redirecting to home');
+                    navigate('/home');
                 }
+            } else {
+                setError('No authentication token received');
             }
         } catch (err) {
             console.error('Login error:', err);

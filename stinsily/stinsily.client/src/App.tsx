@@ -1,23 +1,39 @@
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
+import HomeScreen from './Components/HomeScreen';
 import Login from './Components/Login';
 import Scene from './Components/Scene';
 import AdminPanel from './Components/AdminPanel';
 
 const API_BASE_URL = 'http://localhost:5193';
 
+// Helper function to check if user is authenticated
+const isAuthenticated = () => {
+    return !!localStorage.getItem('authToken');
+};
+
+// Helper function to check if user is admin
+const isAdmin = () => {
+    const email = localStorage.getItem('currentUserEmail');
+    return email?.toLowerCase() === 'admin@admin.com';
+};
+
 function App() {
     const router = createBrowserRouter([
         {
             path: "/",
-            element: <Navigate to="/login" />,
+            element: isAuthenticated() ? <Navigate to="/home" /> : <Navigate to="/login" />,
         },
         {
             path: "/login",
             element: <Login />,
         },
         {
+            path: "/home",
+            element: isAuthenticated() ? <HomeScreen /> : <Navigate to="/login" />,
+        },
+        {
             path: "/scenes/:id",
-            element: <Scene />,
+            element: isAuthenticated() ? <Scene /> : <Navigate to="/login" />,
             loader: async () => {
                 const response = await fetch(`${API_BASE_URL}/api/scenes`, {
                     credentials: 'include'
@@ -32,7 +48,9 @@ function App() {
         },
         {
             path: "/admin",
-            element: <AdminPanel />
+            element: isAuthenticated() && isAdmin() ? 
+                <AdminPanel /> : 
+                <Navigate to="/login" />,
         }
     ]);
 
