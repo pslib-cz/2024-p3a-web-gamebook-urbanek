@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace stinsily.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class prd : Migration
+    public partial class UpdateChoicesConnections : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -80,22 +80,6 @@ namespace stinsily.Server.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_MiniGames", x => x.MiniGameID);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Scenes",
-                columns: table => new
-                {
-                    SceneID = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    ConnectionID = table.Column<int>(type: "INTEGER", nullable: false),
-                    Title = table.Column<string>(type: "TEXT", nullable: false),
-                    ImageURL = table.Column<string>(type: "TEXT", nullable: false),
-                    Description = table.Column<string>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Scenes", x => x.SceneID);
                 });
 
             migrationBuilder.CreateTable(
@@ -221,6 +205,29 @@ namespace stinsily.Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Scenes",
+                columns: table => new
+                {
+                    SceneID = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    ConnectionID = table.Column<int>(type: "INTEGER", nullable: false),
+                    Title = table.Column<string>(type: "TEXT", nullable: false),
+                    Description = table.Column<string>(type: "TEXT", nullable: false),
+                    ImageURL = table.Column<string>(type: "TEXT", nullable: true),
+                    ItemID = table.Column<int>(type: "INTEGER", nullable: true),
+                    Type = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Scenes", x => x.SceneID);
+                    table.ForeignKey(
+                        name: "FK_Scenes_Items_ItemID",
+                        column: x => x.ItemID,
+                        principalTable: "Items",
+                        principalColumn: "ItemID");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ChoicesConnections",
                 columns: table => new
                 {
@@ -228,12 +235,10 @@ namespace stinsily.Server.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     SceneFromID = table.Column<int>(type: "INTEGER", nullable: false),
                     SceneToID = table.Column<int>(type: "INTEGER", nullable: false),
-                    Text = table.Column<string>(type: "TEXT", nullable: true),
-                    Effect = table.Column<string>(type: "TEXT", nullable: true),
+                    Text = table.Column<string>(type: "TEXT", nullable: false),
+                    Effect = table.Column<string>(type: "TEXT", nullable: false),
                     RequiredItemID = table.Column<int>(type: "INTEGER", nullable: true),
-                    MiniGameID = table.Column<int>(type: "INTEGER", nullable: true),
-                    FromSceneSceneID = table.Column<int>(type: "INTEGER", nullable: true),
-                    ToSceneSceneID = table.Column<int>(type: "INTEGER", nullable: true)
+                    MiniGameID = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -249,15 +254,17 @@ namespace stinsily.Server.Migrations
                         principalTable: "MiniGames",
                         principalColumn: "MiniGameID");
                     table.ForeignKey(
-                        name: "FK_ChoicesConnections_Scenes_FromSceneSceneID",
-                        column: x => x.FromSceneSceneID,
+                        name: "FK_ChoicesConnections_Scenes_SceneFromID",
+                        column: x => x.SceneFromID,
                         principalTable: "Scenes",
-                        principalColumn: "SceneID");
+                        principalColumn: "SceneID",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ChoicesConnections_Scenes_ToSceneSceneID",
-                        column: x => x.ToSceneSceneID,
+                        name: "FK_ChoicesConnections_Scenes_SceneToID",
+                        column: x => x.SceneToID,
                         principalTable: "Scenes",
-                        principalColumn: "SceneID");
+                        principalColumn: "SceneID",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -268,7 +275,7 @@ namespace stinsily.Server.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     UserID = table.Column<int>(type: "INTEGER", nullable: false),
                     CurrentSceneID = table.Column<int>(type: "INTEGER", nullable: false),
-                    ItemID = table.Column<int>(type: "INTEGER", nullable: false),
+                    ItemID = table.Column<int>(type: "INTEGER", nullable: true),
                     Health = table.Column<int>(type: "INTEGER", nullable: false),
                     Force = table.Column<int>(type: "INTEGER", nullable: false),
                     ObiWanRelationship = table.Column<int>(type: "INTEGER", nullable: false)
@@ -310,21 +317,21 @@ namespace stinsily.Server.Migrations
 
             migrationBuilder.InsertData(
                 table: "Scenes",
-                columns: new[] { "SceneID", "ConnectionID", "Description", "ImageURL", "Title" },
+                columns: new[] { "SceneID", "ConnectionID", "Description", "ImageURL", "ItemID", "Title", "Type" },
                 values: new object[,]
                 {
-                    { 1, 1, "trenink", "", "Scena1" },
-                    { 2, 2, "rozhodnuti pristupu", "", "Scena2" },
-                    { 3, 3, "podmineny postup", "", "Scena3" }
+                    { 1, 1, "trenink", "", null, "Scena1", 0 },
+                    { 2, 2, "rozhodnuti pristupu", "", null, "Scena2", 0 },
+                    { 3, 3, "podmineny postup", "", null, "Scena3", 0 }
                 });
 
             migrationBuilder.InsertData(
                 table: "ChoicesConnections",
-                columns: new[] { "ChoicesConnectionsID", "Effect", "FromSceneSceneID", "MiniGameID", "RequiredItemID", "SceneFromID", "SceneToID", "Text", "ToSceneSceneID" },
+                columns: new[] { "ChoicesConnectionsID", "Effect", "MiniGameID", "RequiredItemID", "SceneFromID", "SceneToID", "Text" },
                 values: new object[,]
                 {
-                    { 1, "pokracovani v pribehu", null, 1, 1, 1, 2, "prechod na 2. scenu", null },
-                    { 2, "podmínený postup", null, 1, 2, 2, 3, "Postup do další místnosti (potřebujete světelný meč)", null }
+                    { 1, "pokracovani v pribehu", 1, 1, 1, 2, "prechod na 2. scenu" },
+                    { 2, "podmínený postup", 1, 2, 2, 3, "Postup do další místnosti (potřebujete světelný meč)" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -365,11 +372,6 @@ namespace stinsily.Server.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_ChoicesConnections_FromSceneSceneID",
-                table: "ChoicesConnections",
-                column: "FromSceneSceneID");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ChoicesConnections_MiniGameID",
                 table: "ChoicesConnections",
                 column: "MiniGameID");
@@ -380,9 +382,14 @@ namespace stinsily.Server.Migrations
                 column: "RequiredItemID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ChoicesConnections_ToSceneSceneID",
+                name: "IX_ChoicesConnections_SceneFromID",
                 table: "ChoicesConnections",
-                column: "ToSceneSceneID");
+                column: "SceneFromID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ChoicesConnections_SceneToID",
+                table: "ChoicesConnections",
+                column: "SceneToID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Players_CurrentSceneID",
@@ -394,6 +401,11 @@ namespace stinsily.Server.Migrations
                 table: "Players",
                 column: "UserID",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Scenes_ItemID",
+                table: "Scenes",
+                column: "ItemID");
         }
 
         /// <inheritdoc />
@@ -427,9 +439,6 @@ namespace stinsily.Server.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Items");
-
-            migrationBuilder.DropTable(
                 name: "MiniGames");
 
             migrationBuilder.DropTable(
@@ -437,6 +446,9 @@ namespace stinsily.Server.Migrations
 
             migrationBuilder.DropTable(
                 name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "Items");
         }
     }
 }

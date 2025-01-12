@@ -5,13 +5,25 @@
 namespace stinsily.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class imagehandling : Migration
+    public partial class scenes : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<string>(
-                name: "ImageURL",
+                name: "Description",
+                table: "Scenes",
+                type: "TEXT",
+                nullable: true,
+                oldClrType: typeof(string),
+                oldType: "TEXT");
+        }
+
+        /// <inheritdoc />
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.AlterColumn<string>(
+                name: "Description",
                 table: "Scenes",
                 type: "TEXT",
                 nullable: false,
@@ -19,18 +31,6 @@ namespace stinsily.Server.Migrations
                 oldClrType: typeof(string),
                 oldType: "TEXT",
                 oldNullable: true);
-        }
-
-        /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.AlterColumn<string>(
-                name: "ImageURL",
-                table: "Scenes",
-                type: "TEXT",
-                nullable: true,
-                oldClrType: typeof(string),
-                oldType: "TEXT");
         }
     }
 }

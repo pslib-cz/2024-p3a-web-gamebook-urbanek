@@ -10,15 +10,14 @@ interface Scene {
     image?: string;
     connectionID: number;
     itemID?: number;
+    type: 'Normal' | 'Decision';
 }
 
-interface SceneOption {
+interface DecisionOption {
     optionId: number;
     text: string;
     nextSceneId: number;
-    type: 'navigation' | 'item';
-    itemId?: number;
-    action?: string;
+    effect?: string;
 }
 
 const Scene = () => {
@@ -26,7 +25,7 @@ const Scene = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const [currentScene, setCurrentScene] = useState<Scene | null>(null);
-    const [sceneOptions, setSceneOptions] = useState<SceneOption[]>([]);
+    const [sceneOptions, setSceneOptions] = useState<DecisionOption[]>([]);
     const [loading, setLoading] = useState(true);
     const [isTransitioning, setIsTransitioning] = useState(false);
 
@@ -76,30 +75,37 @@ const Scene = () => {
         }
     }, []);
 
-    const handleOptionClick = async (option: SceneOption) => {
-        if (option.type === 'navigation' && option.nextSceneId) {
-            navigate(`/scenes/${option.nextSceneId}`);
-        } else if (option.type === 'item' && option.action && option.itemId) {
-            try {
-                const response = await fetch(`${API_BASE_URL}/Scenes/item`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    credentials: 'include',
-                    body: JSON.stringify({
-                        action: option.action,
-                        itemId: option.itemId
-                    })
-                });
+    const fetchSceneOptions = async (sceneId: string) => {
+        try {
+            const response = await fetch(`http://localhost:5193/api/Scenes/options/${sceneId}`);
+            if (!response.ok) throw new Error('Failed to fetch scene options');
+            const options = await response.json();
+            setSceneOptions(options);
+            console.log('Scene options:', options); // Debug log
+        } catch (error) {
+            console.error('Error fetching scene options:', error);
+        }
+    };
 
-                if (response.ok) {
-                    // Refresh the current scene to update available options
-                    fetchScene(id!);
+    const handleOptionClick = async (option: DecisionOption) => {
+        try {
+            // Apply the effect first
+            if (option.effect) {
+                const response = await fetch('http://localhost:5193/api/Scenes/apply-effect', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ effect: option.effect })
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to apply effect');
                 }
-            } catch (error) {
-                console.error('Error handling item:', error);
             }
+
+            // Then navigate to the next scene
+            navigate(`/scenes/${option.nextSceneId}`);
+        } catch (error) {
+            console.error('Error handling option:', error);
         }
     };
 
@@ -176,6 +182,37 @@ const Scene = () => {
         };
     };
 
+    const renderOptions = () => {
+        if (currentScene?.type === 'Decision') {
+            return (
+                <div className={styles['decision-container']}>
+                    {sceneOptions.map(option => (
+                        <button
+                            key={option.optionId}
+                            className={styles['decision-option']}
+                            onClick={() => handleOptionClick(option)}
+                        >
+                            {option.text}
+                        </button>
+                    ))}
+                </div>
+            );
+        }
+
+        return (
+            <div className={styles['options-container']}>
+                {sceneOptions.map(option => (
+                    <button 
+                        key={option.optionId} 
+                        className={styles['next-button']}
+                        onClick={() => handleOptionClick(option)}
+                        title={option.text}
+                    />
+                ))}
+            </div>
+        );
+    };
+
     if (!currentScene) return null;
 
     const backgroundStyle = getBackgroundStyle();
@@ -195,18 +232,9 @@ const Scene = () => {
             <button className={styles['save-button']} onClick={saveProgress}>
                 Save Progress
             </button>
-            <div className={styles['scene-content']}>
+            <div className={`${styles['scene-content']} ${currentScene?.type === 'Decision' ? styles['decision'] : ''}`}>
                 <p className={styles['scene-description']}>{currentScene.description}</p>
-                <div className={styles['options-container']}>
-                    {sceneOptions.map(option => (
-                        <button 
-                            key={option.optionId} 
-                            className={styles['next-button']}
-                            onClick={() => handleOptionClick(option)}
-                            title={option.text}
-                        />
-                    ))}
-                </div>
+                {renderOptions()}
             </div>
         </div>
     );

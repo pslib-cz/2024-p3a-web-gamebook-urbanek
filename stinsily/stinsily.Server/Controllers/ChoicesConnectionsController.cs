@@ -22,8 +22,8 @@ namespace stinsily.Server.Controllers
         public async Task<ActionResult<IEnumerable<ChoicesConnections>>> GetChoicesConnections()
         {
             return await _context.ChoicesConnections
-                .Include(cc => cc.FromScene)
-                .Include(cc => cc.ToScene)
+                .Include(cc => cc.SceneFrom)
+                .Include(cc => cc.SceneTo)
                 .Include(cc => cc.RequiredItem)
                 .ToListAsync();
         }
@@ -33,8 +33,8 @@ namespace stinsily.Server.Controllers
         public async Task<ActionResult<ChoicesConnections>> GetChoicesConnections(int id)
         {
             var choicesConnections = await _context.ChoicesConnections
-                .Include(cc => cc.FromScene)
-                .Include(cc => cc.ToScene)
+                .Include(cc => cc.SceneFrom)
+                .Include(cc => cc.SceneTo)
                 .Include(cc => cc.RequiredItem)
                 .FirstOrDefaultAsync(cc => cc.ChoicesConnectionsID == id);
 
@@ -54,6 +54,12 @@ namespace stinsily.Server.Controllers
             {
                 return BadRequest();
             }
+
+            // Detach navigation properties before update
+            choicesConnections.SceneFrom = null;
+            choicesConnections.SceneTo = null;
+            choicesConnections.RequiredItem = null;
+            choicesConnections.MiniGame = null;
 
             _context.Entry(choicesConnections).State = EntityState.Modified;
 

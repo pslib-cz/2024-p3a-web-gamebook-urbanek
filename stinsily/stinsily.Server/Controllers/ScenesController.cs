@@ -118,58 +118,29 @@ namespace stinsily.Server.Controllers
         {
             try
             {
-                var options = new List<object>();
-                var player = await _context.Players.FirstOrDefaultAsync();
-                var currentItemId = player?.ItemID;
+                var scene = await _context.Scenes.FindAsync(sceneId);
+                if (scene == null) return NotFound();
 
-                // Get all possible connections FROM current scene
+                // Get all connections for this scene
                 var connections = await _context.ChoicesConnections
                     .Where(c => c.SceneFromID == sceneId)
                     .Include(c => c.RequiredItem)
                     .ToListAsync();
 
-                // Add navigation options based on connections
-                foreach (var connection in connections)
+                var options = connections.Select(connection => new
                 {
-                    bool canTransition = connection.RequiredItemID == null || 
-                                       (currentItemId.HasValue && currentItemId.Value == connection.RequiredItemID);
-
-                    if (canTransition)
-                    {
-                        options.Add(new
-                        {
-                            optionId = connection.ChoicesConnectionsID,
-                            text = connection.Text ?? "Next Scene",
-                            nextSceneId = connection.SceneToID,
-                            type = "navigation"
-                        });
-                    }
-                }
-
-                // Get current scene for item interactions
-                var scene = await _context.Scenes
-                    .Include(s => s.Item)
-                    .FirstOrDefaultAsync(s => s.SceneID == sceneId);
-
-                if (scene?.Item != null)
-                {
-                    var hasItem = currentItemId == scene.Item.ItemID;
-                    options.Add(new
-                    {
-                        optionId = -scene.Item.ItemID,
-                        text = hasItem ? $"Drop {scene.Item.Name}" : $"Pick up {scene.Item.Name}",
-                        type = "item",
-                        itemId = scene.Item.ItemID,
-                        action = hasItem ? "drop" : "pickup"
-                    });
-                }
+                    optionId = connection.ChoicesConnectionsID,
+                    text = connection.Text,
+                    nextSceneId = connection.SceneToID,
+                    effect = connection.Effect,
+                    type = "navigation"
+                }).ToList();
 
                 return Ok(options);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error in GetSceneOptions: {ex.Message}");
-                return StatusCode(500, "Error fetching scene options");
+                return StatusCode(500, ex.Message);
             }
         }
 
@@ -255,7 +226,7 @@ namespace stinsily.Server.Controllers
                 scene.SceneID = request.SceneID;
                 scene.ConnectionID = request.ConnectionID;
                 scene.Title = request.Title;
-                scene.Description = request.Description ?? string.Empty;
+                scene.Description = request.Description;
                 scene.ItemID = request.ItemID;
 
                 // Handle image update if provided
@@ -319,7 +290,7 @@ namespace stinsily.Server.Controllers
                     Title = request.Title,
                     Description = request.Description,
                     ItemID = request.ItemID,
-                    ImageURL = string.Empty
+                    ImageURL = string.Empty,
                 };
 
                 if (request.Image != null && request.Image.Length > 0)
@@ -371,8 +342,8 @@ namespace stinsily.Server.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError($"General error: {ex.Message}");
-                return StatusCode(500, $"Internal server error: {ex.Message}");
+                _logger.LogError($"Error creating scene: {ex.Message}");
+                return StatusCode(500, ex.Message);
             }
         }
 
@@ -535,6 +506,56 @@ namespace stinsily.Server.Controllers
                 return StatusCode(500, "Error updating scene image");
             }
         }
+
+        [HttpPost("apply-effect")]
+        public async Task<ActionResult> ApplyEffect([FromBody] EffectRequest request)
+        {
+            try
+            {
+                var player = await _context.Players.FirstOrDefaultAsync();
+                if (player == null) return NotFound("Player not found");
+
+                var effectParts = request.Effect.Split(':');
+                if (effectParts.Length != 2) return BadRequest("Invalid effect format");
+
+                var effectType = effectParts[0];
+                var effectValue = int.Parse(effectParts[1]);
+
+                switch (effectType)
+                {
+                    case "health":
+                        player.Health = Math.Clamp(player.Health + effectValue, 0, 100);
+                        break;
+                    case "force":
+                        player.Force = Math.Clamp(player.Force + effectValue, 0, 100);
+                        break;
+                    case "obiwan":
+                        player.ObiWanRelationship = Math.Clamp(player.ObiWanRelationship + effectValue, 0, 100);
+                        break;
+                    case "scene":
+                        // Scene navigation is handled client-side
+                        break;
+                    default:
+                        return BadRequest("Unknown effect type");
+                }
+
+                await _context.SaveChangesAsync();
+                return Ok(new { 
+                    health = player.Health,
+                    force = player.Force,
+                    obiWanRelationship = player.ObiWanRelationship
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        public class EffectRequest
+        {
+            public string Effect { get; set; } = string.Empty;
+        }
     }
 
     public class SceneCreateRequest
@@ -542,7 +563,7 @@ namespace stinsily.Server.Controllers
         public int SceneID { get; set; }
         public int ConnectionID { get; set; }
         public string Title { get; set; } = string.Empty;
-        public string Description { get; set; } = string.Empty;
+        public string? Description { get; set; }
         public IFormFile? Image { get; set; }
         public int? ItemID { get; set; }
     }

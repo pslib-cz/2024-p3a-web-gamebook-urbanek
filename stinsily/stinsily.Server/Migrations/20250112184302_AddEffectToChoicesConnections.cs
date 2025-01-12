@@ -5,7 +5,7 @@
 namespace stinsily.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class prdelka : Migration
+    public partial class AddEffectToChoicesConnections : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

@@ -6,19 +6,27 @@ interface Scene {
     sceneID: number;
     connectionID: number;
     title: string;
-    description: string;
+    description?: string;
     image?: string;
     itemID?: number | null;
 }
+
+type SceneType = 'Normal' | 'Decision';
 
 interface ChoiceConnection {
     choicesConnectionsID: number;
     sceneFromID: number;
     sceneToID: number;
     text: string;
-    effect: string;
+    effect: string;  // Format: "health:+10" or "force:-5" or "obiwan:+15" or "scene:5"
     requiredItemID?: number | null;
     miniGameID?: number | null;
+}
+
+// Add new interface for decision effects
+interface DecisionEffect {
+    type: 'health' | 'force' | 'obiwan' | 'scene';
+    value: number;
 }
 
 interface Item {
@@ -132,7 +140,8 @@ const AdminPanel = () => {
             formData.append('sceneID', newScene.sceneID.toString());
             formData.append('connectionID', newScene.connectionID.toString());
             formData.append('title', newScene.title);
-            formData.append('description', newScene.description);
+            formData.append('description', newScene.description || '');
+            
             if (newScene.itemID !== undefined && newScene.itemID !== null) {
                 formData.append('itemID', newScene.itemID.toString());
             }
@@ -158,36 +167,23 @@ const AdminPanel = () => {
 
     const updateScene = async (scene: Scene) => {
         try {
-            // Validate required fields
-            if (!scene.sceneID || !scene.connectionID) {
-                console.error('Scene ID and Connection ID are required');
-                return;
-            }
-
             const formData = new FormData();
-            
-            // Add validation and type checking for each field
             formData.append('sceneID', scene.sceneID.toString());
-            formData.append('connectionID', scene.connectionID.toString() || '0');
-            formData.append('title', scene.title || '');
-            formData.append('description', scene.description || '');
-
+            formData.append('connectionID', scene.connectionID.toString());
+            formData.append('title', scene.title);
+            formData.append('description', scene.description ?? '');
+            
             if (scene.itemID !== undefined && scene.itemID !== null) {
                 formData.append('itemID', scene.itemID.toString());
             }
 
-            // Handle image upload
+            // Handle image upload if present
             const fileInput = document.querySelector(`#file-input-${scene.sceneID}`) as HTMLInputElement;
             if (fileInput?.files?.[0]) {
                 formData.append('image', fileInput.files[0]);
-                console.log('Uploading image for scene:', scene.sceneID);
             }
 
             const token = localStorage.getItem('authToken');
-            if (!token) {
-                throw new Error('No authentication token found');
-            }
-
             const response = await fetch(`http://localhost:5193/api/Scenes/${scene.sceneID}`, {
                 method: "PUT",
                 headers: {
@@ -201,11 +197,9 @@ const AdminPanel = () => {
                 throw new Error(`Server error: ${errorText}`);
             }
 
-            await fetchScenes(); // Refresh the scenes list
+            await fetchScenes();
         } catch (error) {
             console.error('Error updating scene:', error);
-            // You might want to show this error to the user
-            alert(`Failed to update scene: ${error instanceof Error ? error.message : 'Unknown error'}`);
         }
     };
 
@@ -269,20 +263,20 @@ const AdminPanel = () => {
                     choicesConnectionsID: connection.choicesConnectionsID,
                     sceneFromID: connection.sceneFromID,
                     sceneToID: connection.sceneToID,
-                    text: connection.text,
-                    effect: connection.effect,
+                    text: connection.text || '',
+                    effect: connection.effect || '',
                     requiredItemID: connection.requiredItemID,
                     miniGameID: connection.miniGameID
                 })
             });
-            
+
             if (!response.ok) {
                 const errorText = await response.text();
                 console.error('Failed to update connection:', errorText);
                 alert('Failed to update connection');
                 return;
             }
-            
+
             await fetchConnections();
         } catch (error) {
             console.error('Error updating connection:', error);
@@ -454,25 +448,23 @@ const AdminPanel = () => {
                             value={newScene.sceneID}
                             onChange={(e) => setNewScene({...newScene, sceneID: parseInt(e.target.value)})}
                         />
-                        <h2>Connection ID</h2>
-                        <input
-                            type="number"
-                            placeholder="Connection ID"
-                            value={newScene.connectionID}
-                            onChange={(e) => setNewScene({...newScene, connectionID: parseInt(e.target.value)})}
-                        />
-                        <h2>Title</h2>
                         <input
                             type="text"
                             placeholder="Title"
                             value={newScene.title}
                             onChange={(e) => setNewScene({...newScene, title: e.target.value})}
                         />
-                        <h2>Description</h2>
                         <textarea
                             placeholder="Description"
-                            value={newScene.description}
+                            value={newScene.description || ''}
                             onChange={(e) => setNewScene({...newScene, description: e.target.value})}
+                        />
+                        <h2>Connection ID</h2>
+                        <input
+                            type="number"
+                            placeholder="Connection ID"
+                            value={newScene.connectionID}
+                            onChange={(e) => setNewScene({...newScene, connectionID: parseInt(e.target.value)})}
                         />
                         <h2>Scene Item</h2>
                         <select
@@ -530,10 +522,9 @@ const AdminPanel = () => {
                                 />
                                 <h3>Description</h3>
                                 <textarea
-                                    value={scene.description || ''}
-                                    onChange={(e) => handleDescriptionChange(scene, e.target.value)}
-                                    onBlur={() => handleSaveDescription(scene)}
-                                    placeholder="Description"
+                                    value={scene.description ?? ''}
+                                    onChange={(e) => updateScene({...scene, description: e.target.value || undefined})}
+                                    placeholder="Enter scene description"
                                 />
                                 <h3>Scene Item</h3>
                                 <select
@@ -596,20 +587,52 @@ const AdminPanel = () => {
                             value={newConnection.sceneToID || ''}
                             onChange={(e) => setNewConnection({...newConnection, sceneToID: parseInt(e.target.value)})}
                         />
-                        <h2>Text</h2>
-                        <input
-                            type="text"
-                            placeholder="Text"
+                        <h2>Text (Decision Response)</h2>
+                        <textarea
                             value={newConnection.text}
                             onChange={(e) => setNewConnection({...newConnection, text: e.target.value})}
+                            placeholder="Enter the character's response..."
                         />
-                        <h2>Effect</h2>
-                        <input
-                            type="text"
-                            placeholder="Effect"
-                            value={newConnection.effect}
-                            onChange={(e) => setNewConnection({...newConnection, effect: e.target.value})}
-                        />
+                        
+                        <h2>Effect Type</h2>
+                        <select
+                            value={newConnection.effect.split(':')[0]}
+                            onChange={(e) => {
+                                const currentValue = newConnection.effect.split(':')[1] || '0';
+                                setNewConnection({
+                                    ...newConnection,
+                                    effect: `${e.target.value}:${currentValue}`
+                                });
+                            }}
+                        >
+                            <option value="scene">Go to Scene</option>
+                            <option value="health">Modify Health</option>
+                            <option value="force">Modify Force</option>
+                            <option value="obiwan">Modify Obi-Wan Relationship</option>
+                            <option value="scene">Go to Next Scene</option>
+                        </select>
+
+                        <h2>Effect Value</h2>
+                        <div className={styles['effect-input']}>
+                            <input
+                                type="number"
+                                placeholder="Value"
+                                value={newConnection.effect.split(':')[1] || '0'}
+                                onChange={(e) => {
+                                    const effectType = newConnection.effect.split(':')[0] || 'obiwan';
+                                    setNewConnection({
+                                        ...newConnection,
+                                        effect: `${effectType}:${e.target.value}`
+                                    });
+                                }}
+                            />
+                            <span className={styles['effect-hint']}>
+                                {newConnection.effect.startsWith('scene') 
+                                    ? '(Scene ID to navigate to)'
+                                    : '(Use + for increase, - for decrease)'}
+                            </span>
+                        </div>
+
                         <h2>Required Item ID</h2>
                         <input
                             type="number"
@@ -653,12 +676,44 @@ const AdminPanel = () => {
                                     value={connection.text}
                                     onChange={(e) => updateConnection({...connection, text: e.target.value})}
                                 />
-                                <h3>Effect</h3>
-                                <input
-                                    type="text"
-                                    value={connection.effect}
-                                    onChange={(e) => updateConnection({...connection, effect: e.target.value})}
-                                />
+                                <h3>Effect Type</h3>
+                                <select
+                                    value={connection.effect.split(':')[0]}
+                                    onChange={(e) => {
+                                        const currentValue = connection.effect.split(':')[1] || '0';
+                                        updateConnection({
+                                            ...connection,
+                                            effect: `${e.target.value}:${currentValue}`
+                                        });
+                                    }}
+                                >
+                                    <option value="scene">Go to Scene</option>
+                                    <option value="health">Modify Health</option>
+                                    <option value="force">Modify Force</option>
+                                    <option value="obiwan">Modify Obi-Wan Relationship</option>
+                                </select>
+
+                                <h3>Effect Value</h3>
+                                <div className={styles['effect-input']}>
+                                    <input
+                                        type="number"
+                                        placeholder="Value"
+                                        value={connection.effect.split(':')[1] || '0'}
+                                        onChange={(e) => {
+                                            const effectType = connection.effect.split(':')[0] || 'scene';
+                                            updateConnection({
+                                                ...connection,
+                                                effect: `${effectType}:${e.target.value}`
+                                            });
+                                        }}
+                                    />
+                                    <span className={styles['effect-hint']}>
+                                        {connection.effect.startsWith('scene') 
+                                            ? '(Scene ID to navigate to)'
+                                            : '(Use + or - for increase/decrease)'}
+                                    </span>
+                                </div>
+
                                 <h3>Required Item ID</h3>
                                 <input
                                     type="number"

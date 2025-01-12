@@ -107,3 +107,22 @@
     text-shadow: 0 0 3px #00ff00;
     box-sizing: border-box;
 }
+
+.effect-input {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.effect-hint {
+    font-size: 0.9rem;
+    color: #666;
+    font-style: italic;
+}
+
+.effect-preview {
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background: rgba(50, 205, 50, 0.1);
+    border-radius: 5px;
+}

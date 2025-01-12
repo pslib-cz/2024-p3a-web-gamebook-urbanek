@@ -11,8 +11,8 @@ using stinsily.Server.Data;
 namespace stinsily.Server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250111105624_imagehandling")]
-    partial class imagehandling
+    [Migration("20250112184302_AddEffectToChoicesConnections")]
+    partial class AddEffectToChoicesConnections
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -219,10 +219,8 @@ namespace stinsily.Server.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Effect")
+                        .IsRequired()
                         .HasColumnType("TEXT");
-
-                    b.Property<int?>("FromSceneSceneID")
-                        .HasColumnType("INTEGER");
 
                     b.Property<int?>("MiniGameID")
                         .HasColumnType("INTEGER");
@@ -237,20 +235,18 @@ namespace stinsily.Server.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Text")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("ToSceneSceneID")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("ChoicesConnectionsID");
-
-                    b.HasIndex("FromSceneSceneID");
 
                     b.HasIndex("MiniGameID");
 
                     b.HasIndex("RequiredItemID");
 
-                    b.HasIndex("ToSceneSceneID");
+                    b.HasIndex("SceneFromID");
+
+                    b.HasIndex("SceneToID");
 
                     b.ToTable("ChoicesConnections", (string)null);
 
@@ -367,7 +363,7 @@ namespace stinsily.Server.Migrations
                     b.Property<int>("Health")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("ItemID")
+                    b.Property<int?>("ItemID")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("ObiWanRelationship")
@@ -400,14 +396,21 @@ namespace stinsily.Server.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ImageURL")
-                        .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<int?>("ItemID")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("Type")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("SceneID");
+
+                    b.HasIndex("ItemID");
 
                     b.ToTable("Scenes", (string)null);
 
@@ -418,7 +421,8 @@ namespace stinsily.Server.Migrations
                             ConnectionID = 1,
                             Description = "trenink",
                             ImageURL = "",
-                            Title = "Scena1"
+                            Title = "Scena1",
+                            Type = 0
                         },
                         new
                         {
@@ -426,7 +430,8 @@ namespace stinsily.Server.Migrations
                             ConnectionID = 2,
                             Description = "rozhodnuti pristupu",
                             ImageURL = "",
-                            Title = "Scena2"
+                            Title = "Scena2",
+                            Type = 0
                         },
                         new
                         {
@@ -434,7 +439,8 @@ namespace stinsily.Server.Migrations
                             ConnectionID = 3,
                             Description = "podmineny postup",
                             ImageURL = "",
-                            Title = "Scena3"
+                            Title = "Scena3",
+                            Type = 0
                         });
                 });
 
@@ -517,10 +523,6 @@ namespace stinsily.Server.Migrations
 
             modelBuilder.Entity("stinsily.Server.Models.ChoicesConnections", b =>
                 {
-                    b.HasOne("stinsily.Server.Models.Scenes", "FromScene")
-                        .WithMany()
-                        .HasForeignKey("FromSceneSceneID");
-
                     b.HasOne("stinsily.Server.Models.MiniGames", "MiniGame")
                         .WithMany()
                         .HasForeignKey("MiniGameID");
@@ -529,17 +531,25 @@ namespace stinsily.Server.Migrations
                         .WithMany()
                         .HasForeignKey("RequiredItemID");
 
-                    b.HasOne("stinsily.Server.Models.Scenes", "ToScene")
+                    b.HasOne("stinsily.Server.Models.Scenes", "SceneFrom")
                         .WithMany()
-                        .HasForeignKey("ToSceneSceneID");
+                        .HasForeignKey("SceneFromID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("FromScene");
+                    b.HasOne("stinsily.Server.Models.Scenes", "SceneTo")
+                        .WithMany()
+                        .HasForeignKey("SceneToID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("MiniGame");
 
                     b.Navigation("RequiredItem");
 
-                    b.Navigation("ToScene");
+                    b.Navigation("SceneFrom");
+
+                    b.Navigation("SceneTo");
                 });
 
             modelBuilder.Entity("stinsily.Server.Models.Players", b =>
@@ -559,6 +569,15 @@ namespace stinsily.Server.Migrations
                     b.Navigation("CurrentScene");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("stinsily.Server.Models.Scenes", b =>
+                {
+                    b.HasOne("stinsily.Server.Models.Items", "Item")
+                        .WithMany()
+                        .HasForeignKey("ItemID");
+
+                    b.Navigation("Item");
                 });
 
             modelBuilder.Entity("stinsily.Server.Models.Users", b =>
