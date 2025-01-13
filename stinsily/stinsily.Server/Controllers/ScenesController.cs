@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using stinsily.Server.Data;
 using stinsily.Server.Models;
 using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
 
 namespace stinsily.Server.Controllers
 {
@@ -508,53 +509,65 @@ namespace stinsily.Server.Controllers
         }
 
         [HttpPost("apply-effect")]
-        public async Task<ActionResult> ApplyEffect([FromBody] EffectRequest request)
+        public async Task<IActionResult> ApplyEffect([FromBody] EffectRequest request)
         {
             try
             {
-                var player = await _context.Players.FirstOrDefaultAsync();
-                if (player == null) return NotFound("Player not found");
+                // Get the current user's email from the session or claims
+                var userEmail = User.Identity?.Name;
+                if (string.IsNullOrEmpty(userEmail))
+                {
+                    return BadRequest("User not authenticated");
+                }
 
-                var effectParts = request.Effect.Split(':');
-                if (effectParts.Length != 2) return BadRequest("Invalid effect format");
+                var user = await _userManager.FindByNameAsync(userEmail);
+                if (user == null) return NotFound("User not found");
 
-                var effectType = effectParts[0];
-                var effectValue = int.Parse(effectParts[1]);
+                var player = await _context.Players.FirstOrDefaultAsync(p => p.UserID == int.Parse(user.Id));
+                if (player == null)
+                {
+                    return NotFound("Player not found");
+                }
 
-                switch (effectType)
+                // Parse and apply the effect
+                // Example effect format: "health+10" or "gold-5"
+                var parts = request.Effect.Split(new[] { '+', '-' }, 2);
+                if (parts.Length != 2)
+                {
+                    return BadRequest("Invalid effect format");
+                }
+
+                var stat = parts[0].ToLower();
+                var isAddition = request.Effect.Contains('+');
+                if (!int.TryParse(parts[1], out int value))
+                {
+                    return BadRequest("Invalid effect value");
+                }
+
+                // Apply the effect based on the stat
+                switch (stat)
                 {
                     case "health":
-                        player.Health = Math.Clamp(player.Health + effectValue, 0, 100);
+                        player.Health += isAddition ? value : -value;
                         break;
+                    case "gold":
+                        player.ObiWanRelationship += isAddition ? value : -value;
+                        break;
+                    // Add more stats as needed
                     case "force":
-                        player.Force = Math.Clamp(player.Force + effectValue, 0, 100);
-                        break;
-                    case "obiwan":
-                        player.ObiWanRelationship = Math.Clamp(player.ObiWanRelationship + effectValue, 0, 100);
-                        break;
-                    case "scene":
-                        // Scene navigation is handled client-side
+                        player.Force += isAddition ? value : -value;
                         break;
                     default:
-                        return BadRequest("Unknown effect type");
+                        return BadRequest($"Unknown stat: {stat}");
                 }
 
                 await _context.SaveChangesAsync();
-                return Ok(new { 
-                    health = player.Health,
-                    force = player.Force,
-                    obiWanRelationship = player.ObiWanRelationship
-                });
+                return Ok(new { message = "Effect applied successfully", player });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
-        }
-
-        public class EffectRequest
-        {
-            public string Effect { get; set; } = string.Empty;
         }
     }
 
@@ -566,5 +579,10 @@ namespace stinsily.Server.Controllers
         public string? Description { get; set; }
         public IFormFile? Image { get; set; }
         public int? ItemID { get; set; }
+    }
+
+    public class EffectRequest
+    {
+        public string Effect { get; set; }
     }
 }

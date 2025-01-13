@@ -11,8 +11,6 @@ interface Scene {
     itemID?: number | null;
 }
 
-type SceneType = 'Normal' | 'Decision';
-
 interface ChoiceConnection {
     choicesConnectionsID: number;
     sceneFromID: number;
@@ -21,12 +19,6 @@ interface ChoiceConnection {
     effect: string;  // Format: "health:+10" or "force:-5" or "obiwan:+15" or "scene:5"
     requiredItemID?: number | null;
     miniGameID?: number | null;
-}
-
-// Add new interface for decision effects
-interface DecisionEffect {
-    type: 'health' | 'force' | 'obiwan' | 'scene';
-    value: number;
 }
 
 interface Item {

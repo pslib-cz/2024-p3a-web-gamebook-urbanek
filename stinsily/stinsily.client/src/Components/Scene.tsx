@@ -28,6 +28,7 @@ const Scene = () => {
     const [sceneOptions, setSceneOptions] = useState<DecisionOption[]>([]);
     const [loading, setLoading] = useState(true);
     const [isTransitioning, setIsTransitioning] = useState(false);
+    const [currentDescriptionIndex, setCurrentDescriptionIndex] = useState(0);
 
     const API_BASE_URL = 'http://localhost:5193/api';
 
@@ -89,23 +90,32 @@ const Scene = () => {
 
     const handleOptionClick = async (option: DecisionOption) => {
         try {
-            // Apply the effect first
-            if (option.effect) {
-                const response = await fetch('http://localhost:5193/api/Scenes/apply-effect', {
+            // Apply the effect first if it exists and isn't a scene effect
+            if (option.effect && !option.effect.startsWith('scene:')) {
+                const response = await fetch(`${API_BASE_URL}/Scenes/apply-effect`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    credentials: 'include',
                     body: JSON.stringify({ effect: option.effect })
                 });
                 
                 if (!response.ok) {
-                    throw new Error('Failed to apply effect');
+                    const errorText = await response.text();
+                    console.error('Effect response:', errorText);
+                    // Don't throw error here, just log it and continue
+                    console.warn(`Failed to apply effect: ${errorText}`);
                 }
             }
 
-            // Then navigate to the next scene
+            // Navigate to the next scene regardless of effect success
             navigate(`/scenes/${option.nextSceneId}`);
         } catch (error) {
             console.error('Error handling option:', error);
+            // Still navigate even if there's an error
+            navigate(`/scenes/${option.nextSceneId}`);
         }
     };
 
@@ -182,35 +192,13 @@ const Scene = () => {
         };
     };
 
-    const renderOptions = () => {
-        if (currentScene?.type === 'Decision') {
-            return (
-                <div className={styles['decision-container']}>
-                    {sceneOptions.map(option => (
-                        <button
-                            key={option.optionId}
-                            className={styles['decision-option']}
-                            onClick={() => handleOptionClick(option)}
-                        >
-                            {option.text}
-                        </button>
-                    ))}
-                </div>
-            );
-        }
+    const descriptions = currentScene?.description?.split(';') || [];
+    const isLastDescription = currentDescriptionIndex === descriptions.length - 1;
 
-        return (
-            <div className={styles['options-container']}>
-                {sceneOptions.map(option => (
-                    <button 
-                        key={option.optionId} 
-                        className={styles['next-button']}
-                        onClick={() => handleOptionClick(option)}
-                        title={option.text}
-                    />
-                ))}
-            </div>
-        );
+    const handleNextDescription = () => {
+        if (currentDescriptionIndex < descriptions.length - 1) {
+            setCurrentDescriptionIndex(prev => prev + 1);
+        }
     };
 
     if (!currentScene) return null;
@@ -233,8 +221,43 @@ const Scene = () => {
                 Save Progress
             </button>
             <div className={`${styles['scene-content']} ${currentScene?.type === 'Decision' ? styles['decision'] : ''}`}>
-                <p className={styles['scene-description']}>{currentScene.description}</p>
-                {renderOptions()}
+                <p className={styles['scene-description']}>
+                    {descriptions[currentDescriptionIndex]}
+                </p>
+                
+                {!isLastDescription ? (
+                    // Show "Next" button if there are more descriptions
+                    <button 
+                        className={styles['next-button']}
+                        onClick={handleNextDescription}
+                    >
+                        Next
+                    </button>
+                ) : (
+                    // Show choices/navigation options on last description
+                    <div className={styles['decision-container']}>
+                        {sceneOptions.length === 1 ? (
+                            // Single option - show as arrow
+                            <button
+                                className={styles['next-button']}
+                                onClick={() => handleOptionClick(sceneOptions[0])}
+                            >
+                                Next
+                            </button>
+                        ) : (
+                            // Multiple options - show as text buttons
+                            sceneOptions.map((option) => (
+                                <button
+                                    key={option.optionId}
+                                    className={styles['_decision-option']}
+                                    onClick={() => handleOptionClick(option)}
+                                >
+                                    {option.text}
+                                </button>
+                            ))
+                        )}
+                    </div>
+                )}
             </div>
         </div>
     );
