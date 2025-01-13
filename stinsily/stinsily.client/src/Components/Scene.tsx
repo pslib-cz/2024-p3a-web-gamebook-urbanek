@@ -201,6 +201,34 @@ const Scene = () => {
         }
     };
 
+    const exportProgress = () => {
+        const email = getCurrentUserEmail();
+        if (!email) {
+            alert('Please log in to export progress');
+            navigate('/');
+            return;
+        }
+
+        const gameState = {
+            email: email, // Include email to verify correct user on import
+            currentSceneId: id,
+            sceneData: currentScene,
+            options: sceneOptions,
+            timestamp: new Date().toISOString()
+        };
+        
+        // Create blob and download file
+        const blob = new Blob([JSON.stringify(gameState, null, 2)], { type: 'application/json' });
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `stinsily-progress-${new Date().toISOString().slice(0,10)}.json`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+    };
+
     if (!currentScene) return null;
 
     const backgroundStyle = getBackgroundStyle();
@@ -217,6 +245,9 @@ const Scene = () => {
             <div className={styles['scene-title-container']}>
                 <h2 className={styles['scene-title']}>{currentScene.title}</h2>
             </div>
+            <button className={styles['export-button']} onClick={exportProgress}>
+                Export Progress
+            </button>
             <button className={styles['save-button']} onClick={saveProgress}>
                 Save Progress
             </button>

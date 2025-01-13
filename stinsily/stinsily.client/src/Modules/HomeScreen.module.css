@@ -72,6 +72,7 @@
 
 .newGame:hover {
     background-color: #32CD32;
+    transform: scale(1.05);
 }
 
 .resumeGame {
@@ -82,6 +83,7 @@
 
 .resumeGame:hover {
     background-color: #007bff;
+    transform: scale(1.05);
 }
 
 .settings {
@@ -92,6 +94,26 @@
 
 .settings:hover {
     background-color: #D0021B;
+    transform: scale(1.05);
+}
+
+.importGame {
+    background-color: rgba(0, 0, 0, 0.75);
+    color: #007bff;
+    border: 2px solid #007bff;
+    font-family: 'Techno Race', sans-serif;
+    font-size: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 1rem 2rem;
+}
+
+.importGame:hover {
+    background-color: #007bff;
+    color: #000000;
+    transform: scale(1.05);
 }
 
 .author {
@@ -141,4 +163,3 @@
         margin: 0;
     }
 }
-

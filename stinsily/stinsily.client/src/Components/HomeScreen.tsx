@@ -62,6 +62,37 @@ const HomeScreen = () => {
         navigate('/login');
     };
 
+    const handleImportProgress = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (!file) return;
+
+        const currentEmail = localStorage.getItem('currentUserEmail');
+        if (!currentEmail) {
+            alert('Please log in first');
+            navigate('/login');
+            return;
+        }
+
+        try {
+            const text = await file.text();
+            const gameState = JSON.parse(text);
+
+            // Verify the save file belongs to the current user
+            if (gameState.email !== currentEmail) {
+                alert('This save file belongs to a different account');
+                return;
+            }
+
+            // Save the imported progress
+            localStorage.setItem(`gameProgress_${currentEmail}`, JSON.stringify(gameState));
+            alert('Progress imported successfully!');
+            navigate(`/scenes/${gameState.currentSceneId}`);
+        } catch (error) {
+            alert('Error importing save file. Make sure it\'s a valid save file.');
+            console.error('Import error:', error);
+        }
+    };
+
     return (
         <div className={styles.container}>
             <h1 className={styles.title}>Stín Síly</h1>
@@ -78,9 +109,19 @@ const HomeScreen = () => {
                     className={`${styles.button} ${styles.resumeGame}`}
                     onClick={handleResumeGame}
                 >
-                    Načíst hru
+                    Pokračovat
                 </button>
                 
+                <label className={`${styles.button} ${styles.importGame}`}>
+                    Nahrát hru
+                    <input
+                        type="file"
+                        accept=".json"
+                        style={{ display: 'none' }}
+                        onChange={handleImportProgress}
+                    />
+                </label>
+
                 <button 
                     className={`${styles.button} ${styles.settings}`}
                     onClick={handleSettings}

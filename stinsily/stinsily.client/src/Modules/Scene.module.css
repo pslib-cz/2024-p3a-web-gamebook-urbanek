@@ -33,7 +33,9 @@
 
 .scene-title-container {
     position: fixed;
-    left: 1rem;
+    left: 50%;
+    top: 1rem;
+    transform: translateX(-50%);
     z-index: 1;
     margin-top: 1rem;
     padding: 0.75rem 1.5rem;
@@ -41,6 +43,10 @@
     border: 2px solid #ffffff;
     border-radius: 15px;
     max-width: 90%;
+    width: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .scene-title {
@@ -49,6 +55,7 @@
     color: #ffffff;
     text-align: center;
     margin: 0;
+    width: 100%;
 }
 
 .save-button {
@@ -69,6 +76,7 @@
 
 .save-button:hover {
     background-color: #32CD32;
+    color: black;
 }
 
 .scene-content {
@@ -133,7 +141,7 @@
 
 .decision-container:not(:has(._decision-option:only-child)) ._decision-option {
     background: rgba(0, 0, 0, 0.8);
-    border: 2px solid #32CD32;
+    border: 2px solid #007bff;
     border-radius: 15px;
     padding: 1rem;
     color: #ffffff;
@@ -146,7 +154,7 @@
 }
 
 .decision-container:not(:has(._decision-option:only-child)) ._decision-option:hover {
-    background-color: #32CD32;
+    background-color: #007bff;
     color: #000000;
     transform: scale(1.02);
 }
@@ -158,11 +166,14 @@
 }
 
 /* Media Queries */
-@media (min-width: 768px) {
+@media (min-width: 850px) {
     .scene-title-container {
-        position: relative;
         padding: 1rem 2.5rem;
         border-radius: 20px;
+        position: fixed;
+        left: 50%;
+        transform: translateX(-50%);
+        margin-top: 0;
     }
 
     .scene-title {
@@ -190,7 +201,7 @@
 
 @media (min-width: 1024px) {
     .scene-title {
-        font-size: 3rem;
+        font-size: 2.5rem;
     }
 
     .scene-description {
@@ -238,11 +249,69 @@
 }
 
 /* Update media query for larger screens */
-@media (min-width: 768px) {
+@media (min-width: 850px) {
     .next-button {
         width: 3rem;
         height: 3rem;
         bottom: 1.5rem;
         right: 1.5rem;
+    }
+}
+
+.button-container {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 2;
+    display: flex;
+    gap: 1rem;
+}
+
+.export-button {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    z-index: 2;
+    background-color: rgba(0, 0, 0, 0.75);
+    color: #32CD32;
+    border: 2px solid #32CD32;
+    border-radius: 15px;
+    padding: 0.75rem 1.5rem;
+    font-family: 'Techno Race', sans-serif;
+    font-size: 1.5rem;
+    cursor: pointer;
+    text-shadow: none;
+}
+
+.export-button:hover {
+    background-color: #32CD32;
+    color: black;
+}
+
+/* Media Queries */
+@media (max-width: 850px) {
+    .scene-title-container {
+        padding: 0.5rem 1rem;
+        top: 0rem;
+    }
+
+    .scene-title {
+        font-size: 1.5rem;
+    }
+
+    .export-button {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+    }
+
+    .save-button {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .scene-title-container {
+        top: 4rem;
     }
 } 
