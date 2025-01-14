@@ -21,6 +21,10 @@
       "PackagePath": "staticwebassets\\Uploads\\scene_3_b4e3a545-634e-46be-87dc-8441e1c208a4.jpg"
     },
     {
+      "Id": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_4_682b0e1e-904d-4cff-8774-0b0e9bf4023e.jpg",
+      "PackagePath": "staticwebassets\\Uploads\\scene_4_682b0e1e-904d-4cff-8774-0b0e9bf4023e.jpg"
+    },
+    {
       "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.stinsily.Server.props",
       "PackagePath": "build\\stinsily.Server.props"
     },

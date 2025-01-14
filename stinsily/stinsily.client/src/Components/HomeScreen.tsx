@@ -13,14 +13,38 @@ const HomeScreen = () => {
         }
     }, [navigate]);
 
-    const handleNewGame = () => {
-        // Clear any existing game progress
-        const email = localStorage.getItem('currentUserEmail');
-        if (email) {
-            localStorage.removeItem(`gameProgress_${email}`);
+    const handleNewGame = async () => {
+        try {
+            const token = localStorage.getItem('authToken');
+            if (!token) {
+                navigate('/login');
+                return;
+            }
+
+            // Reset stats on server
+            const response = await fetch('http://localhost:5193/api/Scenes/reset-stats', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to reset stats');
+            }
+
+            // Clear local storage progress
+            const email = localStorage.getItem('currentUserEmail');
+            if (email) {
+                localStorage.removeItem(`gameProgress_${email}`);
+            }
+
+            // Navigate to the first scene
+            navigate('/scenes/1');
+        } catch (error) {
+            console.error('Error starting new game:', error);
+            alert('Error starting new game. Please try again.');
         }
-        // Navigate to the first scene
-        navigate('/scenes/1');
     };
 
     const handleResumeGame = () => {

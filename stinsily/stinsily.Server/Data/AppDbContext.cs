@@ -70,8 +70,8 @@ namespace stinsily.Server.Data
 
             modelBuilder.Entity<Players>()
                 .HasOne(p => p.User)
-                .WithOne(u => u.Player)
-                .HasForeignKey<Players>(p => p.UserID);
+                .WithMany()
+                .HasForeignKey(p => p.UserID);
         }
 
         public void UpdateAdminUser(string email, string password)

@@ -20,6 +20,13 @@ interface DecisionOption {
     effect?: string;
 }
 
+interface PlayerStats {
+    health: number;
+    force: number;
+    obiWanRelationship: number;
+    item: string[];
+}
+
 const Scene = () => {
     const [userEmail, setUserEmail] = useState<string | null>(null);
     const { id } = useParams();
@@ -29,16 +36,37 @@ const Scene = () => {
     const [loading, setLoading] = useState(true);
     const [isTransitioning, setIsTransitioning] = useState(false);
     const [currentDescriptionIndex, setCurrentDescriptionIndex] = useState(0);
+    const [playerStats, setPlayerStats] = useState<PlayerStats>({
+        health: 100,
+        force: 50,
+        obiWanRelationship: 25,
+        item: []
+    });
 
     const API_BASE_URL = 'http://localhost:5193/api';
 
+    useEffect(() => {
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+            navigate('/login');
+            return;
+        }
+    }, [navigate]);
+
     const fetchScene = useCallback(async (sceneId: string) => {
         try {
+            const token = localStorage.getItem('authToken');
+            if (!token) {
+                navigate('/login');
+                return;
+            }
+
             console.log('Fetching scene...', sceneId);
             const response = await fetch(`${API_BASE_URL}/Scenes/${sceneId}`, {
                 method: 'GET',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 },
                 credentials: 'include'
             });
@@ -74,11 +102,22 @@ const Scene = () => {
             console.error('Error fetching scene:', error);
             setLoading(false);
         }
-    }, []);
+    }, [API_BASE_URL, navigate]);
 
     const fetchSceneOptions = async (sceneId: string) => {
         try {
-            const response = await fetch(`http://localhost:5193/api/Scenes/options/${sceneId}`);
+            const token = localStorage.getItem('authToken');
+            if (!token) {
+                navigate('/login');
+                return;
+            }
+
+            const response = await fetch(`${API_BASE_URL}/Scenes/options/${sceneId}`, {
+                headers: {
+                    'Accept': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
             if (!response.ok) throw new Error('Failed to fetch scene options');
             const options = await response.json();
             setSceneOptions(options);
@@ -88,34 +127,131 @@ const Scene = () => {
         }
     };
 
+    const loadSavedProgress = useCallback(() => {
+        const email = localStorage.getItem('currentUserEmail');
+        if (email) {
+            const savedProgress = localStorage.getItem(`gameProgress_${email}`);
+            if (savedProgress) {
+                const gameState = JSON.parse(savedProgress);
+                if (gameState.playerStats) {
+                    setPlayerStats(gameState.playerStats);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }, []);
+
+    const fetchPlayerStats = useCallback(async () => {
+        try {
+            const token = localStorage.getItem('authToken');
+            if (!token) {
+                navigate('/login');
+                return;
+            }
+
+            if (!loadSavedProgress()) {
+                const response = await fetch(`${API_BASE_URL}/Scenes/player-stats`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) throw new Error('Failed to fetch stats');
+                const stats = await response.json();
+                setPlayerStats(stats);
+            }
+        } catch (error) {
+            console.error('Error fetching player stats:', error);
+        }
+    }, [API_BASE_URL, navigate, loadSavedProgress]);
+
     const handleOptionClick = async (option: DecisionOption) => {
         try {
-            // Apply the effect first if it exists and isn't a scene effect
-            if (option.effect && !option.effect.startsWith('scene:')) {
-                const response = await fetch(`${API_BASE_URL}/Scenes/apply-effect`, {
+            if (option.effect) {
+                // Convert colon format to plus/minus format
+                let formattedEffect = option.effect;
+                if (option.effect.includes(':')) {
+                    const [stat, value] = option.effect.split(':');
+                    // If value is negative, keep the minus sign, otherwise add plus
+                    const sign = value.startsWith('-') ? '' : '+';
+                    formattedEffect = `${stat}${sign}${value}`;
+                }
+
+                console.log('Sending effect:', formattedEffect);
+
+                const response = await fetch('http://localhost:5193/api/Scenes/apply-effect', {
                     method: 'POST',
-                    headers: { 
+                    headers: {
                         'Content-Type': 'application/json',
-                        'Accept': 'application/json'
+                        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
                     },
-                    credentials: 'include',
-                    body: JSON.stringify({ effect: option.effect })
+                    body: JSON.stringify({ 
+                        Effect: formattedEffect.toLowerCase()
+                    })
                 });
-                
+
                 if (!response.ok) {
                     const errorText = await response.text();
                     console.error('Effect response:', errorText);
-                    // Don't throw error here, just log it and continue
-                    console.warn(`Failed to apply effect: ${errorText}`);
+                    console.error('Effect sent:', formattedEffect);
+                } else {
+                    const result = await response.json();
+                    // Update stats in state without saving to localStorage
+                    setPlayerStats({
+                        health: result.player.health,
+                        force: result.player.force,
+                        obiWanRelationship: result.player.obiWanRelationship,
+                        item: result.player.item || []
+                    });
                 }
             }
 
-            // Navigate to the next scene regardless of effect success
-            navigate(`/scenes/${option.nextSceneId}`);
+            // Navigate to next scene
+            setIsTransitioning(true);
+            setTimeout(() => {
+                navigate(`/scenes/${option.nextSceneId}`);
+            }, 300);
         } catch (error) {
-            console.error('Error handling option:', error);
-            // Still navigate even if there's an error
-            navigate(`/scenes/${option.nextSceneId}`);
+            console.error('Error applying effect:', error);
+        }
+    };
+
+    const handleItemPickup = async (itemId: number) => {
+        try {
+            const token = localStorage.getItem('authToken');
+            if (!token) {
+                navigate('/login');
+                return;
+            }
+
+            const response = await fetch(`${API_BASE_URL}/Scenes/item`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ 
+                    action: 'pickup',
+                    itemId: itemId 
+                })
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('Error picking up item:', errorText);
+                return;
+            }
+
+            // Refresh player stats to update inventory
+            await fetchPlayerStats();
+            
+            // Refresh scene to update item availability
+            if (id) {
+                await fetchScene(id);
+            }
+        } catch (error) {
+            console.error('Error picking up item:', error);
         }
     };
 
@@ -135,39 +271,98 @@ const Scene = () => {
     };
 
     const saveProgress = () => {
-        const email = getCurrentUserEmail();
-        if (!email) {
-            alert('Please log in to save progress');
-            navigate('/');
-            return;
+        const email = localStorage.getItem('currentUserEmail');
+        if (email && id) {
+            const gameState = {
+                email,
+                currentSceneId: id,
+                playerStats: playerStats  // Save current stats
+            };
+            localStorage.setItem(`gameProgress_${email}`, JSON.stringify(gameState));
+            
+            // Also save to server
+            saveToServer(gameState);
+            alert('Progress saved!');
         }
+    };
 
-        const gameState = {
-            currentSceneId: id,
-            sceneData: currentScene,
-            options: sceneOptions
-        };
-        
-        const userProgressKey = `gameProgress_${email}`;
-        localStorage.setItem(userProgressKey, JSON.stringify(gameState));
-        alert('Progress saved!');
+    const saveToServer = async (gameState: any) => {
+        try {
+            const token = localStorage.getItem('authToken');
+            if (!token) return;
+
+            await fetch(`${API_BASE_URL}/Scenes/save-progress`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    sceneId: gameState.currentSceneId,
+                    stats: gameState.playerStats
+                })
+            });
+        } catch (error) {
+            console.error('Error saving to server:', error);
+        }
     };
 
     useEffect(() => {
-        const loadSavedProgress = () => {
+        const loadSavedProgress = async () => {
             const email = getCurrentUserEmail();
             if (email) {
                 const userProgressKey = `gameProgress_${email}`;
                 const savedProgress = localStorage.getItem(userProgressKey);
                 if (savedProgress) {
                     const gameState = JSON.parse(savedProgress);
-                    navigate(`/scenes/${gameState.currentSceneId}`);
+                    // First set the stats
+                    if (gameState.playerStats) {
+                        setPlayerStats(gameState.playerStats);
+                        // Also reset the server stats to match saved stats
+                        await resetServerStats(gameState.playerStats);
+                    }
+                    // Then navigate to the scene
+                    if (gameState.currentSceneId && gameState.currentSceneId !== id) {
+                        navigate(`/scenes/${gameState.currentSceneId}`);
+                    }
                 }
             }
         };
 
         loadSavedProgress();
     }, []);
+
+    // Add new function to reset server stats
+    const resetServerStats = async (stats: PlayerStats) => {
+        try {
+            const token = localStorage.getItem('authToken');
+            if (!token) return;
+
+            await fetch(`${API_BASE_URL}/Scenes/sync-stats`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(stats)
+            });
+        } catch (error) {
+            console.error('Error syncing stats with server:', error);
+        }
+    };
+
+    // Remove or modify the fetchPlayerStats useEffect to avoid overwriting saved stats
+    useEffect(() => {
+        if (!id) return;
+        
+        const email = getCurrentUserEmail();
+        const savedProgress = localStorage.getItem(`gameProgress_${email}`);
+        
+        // Only fetch from server if there's no saved progress
+        if (!savedProgress) {
+            fetchPlayerStats();
+        }
+    }, [id, fetchPlayerStats]);
 
     useEffect(() => {
         getCurrentUserEmail();
@@ -251,6 +446,30 @@ const Scene = () => {
             <button className={styles['save-button']} onClick={saveProgress}>
                 Save Progress
             </button>
+            <div className={styles['stats-panel']}>
+                <div className={styles['stat-item']}>
+                    <span className={styles['stat-label']}>Health:</span>
+                    <span className={styles['stat-value']}>{playerStats.health}</span>
+                </div>
+                <div className={styles['stat-item']}>
+                    <span className={styles['stat-label']}>Force:</span>
+                    <span className={styles['stat-value']}>{playerStats.force}</span>
+                </div>
+                <div className={styles['stat-item']}>
+                    <span className={styles['stat-label']}>Obi-Wan:</span>
+                    <span className={styles['stat-value']}>{playerStats.obiWanRelationship}</span>
+                </div>
+                {playerStats.item.length > 0 && (
+                    <div className={styles['items-container']}>
+                        <span className={styles['stat-label']}>Items:</span>
+                        <div className={styles['items-list']}>
+                            {playerStats.item.map((item, index) => (
+                                <span key={index} className={styles['item']}>{item}</span>
+                            ))}
+                        </div>
+                    </div>
+                )}
+            </div>
             <div className={`${styles['scene-content']} ${currentScene?.type === 'Decision' ? styles['decision'] : ''}`}>
                 <p className={styles['scene-description']}>
                     {descriptions[currentDescriptionIndex]}
@@ -290,6 +509,16 @@ const Scene = () => {
                     </div>
                 )}
             </div>
+            {currentScene?.itemID && (
+                <div className={styles['item-pickup-container']}>
+                    <button 
+                        className={styles['pickup-button']}
+                        onClick={() => handleItemPickup(currentScene.itemID!)}
+                    >
+                        Sebrat předmět
+                    </button>
+                </div>
+            )}
         </div>
     );
 };

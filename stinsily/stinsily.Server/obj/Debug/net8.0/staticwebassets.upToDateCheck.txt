@@ -3,3 +3,4 @@ wwwroot\Uploads\scene_1_ea44b05e-865b-425f-8480-d8c1dbffbe49.jpg
 wwwroot\Uploads\scene_2_66e4e96b-d36a-4f50-a2de-ae4c7b117395.jpg
 wwwroot\Uploads\scene_2_bd81c4a6-3e7a-45d3-be36-8df09c0ac137.jpg
 wwwroot\Uploads\scene_3_b4e3a545-634e-46be-87dc-8441e1c208a4.jpg
+wwwroot\Uploads\scene_4_682b0e1e-904d-4cff-8774-0b0e9bf4023e.jpg

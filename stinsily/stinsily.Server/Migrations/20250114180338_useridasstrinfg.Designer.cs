@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using stinsily.Server.Data;
 
@@ -10,9 +11,11 @@ using stinsily.Server.Data;
 namespace stinsily.Server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250114180338_useridasstrinfg")]
+    partial class useridasstrinfg
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.0");
@@ -374,7 +377,8 @@ namespace stinsily.Server.Migrations
 
                     b.HasIndex("CurrentSceneID");
 
-                    b.HasIndex("UserID");
+                    b.HasIndex("UserID")
+                        .IsUnique();
 
                     b.ToTable("Players", (string)null);
                 });
@@ -450,16 +454,11 @@ namespace stinsily.Server.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("PlayerID")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("UserName")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("UserID");
-
-                    b.HasIndex("PlayerID");
 
                     b.ToTable("Users", (string)null);
                 });
@@ -554,9 +553,9 @@ namespace stinsily.Server.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserID")
+                    b.HasOne("stinsily.Server.Models.Users", "User")
+                        .WithOne("Player")
+                        .HasForeignKey("stinsily.Server.Models.Players", "UserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -576,10 +575,6 @@ namespace stinsily.Server.Migrations
 
             modelBuilder.Entity("stinsily.Server.Models.Users", b =>
                 {
-                    b.HasOne("stinsily.Server.Models.Players", "Player")
-                        .WithMany()
-                        .HasForeignKey("PlayerID");
-
                     b.Navigation("Player");
                 });
 #pragma warning restore 612, 618

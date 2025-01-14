@@ -40,7 +40,7 @@ namespace stinsily.Server.Controllers
         // PUT: api/Users/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(int id, Users user)
+        public async Task<IActionResult> PutUser(string id, Users user)
         {
             if (id != user.UserID)
             {
@@ -95,9 +95,9 @@ namespace stinsily.Server.Controllers
             return NoContent();
         }
 
-        private bool UserExists(int id)
+        private bool UserExists(string userID)
         {
-            return _context.Users.Any(e => e.UserID == id);
+            return _context.Users.Any(e => e.UserID == userID);
         }
     }
 }

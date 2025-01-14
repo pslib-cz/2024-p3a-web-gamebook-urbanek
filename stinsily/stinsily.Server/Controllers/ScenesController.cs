@@ -86,7 +86,7 @@ namespace stinsily.Server.Controllers
                 var player = await _context.Players
                     .Include(p => p.CurrentScene)
                     .Include(p => p.ItemID)
-                    .FirstOrDefaultAsync(p => p.UserID == int.Parse(user.Id));
+                    .FirstOrDefaultAsync(p => p.UserID == user.Id);
 
                 if (player == null)
                     return NotFound("Player not found");
@@ -156,7 +156,13 @@ namespace stinsily.Server.Controllers
         {
             try
             {
-                var player = await _context.Players.FirstOrDefaultAsync();
+                var user = await _userManager.GetUserAsync(User);
+                if (user == null)
+                {
+                    return Unauthorized("User not authenticated");
+                }
+
+                var player = await _context.Players.FirstOrDefaultAsync(p => p.UserID == user.Id);
                 
                 if (player == null)
                 {
@@ -168,7 +174,7 @@ namespace stinsily.Server.Controllers
 
                     player = new Players 
                     { 
-                        UserID = 1,
+                        UserID = user.Id,
                         CurrentSceneID = defaultScene.SceneID,
                         ItemID = null,
                         Health = 100,
@@ -355,7 +361,7 @@ namespace stinsily.Server.Controllers
             var player = await _context.Players
                 .Include(p => p.CurrentScene)
                 .Include(p => p.ItemID)
-                .FirstOrDefaultAsync(p => p.UserID == int.Parse(user.Id));
+                .FirstOrDefaultAsync(p => p.UserID == user.Id);
 
             if (player == null)
                 return NotFound("Player not found");
@@ -398,27 +404,54 @@ namespace stinsily.Server.Controllers
         [HttpPost("save-progress")]
         public async Task<IActionResult> SaveProgress([FromBody] SaveProgressRequest request)
         {
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null)
-                return Unauthorized();
-
-            var player = await _context.Players
-                .FirstOrDefaultAsync(p => p.UserID == int.Parse(user.Id));
-
-            if (player == null)
+            try
             {
-                player = new Players { UserID = int.Parse(user.Id) };
-                _context.Players.Add(player);
-            }
+                var user = await _userManager.GetUserAsync(User);
+                if (user == null) return Unauthorized("User not authenticated");
 
-            var scene = await _context.Scenes.FindAsync(request.LastSceneId);
-            if (scene != null)
+                var player = await _context.Players.FirstOrDefaultAsync(p => p.UserID == user.Id);
+                if (player == null)
+                {
+                    player = new Players
+                    {
+                        UserID = user.Id,
+                        CurrentSceneID = request.SceneId,
+                        Health = request.Stats.Health,
+                        Force = request.Stats.Force,
+                        ObiWanRelationship = request.Stats.ObiWanRelationship,
+                        ItemID = null
+                    };
+                    _context.Players.Add(player);
+                }
+                else
+                {
+                    player.CurrentSceneID = request.SceneId;
+                    player.Health = request.Stats.Health;
+                    player.Force = request.Stats.Force;
+                    player.ObiWanRelationship = request.Stats.ObiWanRelationship;
+                }
+
+                await _context.SaveChangesAsync();
+                return Ok(new { message = "Progress saved successfully" });
+            }
+            catch (Exception ex)
             {
-                player.CurrentScene = scene;
+                _logger.LogError($"Error saving progress: {ex.Message}");
+                return StatusCode(500, "Error saving progress");
             }
+        }
 
-            await _context.SaveChangesAsync();
-            return Ok();
+        public class SaveProgressRequest
+        {
+            public int SceneId { get; set; }
+            public PlayerStatsRequest Stats { get; set; }
+        }
+
+        public class PlayerStatsRequest
+        {
+            public int Health { get; set; }
+            public int Force { get; set; }
+            public int ObiWanRelationship { get; set; }
         }
 
         [HttpGet("last-scene")]
@@ -430,14 +463,9 @@ namespace stinsily.Server.Controllers
 
             var player = await _context.Players
                 .Include(p => p.CurrentScene)
-                .FirstOrDefaultAsync(p => p.UserID == int.Parse(user.Id));
+                .FirstOrDefaultAsync(p => p.UserID == user.Id);
 
             return Ok(new { lastSceneId = player?.CurrentScene?.SceneID ?? 1 });
-        }
-
-        public class SaveProgressRequest
-        {
-            public int LastSceneId { get; set; }
         }
 
         [HttpGet("current-user")]
@@ -513,7 +541,6 @@ namespace stinsily.Server.Controllers
         {
             try
             {
-                // Get the current user's email from the session or claims
                 var userEmail = User.Identity?.Name;
                 if (string.IsNullOrEmpty(userEmail))
                 {
@@ -523,25 +550,28 @@ namespace stinsily.Server.Controllers
                 var user = await _userManager.FindByNameAsync(userEmail);
                 if (user == null) return NotFound("User not found");
 
-                var player = await _context.Players.FirstOrDefaultAsync(p => p.UserID == int.Parse(user.Id));
+                var player = await _context.Players.FirstOrDefaultAsync(p => p.UserID == user.Id);
                 if (player == null)
                 {
                     return NotFound("Player not found");
                 }
 
+                // Log the received effect
+                _logger.LogInformation($"Received effect: {request.Effect}");
+
                 // Parse and apply the effect
-                // Example effect format: "health+10" or "gold-5"
-                var parts = request.Effect.Split(new[] { '+', '-' }, 2);
+                var parts = request.Effect.Split(new[] { '+', '-' }, 2, StringSplitOptions.RemoveEmptyEntries);
                 if (parts.Length != 2)
                 {
-                    return BadRequest("Invalid effect format");
+                    _logger.LogWarning($"Invalid effect format: {request.Effect}");
+                    return BadRequest($"Invalid effect format. Expected format: stat+value or stat-value. Received: {request.Effect}");
                 }
 
-                var stat = parts[0].ToLower();
+                var stat = parts[0].Trim().ToLower();
                 var isAddition = request.Effect.Contains('+');
                 if (!int.TryParse(parts[1], out int value))
                 {
-                    return BadRequest("Invalid effect value");
+                    return BadRequest($"Invalid effect value: {parts[1]}");
                 }
 
                 // Apply the effect based on the stat
@@ -550,15 +580,14 @@ namespace stinsily.Server.Controllers
                     case "health":
                         player.Health += isAddition ? value : -value;
                         break;
-                    case "gold":
-                        player.ObiWanRelationship += isAddition ? value : -value;
-                        break;
-                    // Add more stats as needed
                     case "force":
                         player.Force += isAddition ? value : -value;
                         break;
+                    case "obiwan":
+                        player.ObiWanRelationship += isAddition ? value : -value;
+                        break;
                     default:
-                        return BadRequest($"Unknown stat: {stat}");
+                        return BadRequest($"Unknown stat: {stat}. Valid stats are: health, force, obiwan");
                 }
 
                 await _context.SaveChangesAsync();
@@ -566,6 +595,124 @@ namespace stinsily.Server.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError($"Error in ApplyEffect: {ex.Message}");
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpGet("player-stats")]
+        public async Task<IActionResult> GetPlayerStats()
+        {
+            try
+            {
+                var user = await _userManager.GetUserAsync(User);
+                if (user == null)
+                {
+                    _logger.LogWarning("User not found");
+                    return Unauthorized("User not authenticated");
+                }
+
+                _logger.LogInformation($"Getting stats for user ID: {user.Id}");
+
+                var player = await _context.Players
+                    .FirstOrDefaultAsync(p => p.UserID == user.Id);
+
+                if (player == null)
+                {
+                    _logger.LogInformation("Creating new player");
+                    player = new Players
+                    {
+                        UserID = user.Id,
+                        Health = 100,
+                        Force = 50,
+                        ObiWanRelationship = 25,
+                        ItemID = null,
+                        CurrentSceneID = 1
+                    };
+                    _context.Players.Add(player);
+                    await _context.SaveChangesAsync();
+                }
+
+                // Get item name separately if needed
+                var items = new List<string>();
+                if (player.ItemID.HasValue)
+                {
+                    var item = await _context.Items.FindAsync(player.ItemID.Value);
+                    if (item != null)
+                    {
+                        items.Add(item.Name);
+                    }
+                }
+
+                return Ok(new
+                {
+                    health = player.Health,
+                    force = player.Force,
+                    obiWanRelationship = player.ObiWanRelationship,
+                    item = items
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error in GetPlayerStats: {ex.Message}\nStack trace: {ex.StackTrace}");
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpPost("reset-stats")]
+        public async Task<IActionResult> ResetStats()
+        {
+            try
+            {
+                var user = await _userManager.GetUserAsync(User);
+                if (user == null) return Unauthorized("User not authenticated");
+
+                var player = await _context.Players.FirstOrDefaultAsync(p => p.UserID == user.Id);
+                if (player != null)
+                {
+                    // Reset stats to default values
+                    player.Health = 100;
+                    player.Force = 50;
+                    player.ObiWanRelationship = 25;
+                    player.ItemID = null;
+                    player.CurrentSceneID = 1;
+
+                    await _context.SaveChangesAsync();
+                }
+
+                return Ok(new { message = "Stats reset successfully" });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error in ResetStats: {ex.Message}");
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpPost("sync-stats")]
+        public async Task<IActionResult> SyncStats([FromBody] PlayerStatsRequest stats)
+        {
+            try
+            {
+                var user = await _userManager.GetUserAsync(User);
+                if (user == null) return Unauthorized("User not authenticated");
+
+                var player = await _context.Players.FirstOrDefaultAsync(p => p.UserID == user.Id);
+                if (player != null)
+                {
+                    // Sync stats with what's in localStorage
+                    player.Health = stats.Health;
+                    player.Force = stats.Force;
+                    player.ObiWanRelationship = stats.ObiWanRelationship;
+
+                    await _context.SaveChangesAsync();
+                }
+
+                return Ok(new { message = "Stats synced successfully" });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error in SyncStats: {ex.Message}");
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }

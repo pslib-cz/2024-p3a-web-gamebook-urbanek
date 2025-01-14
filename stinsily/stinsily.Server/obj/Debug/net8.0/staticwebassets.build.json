@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "CuGBMcJWYQO3uiUQ25TwF1sHrWU4WhrVo0gGWdkBaS4=",
+  "Hash": "Yw4NyE76rnXCukbfhmQpqAX/0uwEeXWlQVQJDHo/7N0=",
   "Source": "stinsily.Server",
   "BasePath": "_content/stinsily.Server",
   "Mode": "Default",
@@ -132,6 +132,27 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\Uploads\\scene_3_b4e3a545-634e-46be-87dc-8441e1c208a4.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_4_682b0e1e-904d-4cff-8774-0b0e9bf4023e.jpg",
+      "SourceId": "stinsily.Server",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\",
+      "BasePath": "_content/stinsily.Server",
+      "RelativePath": "Uploads/scene_4_682b0e1e-904d-4cff-8774-0b0e9bf4023e#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "mq5tvy0gbn",
+      "Integrity": "Tgk0jRFhx20NRfk1w1XRlY/Yh9FCRlDbHBeOnWngmAQ=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Uploads\\scene_4_682b0e1e-904d-4cff-8774-0b0e9bf4023e.jpg"
     }
   ],
   "Endpoints": [
@@ -542,6 +563,88 @@
         {
           "Name": "integrity",
           "Value": "sha256-rvt328aGBKXmE04+CbkN0jnFFf/9JEQnezv+lhdqAXY="
+        }
+      ]
+    },
+    {
+      "Route": "Uploads/scene_4_682b0e1e-904d-4cff-8774-0b0e9bf4023e.jpg",
+      "AssetFile": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_4_682b0e1e-904d-4cff-8774-0b0e9bf4023e.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3626819"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"Tgk0jRFhx20NRfk1w1XRlY/Yh9FCRlDbHBeOnWngmAQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 13 Jan 2025 21:23:56 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-Tgk0jRFhx20NRfk1w1XRlY/Yh9FCRlDbHBeOnWngmAQ="
+        }
+      ]
+    },
+    {
+      "Route": "Uploads/scene_4_682b0e1e-904d-4cff-8774-0b0e9bf4023e.mq5tvy0gbn.jpg",
+      "AssetFile": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_4_682b0e1e-904d-4cff-8774-0b0e9bf4023e.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3626819"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"Tgk0jRFhx20NRfk1w1XRlY/Yh9FCRlDbHBeOnWngmAQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 13 Jan 2025 21:23:56 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "mq5tvy0gbn"
+        },
+        {
+          "Name": "label",
+          "Value": "Uploads/scene_4_682b0e1e-904d-4cff-8774-0b0e9bf4023e.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-Tgk0jRFhx20NRfk1w1XRlY/Yh9FCRlDbHBeOnWngmAQ="
         }
       ]
     }
