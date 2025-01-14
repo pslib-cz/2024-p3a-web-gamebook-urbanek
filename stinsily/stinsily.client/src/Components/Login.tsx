@@ -108,36 +108,26 @@ const Login = () => {
     };
 
     return (
-        <div className="login-form">
+        <div className={styles['login-form']}>
             {error && <div className={error.includes('successful') ? styles['success-message'] : styles['error-message']}>
                 {error}
             </div>}
-            <form>
-                <div>
-                    <input
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="Email"
-                        required
-                    />
-                </div>
-                <div>
-                    <input
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        placeholder="Password"
-                        required
-                    />
-                </div>
-                <div className={styles['button-group']}>
-                    <button type="button" onClick={handleLogin}>
-                        Login
-                    </button>
-                    <button type="button" onClick={handleRegister}>
-                        Register
-                    </button>
+            <form onSubmit={handleLogin}>
+                <input
+                    type="email"
+                    placeholder="Email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                />
+                <input
+                    type="password"
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                />
+                <div className={styles['button-container']}>
+                    <button type="submit">Login</button>
+                    <button type="button" onClick={handleRegister}>Register</button>
                 </div>
             </form>
         </div>
