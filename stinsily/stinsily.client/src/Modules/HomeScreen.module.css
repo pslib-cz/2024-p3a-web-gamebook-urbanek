@@ -40,6 +40,7 @@
 }
 
 .button {
+    font-family: 'Space Grotesk', sans-serif;
     padding: 1rem 2rem;
     width: 340px;
     font-size: 3rem;
@@ -101,7 +102,7 @@
     background-color: rgba(0, 0, 0, 0.75);
     color: #007bff;
     border: 2px solid #007bff;
-    font-family: 'Techno Race', sans-serif;
+    font-family: 'Space Grotesk', sans-serif;
     font-size: 3rem;
     display: flex;
     justify-content: center;
@@ -118,7 +119,7 @@
 
 .author {
     position: absolute;
-    font-family: 'Techno Race', sans-serif;
+    font-family: 'Space Grotesk', sans-serif;
     bottom: 10px;
     left: 50%;
     transform: translateX(-50%);

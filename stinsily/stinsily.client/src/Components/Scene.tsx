@@ -25,6 +25,13 @@ interface PlayerStats {
     force: number;
     obiWanRelationship: number;
     item: string[];
+    itemId?: number | null;
+}
+
+interface Item {
+    id: number;
+    name: string;
+    description: string;
 }
 
 const Scene = () => {
@@ -42,6 +49,8 @@ const Scene = () => {
         obiWanRelationship: 25,
         item: []
     });
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [itemDetails, setItemDetails] = useState<Item | null>(null);
 
     const API_BASE_URL = 'http://localhost:5193/api';
 
@@ -97,6 +106,11 @@ const Scene = () => {
                 setSceneOptions(optionsData);
             }
             
+            // If scene has an item, fetch its details
+            if (sceneData.itemID) {
+                await fetchItemDetails(sceneData.itemID);
+            }
+
             setLoading(false);
         } catch (error) {
             console.error('Error fetching scene:', error);
@@ -142,6 +156,26 @@ const Scene = () => {
         return false;
     }, []);
 
+    const fetchItemName = async (itemId: number) => {
+        try {
+            const token = localStorage.getItem('authToken');
+            if (!token) return null;
+
+            const response = await fetch(`${API_BASE_URL}/api/Items/${itemId}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!response.ok) throw new Error('Failed to fetch item');
+            const item = await response.json();
+            return item.name;
+        } catch (error) {
+            console.error('Error fetching item name:', error);
+            return null;
+        }
+    };
+
     const fetchPlayerStats = useCallback(async () => {
         try {
             const token = localStorage.getItem('authToken');
@@ -151,6 +185,7 @@ const Scene = () => {
             }
 
             if (!loadSavedProgress()) {
+                // Fetch basic stats
                 const response = await fetch(`${API_BASE_URL}/Scenes/player-stats`, {
                     headers: {
                         'Authorization': `Bearer ${token}`
@@ -159,6 +194,23 @@ const Scene = () => {
 
                 if (!response.ok) throw new Error('Failed to fetch stats');
                 const stats = await response.json();
+                
+                // Fetch item separately using ItemsController if itemId exists
+                if (stats.itemId) {
+                    const itemResponse = await fetch(`${API_BASE_URL}/Items/${stats.itemId}`, {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+
+                    if (itemResponse.ok) {
+                        const item = await itemResponse.json();
+                        stats.item = [item.name];
+                    }
+                } else {
+                    stats.item = [];
+                }
+
                 setPlayerStats(stats);
             }
         } catch (error) {
@@ -173,12 +225,9 @@ const Scene = () => {
                 let formattedEffect = option.effect;
                 if (option.effect.includes(':')) {
                     const [stat, value] = option.effect.split(':');
-                    // If value is negative, keep the minus sign, otherwise add plus
                     const sign = value.startsWith('-') ? '' : '+';
                     formattedEffect = `${stat}${sign}${value}`;
                 }
-
-                console.log('Sending effect:', formattedEffect);
 
                 const response = await fetch('http://localhost:5193/api/Scenes/apply-effect', {
                     method: 'POST',
@@ -197,13 +246,14 @@ const Scene = () => {
                     console.error('Effect sent:', formattedEffect);
                 } else {
                     const result = await response.json();
-                    // Update stats in state without saving to localStorage
-                    setPlayerStats({
+                    // Update stats in state while preserving the item
+                    setPlayerStats(prev => ({
                         health: result.player.health,
                         force: result.player.force,
                         obiWanRelationship: result.player.obiWanRelationship,
-                        item: result.player.item || []
-                    });
+                        item: prev.item, // Preserve the current item
+                        itemId: prev.itemId // Preserve the current itemId
+                    }));
                 }
             }
 
@@ -220,10 +270,7 @@ const Scene = () => {
     const handleItemPickup = async (itemId: number) => {
         try {
             const token = localStorage.getItem('authToken');
-            if (!token) {
-                navigate('/login');
-                return;
-            }
+            if (!token) return;
 
             const response = await fetch(`${API_BASE_URL}/Scenes/item`, {
                 method: 'POST',
@@ -231,25 +278,47 @@ const Scene = () => {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify({ 
-                    action: 'pickup',
-                    itemId: itemId 
+                body: JSON.stringify({
+                    Action: 'pickup',
+                    ItemId: itemId 
                 })
             });
 
             if (!response.ok) {
                 const errorText = await response.text();
                 console.error('Error picking up item:', errorText);
-                return;
+                throw new Error('Failed to pick up item');
             }
 
-            // Refresh player stats to update inventory
-            await fetchPlayerStats();
-            
-            // Refresh scene to update item availability
-            if (id) {
-                await fetchScene(id);
+            // Fetch item details from ItemsController
+            const itemResponse = await fetch(`${API_BASE_URL}/Items/${itemId}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!itemResponse.ok) throw new Error('Failed to fetch item details');
+            const item = await itemResponse.json();
+
+            // Update player stats with the new item
+            setPlayerStats(prev => ({
+                ...prev,
+                item: [item.name],
+                itemId: itemId
+            }));
+
+            // Get the current scene options again to ensure we have the correct ones
+            const sceneOptionsResponse = await fetch(`${API_BASE_URL}/Scenes/options/${id}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (sceneOptionsResponse.ok) {
+                const newOptions = await sceneOptionsResponse.json();
+                setSceneOptions(newOptions);
             }
+
         } catch (error) {
             console.error('Error picking up item:', error);
         }
@@ -276,11 +345,11 @@ const Scene = () => {
             const gameState = {
                 email,
                 currentSceneId: id,
-                playerStats: playerStats  // Save current stats
+                playerStats: playerStats  // This now includes item state
             };
             localStorage.setItem(`gameProgress_${email}`, JSON.stringify(gameState));
             
-            // Also save to server
+            // Save to server
             saveToServer(gameState);
             alert('Progress saved!');
         }
@@ -344,7 +413,10 @@ const Scene = () => {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify(stats)
+                body: JSON.stringify({
+                    ...stats,
+                    itemId: stats.itemId || null  // Ensure itemId is included in sync
+                })
             });
         } catch (error) {
             console.error('Error syncing stats with server:', error);
@@ -424,6 +496,25 @@ const Scene = () => {
         window.URL.revokeObjectURL(url);
     };
 
+    const fetchItemDetails = async (itemId: number) => {
+        try {
+            const token = localStorage.getItem('authToken');
+            if (!token) return;
+
+            const response = await fetch(`${API_BASE_URL}/Items/${itemId}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!response.ok) throw new Error('Failed to fetch item details');
+            const item = await response.json();
+            setItemDetails(item);
+        } catch (error) {
+            console.error('Error fetching item details:', error);
+        }
+    };
+
     if (!currentScene) return null;
 
     const backgroundStyle = getBackgroundStyle();
@@ -433,6 +524,25 @@ const Scene = () => {
 
     return (
         <div className={`${styles['scene-container']} ${isTransitioning ? styles['transitioning'] : ''}`}>
+            <div className={styles['menu-container']}>
+                <button 
+                    className={styles['hamburger-button']}
+                    onClick={() => setIsMenuOpen(!isMenuOpen)}
+                >
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <div className={`${styles['dropdown-menu']} ${isMenuOpen ? styles.open : ''}`}>
+                    <button onClick={saveProgress}>
+                        Uložit hru
+                    </button>
+                    <hr />
+                    <button onClick={exportProgress}>
+                        Exportovat hru
+                    </button>
+                </div>
+            </div>
             <div 
                 className={styles['scene-background']} 
                 style={backgroundStyle}
@@ -440,28 +550,28 @@ const Scene = () => {
             <div className={styles['scene-title-container']}>
                 <h2 className={styles['scene-title']}>{currentScene.title}</h2>
             </div>
-            <button className={styles['export-button']} onClick={exportProgress}>
+            {/* <button className={styles['export-button']} onClick={exportProgress}>
                 Export Progress
             </button>
             <button className={styles['save-button']} onClick={saveProgress}>
                 Save Progress
-            </button>
+            </button> */}
             <div className={styles['stats-panel']}>
                 <div className={styles['stat-item']}>
                     <span className={styles['stat-label']}>Health:</span>
                     <span className={styles['stat-value']}>{playerStats.health}</span>
                 </div>
                 <div className={styles['stat-item']}>
-                    <span className={styles['stat-label']}>Force:</span>
+                    <span className={styles['stat-label']}>Síla:</span>
                     <span className={styles['stat-value']}>{playerStats.force}</span>
                 </div>
                 <div className={styles['stat-item']}>
-                    <span className={styles['stat-label']}>Obi-Wan:</span>
+                    <span className={styles['stat-label']}>Vztah s Obi-Wanem:</span>
                     <span className={styles['stat-value']}>{playerStats.obiWanRelationship}</span>
                 </div>
                 {playerStats.item.length > 0 && (
                     <div className={styles['items-container']}>
-                        <span className={styles['stat-label']}>Items:</span>
+                        <span className={styles['stat-label']}>Itemy:</span>
                         <div className={styles['items-list']}>
                             {playerStats.item.map((item, index) => (
                                 <span key={index} className={styles['item']}>{item}</span>
@@ -486,6 +596,14 @@ const Scene = () => {
                 ) : (
                     // Show choices/navigation options on last description
                     <div className={styles['decision-container']}>
+                        {currentScene?.itemID && (
+                            <button 
+                                className={styles['pickup-button']}
+                                onClick={() => handleItemPickup(currentScene.itemID!)}
+                            >
+                                {itemDetails?.description || 'Sebrat předmět'}
+                            </button>
+                        )}
                         {sceneOptions.length === 1 ? (
                             // Single option - show as arrow
                             <button
@@ -509,16 +627,6 @@ const Scene = () => {
                     </div>
                 )}
             </div>
-            {currentScene?.itemID && (
-                <div className={styles['item-pickup-container']}>
-                    <button 
-                        className={styles['pickup-button']}
-                        onClick={() => handleItemPickup(currentScene.itemID!)}
-                    >
-                        Sebrat předmět
-                    </button>
-                </div>
-            )}
         </div>
     );
 };
