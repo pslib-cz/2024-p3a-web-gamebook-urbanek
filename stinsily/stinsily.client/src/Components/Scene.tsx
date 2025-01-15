@@ -515,6 +515,10 @@ const Scene = () => {
         }
     };
 
+    const handleBackToMenu = () => {
+        navigate('/home');
+    };
+
     if (!currentScene) return null;
 
     const backgroundStyle = getBackgroundStyle();
@@ -540,6 +544,10 @@ const Scene = () => {
                     <hr />
                     <button onClick={exportProgress}>
                         Exportovat hru
+                    </button>
+                    <hr />
+                    <button onClick={handleBackToMenu}>
+                        Hlavní menu
                     </button>
                 </div>
             </div>

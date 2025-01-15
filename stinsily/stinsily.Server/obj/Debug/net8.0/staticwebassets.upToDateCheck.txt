@@ -6,3 +6,4 @@ wwwroot\Uploads\scene_3_b4e3a545-634e-46be-87dc-8441e1c208a4.jpg
 wwwroot\Uploads\scene_4_682b0e1e-904d-4cff-8774-0b0e9bf4023e.jpg
 wwwroot\Uploads\scene_5_b6cbb5f5-3543-483f-bae2-80b89c1d2819.jpg
 wwwroot\Uploads\scene_6_089370f8-3aa0-44e2-9203-1b00c8e844f0.jpg
+wwwroot\Uploads\scene_7_70aef808-66ce-4561-ad68-81fd6f6b8c4c.jpg

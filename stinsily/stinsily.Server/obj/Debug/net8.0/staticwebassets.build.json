@@ -1,13 +1,13 @@
 {
   "Version": 1,
-  "Hash": "6THH5x5vxRSWBztUId7KjaqnHR7aOS1+Juf/YqmHVVI=",
+  "Hash": "TV9JTSfJwtZUDh5IDWDrrBQ6pkDwbqlTbq9Tn7jyHL4=",
   "Source": "stinsily.Server",
   "BasePath": "_content/stinsily.Server",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [
     {
-      "Identity": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.client\\stinsily.client.esproj",
+      "Identity": "C:\\Users\\adam.urbanek.022\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.client\\stinsily.client.esproj",
       "Version": 2,
       "Source": "stinsily.client",
       "GetPublishAssetsTargets": "GetCurrentProjectPublishStaticWebAssetItems",
@@ -22,17 +22,17 @@
     {
       "Name": "stinsily.Server\\wwwroot",
       "Source": "stinsily.Server",
-      "ContentRoot": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\adam.urbanek.022\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\",
       "BasePath": "_content/stinsily.Server",
       "Pattern": "**"
     }
   ],
   "Assets": [
     {
-      "Identity": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_1_88e9e98f-d9dc-4e15-88ea-53a7737cff81.jpg",
+      "Identity": "C:\\Users\\adam.urbanek.022\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_1_88e9e98f-d9dc-4e15-88ea-53a7737cff81.jpg",
       "SourceId": "stinsily.Server",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\adam.urbanek.022\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\",
       "BasePath": "_content/stinsily.Server",
       "RelativePath": "Uploads/scene_1_88e9e98f-d9dc-4e15-88ea-53a7737cff81#[.{fingerprint}]?.jpg",
       "AssetKind": "All",
@@ -50,10 +50,10 @@
       "OriginalItemSpec": "wwwroot\\Uploads\\scene_1_88e9e98f-d9dc-4e15-88ea-53a7737cff81.jpg"
     },
     {
-      "Identity": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_1_ea44b05e-865b-425f-8480-d8c1dbffbe49.jpg",
+      "Identity": "C:\\Users\\adam.urbanek.022\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_1_ea44b05e-865b-425f-8480-d8c1dbffbe49.jpg",
       "SourceId": "stinsily.Server",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\adam.urbanek.022\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\",
       "BasePath": "_content/stinsily.Server",
       "RelativePath": "Uploads/scene_1_ea44b05e-865b-425f-8480-d8c1dbffbe49#[.{fingerprint}]?.jpg",
       "AssetKind": "All",
@@ -71,10 +71,10 @@
       "OriginalItemSpec": "wwwroot\\Uploads\\scene_1_ea44b05e-865b-425f-8480-d8c1dbffbe49.jpg"
     },
     {
-      "Identity": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_2_66e4e96b-d36a-4f50-a2de-ae4c7b117395.jpg",
+      "Identity": "C:\\Users\\adam.urbanek.022\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_2_66e4e96b-d36a-4f50-a2de-ae4c7b117395.jpg",
       "SourceId": "stinsily.Server",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\adam.urbanek.022\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\",
       "BasePath": "_content/stinsily.Server",
       "RelativePath": "Uploads/scene_2_66e4e96b-d36a-4f50-a2de-ae4c7b117395#[.{fingerprint}]?.jpg",
       "AssetKind": "All",
@@ -92,10 +92,10 @@
       "OriginalItemSpec": "wwwroot\\Uploads\\scene_2_66e4e96b-d36a-4f50-a2de-ae4c7b117395.jpg"
     },
     {
-      "Identity": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_2_bd81c4a6-3e7a-45d3-be36-8df09c0ac137.jpg",
+      "Identity": "C:\\Users\\adam.urbanek.022\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_2_bd81c4a6-3e7a-45d3-be36-8df09c0ac137.jpg",
       "SourceId": "stinsily.Server",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\adam.urbanek.022\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\",
       "BasePath": "_content/stinsily.Server",
       "RelativePath": "Uploads/scene_2_bd81c4a6-3e7a-45d3-be36-8df09c0ac137#[.{fingerprint}]?.jpg",
       "AssetKind": "All",
@@ -113,10 +113,10 @@
       "OriginalItemSpec": "wwwroot\\Uploads\\scene_2_bd81c4a6-3e7a-45d3-be36-8df09c0ac137.jpg"
     },
     {
-      "Identity": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_3_b4e3a545-634e-46be-87dc-8441e1c208a4.jpg",
+      "Identity": "C:\\Users\\adam.urbanek.022\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_3_b4e3a545-634e-46be-87dc-8441e1c208a4.jpg",
       "SourceId": "stinsily.Server",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\adam.urbanek.022\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\",
       "BasePath": "_content/stinsily.Server",
       "RelativePath": "Uploads/scene_3_b4e3a545-634e-46be-87dc-8441e1c208a4#[.{fingerprint}]?.jpg",
       "AssetKind": "All",
@@ -134,10 +134,10 @@
       "OriginalItemSpec": "wwwroot\\Uploads\\scene_3_b4e3a545-634e-46be-87dc-8441e1c208a4.jpg"
     },
     {
-      "Identity": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_4_682b0e1e-904d-4cff-8774-0b0e9bf4023e.jpg",
+      "Identity": "C:\\Users\\adam.urbanek.022\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_4_682b0e1e-904d-4cff-8774-0b0e9bf4023e.jpg",
       "SourceId": "stinsily.Server",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\adam.urbanek.022\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\",
       "BasePath": "_content/stinsily.Server",
       "RelativePath": "Uploads/scene_4_682b0e1e-904d-4cff-8774-0b0e9bf4023e#[.{fingerprint}]?.jpg",
       "AssetKind": "All",
@@ -155,10 +155,10 @@
       "OriginalItemSpec": "wwwroot\\Uploads\\scene_4_682b0e1e-904d-4cff-8774-0b0e9bf4023e.jpg"
     },
     {
-      "Identity": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_5_b6cbb5f5-3543-483f-bae2-80b89c1d2819.jpg",
+      "Identity": "C:\\Users\\adam.urbanek.022\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_5_b6cbb5f5-3543-483f-bae2-80b89c1d2819.jpg",
       "SourceId": "stinsily.Server",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\adam.urbanek.022\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\",
       "BasePath": "_content/stinsily.Server",
       "RelativePath": "Uploads/scene_5_b6cbb5f5-3543-483f-bae2-80b89c1d2819#[.{fingerprint}]?.jpg",
       "AssetKind": "All",
@@ -176,10 +176,10 @@
       "OriginalItemSpec": "wwwroot\\Uploads\\scene_5_b6cbb5f5-3543-483f-bae2-80b89c1d2819.jpg"
     },
     {
-      "Identity": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_6_089370f8-3aa0-44e2-9203-1b00c8e844f0.jpg",
+      "Identity": "C:\\Users\\adam.urbanek.022\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_6_089370f8-3aa0-44e2-9203-1b00c8e844f0.jpg",
       "SourceId": "stinsily.Server",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\adam.urbanek.022\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\",
       "BasePath": "_content/stinsily.Server",
       "RelativePath": "Uploads/scene_6_089370f8-3aa0-44e2-9203-1b00c8e844f0#[.{fingerprint}]?.jpg",
       "AssetKind": "All",
@@ -195,12 +195,33 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\Uploads\\scene_6_089370f8-3aa0-44e2-9203-1b00c8e844f0.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\adam.urbanek.022\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_7_70aef808-66ce-4561-ad68-81fd6f6b8c4c.jpg",
+      "SourceId": "stinsily.Server",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\adam.urbanek.022\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\",
+      "BasePath": "_content/stinsily.Server",
+      "RelativePath": "Uploads/scene_7_70aef808-66ce-4561-ad68-81fd6f6b8c4c#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "jlipxk0ags",
+      "Integrity": "ZzuDQ7wJq58X63ZAVjbk7WKRJuaugRpvGmfa4lP6UBU=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Uploads\\scene_7_70aef808-66ce-4561-ad68-81fd6f6b8c4c.jpg"
     }
   ],
   "Endpoints": [
     {
       "Route": "Uploads/scene_1_88e9e98f-d9dc-4e15-88ea-53a7737cff81.jpg",
-      "AssetFile": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_1_88e9e98f-d9dc-4e15-88ea-53a7737cff81.jpg",
+      "AssetFile": "C:\\Users\\adam.urbanek.022\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_1_88e9e98f-d9dc-4e15-88ea-53a7737cff81.jpg",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -221,7 +242,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 12 Jan 2025 18:47:50 GMT"
+          "Value": "Wed, 15 Jan 2025 09:59:30 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -237,7 +258,7 @@
     },
     {
       "Route": "Uploads/scene_1_88e9e98f-d9dc-4e15-88ea-53a7737cff81.nzj18cokfo.jpg",
-      "AssetFile": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_1_88e9e98f-d9dc-4e15-88ea-53a7737cff81.jpg",
+      "AssetFile": "C:\\Users\\adam.urbanek.022\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_1_88e9e98f-d9dc-4e15-88ea-53a7737cff81.jpg",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -258,7 +279,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 12 Jan 2025 18:47:50 GMT"
+          "Value": "Wed, 15 Jan 2025 09:59:30 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -282,7 +303,7 @@
     },
     {
       "Route": "Uploads/scene_1_ea44b05e-865b-425f-8480-d8c1dbffbe49.jpg",
-      "AssetFile": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_1_ea44b05e-865b-425f-8480-d8c1dbffbe49.jpg",
+      "AssetFile": "C:\\Users\\adam.urbanek.022\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_1_ea44b05e-865b-425f-8480-d8c1dbffbe49.jpg",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -303,7 +324,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 12 Jan 2025 16:52:31 GMT"
+          "Value": "Wed, 15 Jan 2025 09:59:30 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -319,7 +340,7 @@
     },
     {
       "Route": "Uploads/scene_1_ea44b05e-865b-425f-8480-d8c1dbffbe49.nzj18cokfo.jpg",
-      "AssetFile": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_1_ea44b05e-865b-425f-8480-d8c1dbffbe49.jpg",
+      "AssetFile": "C:\\Users\\adam.urbanek.022\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_1_ea44b05e-865b-425f-8480-d8c1dbffbe49.jpg",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -340,7 +361,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 12 Jan 2025 16:52:31 GMT"
+          "Value": "Wed, 15 Jan 2025 09:59:30 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -364,7 +385,7 @@
     },
     {
       "Route": "Uploads/scene_2_66e4e96b-d36a-4f50-a2de-ae4c7b117395.jpg",
-      "AssetFile": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_2_66e4e96b-d36a-4f50-a2de-ae4c7b117395.jpg",
+      "AssetFile": "C:\\Users\\adam.urbanek.022\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_2_66e4e96b-d36a-4f50-a2de-ae4c7b117395.jpg",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -385,7 +406,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 12 Jan 2025 18:48:33 GMT"
+          "Value": "Wed, 15 Jan 2025 09:59:31 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -401,7 +422,7 @@
     },
     {
       "Route": "Uploads/scene_2_66e4e96b-d36a-4f50-a2de-ae4c7b117395.mr3dcth2ev.jpg",
-      "AssetFile": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_2_66e4e96b-d36a-4f50-a2de-ae4c7b117395.jpg",
+      "AssetFile": "C:\\Users\\adam.urbanek.022\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_2_66e4e96b-d36a-4f50-a2de-ae4c7b117395.jpg",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -422,7 +443,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 12 Jan 2025 18:48:33 GMT"
+          "Value": "Wed, 15 Jan 2025 09:59:31 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -446,7 +467,7 @@
     },
     {
       "Route": "Uploads/scene_2_bd81c4a6-3e7a-45d3-be36-8df09c0ac137.jpg",
-      "AssetFile": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_2_bd81c4a6-3e7a-45d3-be36-8df09c0ac137.jpg",
+      "AssetFile": "C:\\Users\\adam.urbanek.022\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_2_bd81c4a6-3e7a-45d3-be36-8df09c0ac137.jpg",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -467,7 +488,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 12 Jan 2025 16:54:13 GMT"
+          "Value": "Wed, 15 Jan 2025 09:59:31 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -483,7 +504,7 @@
     },
     {
       "Route": "Uploads/scene_2_bd81c4a6-3e7a-45d3-be36-8df09c0ac137.mr3dcth2ev.jpg",
-      "AssetFile": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_2_bd81c4a6-3e7a-45d3-be36-8df09c0ac137.jpg",
+      "AssetFile": "C:\\Users\\adam.urbanek.022\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_2_bd81c4a6-3e7a-45d3-be36-8df09c0ac137.jpg",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -504,7 +525,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 12 Jan 2025 16:54:13 GMT"
+          "Value": "Wed, 15 Jan 2025 09:59:31 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -528,7 +549,7 @@
     },
     {
       "Route": "Uploads/scene_3_b4e3a545-634e-46be-87dc-8441e1c208a4.jpg",
-      "AssetFile": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_3_b4e3a545-634e-46be-87dc-8441e1c208a4.jpg",
+      "AssetFile": "C:\\Users\\adam.urbanek.022\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_3_b4e3a545-634e-46be-87dc-8441e1c208a4.jpg",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -549,7 +570,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 12 Jan 2025 18:48:55 GMT"
+          "Value": "Wed, 15 Jan 2025 09:59:31 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -565,7 +586,7 @@
     },
     {
       "Route": "Uploads/scene_3_b4e3a545-634e-46be-87dc-8441e1c208a4.mr3dcth2ev.jpg",
-      "AssetFile": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_3_b4e3a545-634e-46be-87dc-8441e1c208a4.jpg",
+      "AssetFile": "C:\\Users\\adam.urbanek.022\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_3_b4e3a545-634e-46be-87dc-8441e1c208a4.jpg",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -586,7 +607,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 12 Jan 2025 18:48:55 GMT"
+          "Value": "Wed, 15 Jan 2025 09:59:31 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -610,7 +631,7 @@
     },
     {
       "Route": "Uploads/scene_4_682b0e1e-904d-4cff-8774-0b0e9bf4023e.jpg",
-      "AssetFile": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_4_682b0e1e-904d-4cff-8774-0b0e9bf4023e.jpg",
+      "AssetFile": "C:\\Users\\adam.urbanek.022\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_4_682b0e1e-904d-4cff-8774-0b0e9bf4023e.jpg",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -631,7 +652,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Mon, 13 Jan 2025 21:23:56 GMT"
+          "Value": "Wed, 15 Jan 2025 09:59:31 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -647,7 +668,7 @@
     },
     {
       "Route": "Uploads/scene_4_682b0e1e-904d-4cff-8774-0b0e9bf4023e.mq5tvy0gbn.jpg",
-      "AssetFile": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_4_682b0e1e-904d-4cff-8774-0b0e9bf4023e.jpg",
+      "AssetFile": "C:\\Users\\adam.urbanek.022\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_4_682b0e1e-904d-4cff-8774-0b0e9bf4023e.jpg",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -668,7 +689,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Mon, 13 Jan 2025 21:23:56 GMT"
+          "Value": "Wed, 15 Jan 2025 09:59:31 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -692,7 +713,7 @@
     },
     {
       "Route": "Uploads/scene_5_b6cbb5f5-3543-483f-bae2-80b89c1d2819.jpg",
-      "AssetFile": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_5_b6cbb5f5-3543-483f-bae2-80b89c1d2819.jpg",
+      "AssetFile": "C:\\Users\\adam.urbanek.022\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_5_b6cbb5f5-3543-483f-bae2-80b89c1d2819.jpg",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -713,7 +734,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 14 Jan 2025 21:43:28 GMT"
+          "Value": "Wed, 15 Jan 2025 09:59:31 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -729,7 +750,7 @@
     },
     {
       "Route": "Uploads/scene_5_b6cbb5f5-3543-483f-bae2-80b89c1d2819.mq5tvy0gbn.jpg",
-      "AssetFile": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_5_b6cbb5f5-3543-483f-bae2-80b89c1d2819.jpg",
+      "AssetFile": "C:\\Users\\adam.urbanek.022\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_5_b6cbb5f5-3543-483f-bae2-80b89c1d2819.jpg",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -750,7 +771,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 14 Jan 2025 21:43:28 GMT"
+          "Value": "Wed, 15 Jan 2025 09:59:31 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -774,7 +795,7 @@
     },
     {
       "Route": "Uploads/scene_6_089370f8-3aa0-44e2-9203-1b00c8e844f0.jpg",
-      "AssetFile": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_6_089370f8-3aa0-44e2-9203-1b00c8e844f0.jpg",
+      "AssetFile": "C:\\Users\\adam.urbanek.022\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_6_089370f8-3aa0-44e2-9203-1b00c8e844f0.jpg",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -795,7 +816,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 14 Jan 2025 21:43:32 GMT"
+          "Value": "Wed, 15 Jan 2025 09:59:31 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -811,7 +832,7 @@
     },
     {
       "Route": "Uploads/scene_6_089370f8-3aa0-44e2-9203-1b00c8e844f0.mq5tvy0gbn.jpg",
-      "AssetFile": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_6_089370f8-3aa0-44e2-9203-1b00c8e844f0.jpg",
+      "AssetFile": "C:\\Users\\adam.urbanek.022\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_6_089370f8-3aa0-44e2-9203-1b00c8e844f0.jpg",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -832,7 +853,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 14 Jan 2025 21:43:32 GMT"
+          "Value": "Wed, 15 Jan 2025 09:59:31 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -851,6 +872,88 @@
         {
           "Name": "integrity",
           "Value": "sha256-Tgk0jRFhx20NRfk1w1XRlY/Yh9FCRlDbHBeOnWngmAQ="
+        }
+      ]
+    },
+    {
+      "Route": "Uploads/scene_7_70aef808-66ce-4561-ad68-81fd6f6b8c4c.jlipxk0ags.jpg",
+      "AssetFile": "C:\\Users\\adam.urbanek.022\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_7_70aef808-66ce-4561-ad68-81fd6f6b8c4c.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3595921"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"ZzuDQ7wJq58X63ZAVjbk7WKRJuaugRpvGmfa4lP6UBU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 15 Jan 2025 09:59:31 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "jlipxk0ags"
+        },
+        {
+          "Name": "label",
+          "Value": "Uploads/scene_7_70aef808-66ce-4561-ad68-81fd6f6b8c4c.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-ZzuDQ7wJq58X63ZAVjbk7WKRJuaugRpvGmfa4lP6UBU="
+        }
+      ]
+    },
+    {
+      "Route": "Uploads/scene_7_70aef808-66ce-4561-ad68-81fd6f6b8c4c.jpg",
+      "AssetFile": "C:\\Users\\adam.urbanek.022\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_7_70aef808-66ce-4561-ad68-81fd6f6b8c4c.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3595921"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"ZzuDQ7wJq58X63ZAVjbk7WKRJuaugRpvGmfa4lP6UBU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 15 Jan 2025 09:59:31 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-ZzuDQ7wJq58X63ZAVjbk7WKRJuaugRpvGmfa4lP6UBU="
         }
       ]
     }

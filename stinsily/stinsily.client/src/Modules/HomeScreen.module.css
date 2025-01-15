@@ -26,10 +26,9 @@
     font-size: 10rem;
     color: #8B0000;
     font-family: 'Techno Race', sans-serif;
-    font-weight: bold;
+    text-shadow: 0 0 10px #ffffff;
     margin-left: 5%;
     line-height: 1;
-    text-shadow: 0 0 6px #ffffff;
 }
 
 .buttonContainer {
