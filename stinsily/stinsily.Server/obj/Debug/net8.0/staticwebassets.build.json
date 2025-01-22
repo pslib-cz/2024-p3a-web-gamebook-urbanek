@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "TV9JTSfJwtZUDh5IDWDrrBQ6pkDwbqlTbq9Tn7jyHL4=",
+  "Hash": "blipz5u61lJ/e5GeIBPPLTTMrL7tQq12v0cbYN2lrf4=",
   "Source": "stinsily.Server",
   "BasePath": "_content/stinsily.Server",
   "Mode": "Default",
@@ -242,7 +242,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 15 Jan 2025 09:59:30 GMT"
+          "Value": "Wed, 22 Jan 2025 09:59:42 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -279,7 +279,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 15 Jan 2025 09:59:30 GMT"
+          "Value": "Wed, 22 Jan 2025 09:59:42 GMT"
         },
         {
           "Name": "Cache-Control",

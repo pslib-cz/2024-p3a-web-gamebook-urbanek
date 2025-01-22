@@ -21,14 +21,12 @@ namespace stinsily.Server.Controllers
             _context = context;
         }
 
-        // GET: api/MiniGames
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MiniGames>>> GetMiniGames()
         {
             return await _context.MiniGames.ToListAsync();
         }
 
-        // GET: api/MiniGames/5
         [HttpGet("{id}")]
         public async Task<ActionResult<MiniGames>> GetMiniGames(int id)
         {
@@ -42,8 +40,6 @@ namespace stinsily.Server.Controllers
             return miniGames;
         }
 
-        // PUT: api/MiniGames/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutMiniGames(int id, MiniGames miniGames)
         {
@@ -73,8 +69,6 @@ namespace stinsily.Server.Controllers
             return NoContent();
         }
 
-        // POST: api/MiniGames
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<MiniGames>> PostMiniGames(MiniGames miniGames)
         {
@@ -84,7 +78,6 @@ namespace stinsily.Server.Controllers
             return CreatedAtAction("GetMiniGames", new { id = miniGames.MiniGameID }, miniGames);
         }
 
-        // DELETE: api/MiniGames/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMiniGames(int id)
         {

@@ -17,7 +17,6 @@ namespace stinsily.Server.Controllers
             _context = context;
         }
 
-        // GET: api/ChoicesConnections
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ChoicesConnections>>> GetChoicesConnections()
         {
@@ -28,7 +27,6 @@ namespace stinsily.Server.Controllers
                 .ToListAsync();
         }
 
-        // GET: api/ChoicesConnections/5
         [HttpGet("{id}")]
         public async Task<ActionResult<ChoicesConnections>> GetChoicesConnections(int id)
         {
@@ -46,7 +44,6 @@ namespace stinsily.Server.Controllers
             return choicesConnections;
         }
 
-        // PUT: api/ChoicesConnections/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutChoicesConnections(int id, ChoicesConnections choicesConnections)
         {
@@ -82,7 +79,6 @@ namespace stinsily.Server.Controllers
             return NoContent();
         }
 
-        // POST: api/ChoicesConnections
         [HttpPost]
         public async Task<ActionResult<ChoicesConnections>> PostChoicesConnections(ChoicesConnections choicesConnections)
         {
@@ -92,7 +88,6 @@ namespace stinsily.Server.Controllers
             return CreatedAtAction("GetChoicesConnections", new { id = choicesConnections.ChoicesConnectionsID }, choicesConnections);
         }
 
-        // DELETE: api/ChoicesConnections/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteChoicesConnections(int id)
         {

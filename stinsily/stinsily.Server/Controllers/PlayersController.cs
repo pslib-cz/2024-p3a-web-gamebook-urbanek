@@ -21,14 +21,12 @@ namespace stinsily.Server.Controllers
             _context = context;
         }
 
-        // GET: api/Players
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Players>>> GetPlayers()
         {
             return await _context.Players.ToListAsync();
         }
 
-        // GET: api/Players/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Players>> GetPlayer(int id)
         {
@@ -42,8 +40,6 @@ namespace stinsily.Server.Controllers
             return player;
         }
 
-        // PUT: api/Players/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPlayer(int id, Players player)
         {
@@ -73,8 +69,6 @@ namespace stinsily.Server.Controllers
             return NoContent();
         }
 
-        // POST: api/Players
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Players>> PostPlayer(Players player)
         {
@@ -84,7 +78,6 @@ namespace stinsily.Server.Controllers
             return CreatedAtAction("GetPlayer", new { id = player.PlayerID }, player);
         }
 
-        // DELETE: api/Players/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePlayer(int id)
         {

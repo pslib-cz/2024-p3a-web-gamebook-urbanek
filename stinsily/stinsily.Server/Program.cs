@@ -6,14 +6,12 @@ using Microsoft.AspNetCore.Http.Features;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Move the DbContext configuration to the top and make it more explicit
 var connectionString = "Data Source=gamebook.db";
 builder.Services.AddDbContext<AppDbContext>(options => 
     options.UseSqlite(connectionString), 
     ServiceLifetime.Scoped
 );
 
-// Add services to the container.
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
@@ -55,10 +53,8 @@ builder.Services.AddCors(options =>
         });
 });
 
-// Add authentication
 builder.Services.AddAuthentication().AddBearerToken();
 
-// Add authorization
 builder.Services.AddAuthorization();
 
 builder.Services.AddScoped<RoleManager<IdentityRole>>();
@@ -75,11 +71,9 @@ builder.Services.Configure<FormOptions>(options =>
 
 var app = builder.Build();
 
-// Configure paths for static files
 var webRootPath = Path.Combine(builder.Environment.ContentRootPath, "wwwroot");
 var uploadsPath = Path.Combine(webRootPath, "uploads");
 
-// Ensure directories exist
 if (!Directory.Exists(webRootPath))
 {
     Directory.CreateDirectory(webRootPath);
@@ -89,7 +83,6 @@ if (!Directory.Exists(uploadsPath))
     Directory.CreateDirectory(uploadsPath);
 }
 
-// Configure static files middleware
 app.UseStaticFiles();
 
 app.UseStaticFiles(new StaticFileOptions
@@ -109,23 +102,20 @@ app.UseCors("AllowReactApp");
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Initialize database and createroles/admin user
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     var context = services.GetRequiredService<AppDbContext>();
-    context.Database.Migrate(); // This ensures the database is created
+    context.Database.Migrate();
 
     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
     var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
 
-    // Create Admin role if it doesn't exist
     if (!roleManager.RoleExistsAsync("Admin").Result)
     {
         roleManager.CreateAsync(new IdentityRole("Admin")).Wait();
     }
 
-    // Create admin user if it doesn't exist
     var adminEmail = "admin@admin.com";
     var adminUser = userManager.FindByEmailAsync(adminEmail).Result;
     if (adminUser == null)

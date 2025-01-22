@@ -17,14 +17,12 @@ namespace stinsily.Server.Controllers
             _context = context;
         }
 
-        // GET: api/Items
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Items>>> GetItems()
         {
             return await _context.Items.ToListAsync();
         }
 
-        // GET: api/Items/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Items>> GetItem(int id)
         {
@@ -38,7 +36,6 @@ namespace stinsily.Server.Controllers
             return item;
         }
 
-        // PUT: api/Items/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutItem(int id, Items item)
         {
@@ -68,7 +65,6 @@ namespace stinsily.Server.Controllers
             return NoContent();
         }
 
-        // POST: api/Items
         [HttpPost]
         public async Task<ActionResult<Items>> PostItem(Items item)
         {
@@ -78,7 +74,6 @@ namespace stinsily.Server.Controllers
             return CreatedAtAction("GetItem", new { id = item.ItemID }, item);
         }
 
-        // DELETE: api/Items/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteItem(int id)
         {

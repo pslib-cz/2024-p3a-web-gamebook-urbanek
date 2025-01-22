@@ -25,7 +25,6 @@ namespace stinsily.Server.Controllers
             _environment = environment;
             _logger = logger;
 
-            // Ensure uploads directory exists
             var uploadsPath = Path.Combine(_environment.WebRootPath, "Uploads");
             if (!Directory.Exists(uploadsPath))
             {
@@ -33,20 +32,6 @@ namespace stinsily.Server.Controllers
             }
         }
 
-        [HttpGet("check-admin")]
-        public async Task<IActionResult> CheckAdmin()
-        {
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null)
-            {
-                return Unauthorized();
-            }
-
-            var isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
-            return Ok(new { isAdmin });
-        }
-
-        // GET: api/Scenes
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Scenes>>> GetScenes()
         {
@@ -63,12 +48,11 @@ namespace stinsily.Server.Controllers
                 return NotFound();
             }
 
-            // Make sure ImageURL is included in the response
             return new JsonResult(new {
                 sceneID = scene.SceneID,
                 title = scene.Title,
                 description = scene.Description,
-                imageURL = scene.ImageURL,  // Make sure this property exists and is being set
+                imageURL = scene.ImageURL,
                 connectionID = scene.ConnectionID,
                 itemID = scene.ItemID
             });
@@ -186,7 +170,6 @@ namespace stinsily.Server.Controllers
                     await _context.SaveChangesAsync();
                 }
 
-                // Handle item action
                 if (request.Action.ToLower() == "pickup")
                 {
                     var item = await _context.Items.FindAsync(request.ItemId);
@@ -229,17 +212,14 @@ namespace stinsily.Server.Controllers
                     return NotFound($"Scene with ID {id} not found");
                 }
 
-                // Update basic properties
                 scene.SceneID = request.SceneID;
                 scene.ConnectionID = request.ConnectionID;
                 scene.Title = request.Title;
                 scene.Description = request.Description;
                 scene.ItemID = request.ItemID;
 
-                // Handle image update if provided
                 if (request.Image != null && request.Image.Length > 0)
                 {
-                    // Delete old image if it exists
                     if (!string.IsNullOrEmpty(scene.ImageURL))
                     {
                         var oldImagePath = Path.Combine(_environment.WebRootPath, scene.ImageURL.TrimStart('/'));
@@ -249,7 +229,6 @@ namespace stinsily.Server.Controllers
                         }
                     }
 
-                    // Save new image
                     var uploadsPath = Path.Combine(_environment.WebRootPath, "uploads");
                     Directory.CreateDirectory(uploadsPath);
 
@@ -306,7 +285,6 @@ namespace stinsily.Server.Controllers
 
                     try
                     {
-                        // Use wwwroot/uploads for file storage
                         var uploadsFolder = Path.Combine(_environment.WebRootPath, "uploads");
                         if (!Directory.Exists(uploadsFolder))
                         {
@@ -394,11 +372,6 @@ namespace stinsily.Server.Controllers
             _context.Scenes.Remove(scenes);
             await _context.SaveChangesAsync();
             return NoContent();
-        }
-
-        private bool ScenesExists(int id)
-        {
-            return _context.Scenes.Any(e => e.SceneID == id);
         }
 
         [HttpPost("save-progress")]
