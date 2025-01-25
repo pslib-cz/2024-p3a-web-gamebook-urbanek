@@ -247,7 +247,6 @@
     transform: scale(1.02);
 }
 
-/* Update media query for larger screens */
 @media (min-width: 850px) {
     .next-button {
         width: 3rem;
@@ -287,7 +286,6 @@
     color: black;
 }
 
-/* Media Queries */
 @media (max-width: 850px) {
     .scene-title-container {
         padding: 0.5rem 1rem;
@@ -365,8 +363,13 @@
     font-size: 0.9rem;
 }
 
-/* Add responsive design for stats panel */
 @media (max-width: 768px) {
+    .menu-container {
+        position: fixed;
+        top: 2rem;
+        left: 1rem;
+    }
+
     .stats-panel {
         top: 1rem;
         right: 1rem;
@@ -410,7 +413,6 @@
     transform: scale(1.02);
 }
 
-/* Add these styles for the hamburger menu */
 .menu-container {
     position: fixed;
     top: 2rem;
@@ -464,7 +466,7 @@
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    min-width: 170px;
+    min-width: 200px;
     box-shadow: 0 0 20px rgba(50, 205, 50, 0.2);
     transform-origin: top left;
     transform: scale(0);
@@ -499,4 +501,39 @@
 .dropdown-menu hr {
     border: none;
     border-top: 1px solid rgba(50, 205, 50, 0.3);
+}
+
+.dropdown-menu .stats-panel {
+    display: none;
+}
+
+.stats-divider {
+    display: none;
+}
+
+@media (max-width: 1110px) {
+    .stats-panel {
+        display: none;
+    }
+
+    .stats-divider {
+        display: block;
+    }
+
+    .dropdown-menu .stats-panel {
+        display: flex;
+        position: static;
+        border: none;
+        padding: 0.8rem;
+        border-radius: 0;
+        background: transparent;
+    }
+
+    .dropdown-menu .stat-item {
+        color: #32CD32;
+    }
+
+    .dropdown-menu .stat-value {
+        color: white;
+    }
 } 

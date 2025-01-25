@@ -3,7 +3,7 @@
 "ServerUrl": "https://localhost:50701",
 "RedirectUrl": "",
 "LaunchCommand": "npm run dev",
-"WorkingDirectory": "C:\\Users\\adam.urbanek.022\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\..\\stinsily.client",
+"WorkingDirectory": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\..\\stinsily.client",
 "MaxTimeoutInSeconds": "120",
 "KeepRunning": "false"
 }

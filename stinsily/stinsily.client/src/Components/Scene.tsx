@@ -549,6 +549,31 @@ const Scene = () => {
                     <button onClick={handleBackToMenu}>
                         Hlavní menu
                     </button>
+                    <hr className={styles['stats-divider']}/>
+                    <div className={styles['stats-panel']}>
+                        <div className={styles['stat-item']}>
+                            <span className={styles['stat-label']}>Health:</span>
+                            <span className={styles['stat-value']}>{playerStats.health}</span>
+                        </div>
+                        <div className={styles['stat-item']}>
+                            <span className={styles['stat-label']}>Síla:</span>
+                            <span className={styles['stat-value']}>{playerStats.force}</span>
+                        </div>
+                        <div className={styles['stat-item']}>
+                            <span className={styles['stat-label']}>Vztah s Obi-Wanem:</span>
+                            <span className={styles['stat-value']}>{playerStats.obiWanRelationship}</span>
+                        </div>
+                        {playerStats.item.length > 0 && (
+                            <div className={styles['items-container']}>
+                                <span className={styles['stat-label']}>Itemy:</span>
+                                <div className={styles['items-list']}>
+                                    {playerStats.item.map((item, index) => (
+                                        <span key={index} className={styles['item']}>{item}</span>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
             <div 
@@ -558,12 +583,6 @@ const Scene = () => {
             <div className={styles['scene-title-container']}>
                 <h2 className={styles['scene-title']}>{currentScene.title}</h2>
             </div>
-            {/* <button className={styles['export-button']} onClick={exportProgress}>
-                Export Progress
-            </button>
-            <button className={styles['save-button']} onClick={saveProgress}>
-                Save Progress
-            </button> */}
             <div className={styles['stats-panel']}>
                 <div className={styles['stat-item']}>
                     <span className={styles['stat-label']}>Health:</span>
