@@ -246,28 +246,6 @@ namespace stinsily.Server.Migrations
                     b.HasIndex("SceneToID");
 
                     b.ToTable("ChoicesConnections", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            ChoicesConnectionsID = 1,
-                            Effect = "pokracovani v pribehu",
-                            MiniGameID = 1,
-                            RequiredItemID = 1,
-                            SceneFromID = 1,
-                            SceneToID = 2,
-                            Text = "prechod na 2. scenu"
-                        },
-                        new
-                        {
-                            ChoicesConnectionsID = 2,
-                            Effect = "podmínený postup",
-                            MiniGameID = 1,
-                            RequiredItemID = 2,
-                            SceneFromID = 2,
-                            SceneToID = 3,
-                            Text = "Postup do další místnosti (potřebujete světelný meč)"
-                        });
                 });
 
             modelBuilder.Entity("stinsily.Server.Models.Items", b =>
@@ -296,26 +274,6 @@ namespace stinsily.Server.Migrations
                     b.HasKey("ItemID");
 
                     b.ToTable("Items", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            ItemID = 1,
-                            Description = "nic",
-                            ForceModifier = 0,
-                            HealthModifier = 0,
-                            Name = "nic",
-                            ObiWanRelationshipModifier = 0
-                        },
-                        new
-                        {
-                            ItemID = 2,
-                            Description = "mec",
-                            ForceModifier = 10,
-                            HealthModifier = 0,
-                            Name = "Svetelny mec",
-                            ObiWanRelationshipModifier = 0
-                        });
                 });
 
             modelBuilder.Entity("stinsily.Server.Models.MiniGames", b =>
@@ -331,18 +289,6 @@ namespace stinsily.Server.Migrations
                     b.HasKey("MiniGameID");
 
                     b.ToTable("MiniGames", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            MiniGameID = 1,
-                            Description = "nic"
-                        },
-                        new
-                        {
-                            MiniGameID = 2,
-                            Description = "mini hra 1"
-                        });
                 });
 
             modelBuilder.Entity("stinsily.Server.Models.Players", b =>
@@ -406,32 +352,6 @@ namespace stinsily.Server.Migrations
                     b.HasIndex("ItemID");
 
                     b.ToTable("Scenes", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            SceneID = 1,
-                            ConnectionID = 1,
-                            Description = "trenink",
-                            ImageURL = "",
-                            Title = "Scena1"
-                        },
-                        new
-                        {
-                            SceneID = 2,
-                            ConnectionID = 2,
-                            Description = "rozhodnuti pristupu",
-                            ImageURL = "",
-                            Title = "Scena2"
-                        },
-                        new
-                        {
-                            SceneID = 3,
-                            ConnectionID = 3,
-                            Description = "podmineny postup",
-                            ImageURL = "",
-                            Title = "Scena3"
-                        });
                 });
 
             modelBuilder.Entity("stinsily.Server.Models.Users", b =>

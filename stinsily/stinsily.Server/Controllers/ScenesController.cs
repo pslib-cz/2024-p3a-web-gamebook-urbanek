@@ -118,7 +118,7 @@ namespace stinsily.Server.Controllers
                     text = connection.Text,
                     nextSceneId = connection.SceneToID,
                     effect = connection.Effect,
-                    type = "navigation"
+                    requiredItemID = connection.RequiredItemID
                 }).ToList();
 
                 return Ok(options);

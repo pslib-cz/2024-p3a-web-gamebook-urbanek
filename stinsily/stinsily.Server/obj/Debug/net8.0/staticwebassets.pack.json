@@ -1,6 +1,34 @@
 {
   "Files": [
     {
+      "Id": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\0a49e8eb-bf19-466c-879f-bbcc32b4a3dd.png",
+      "PackagePath": "staticwebassets\\Uploads\\0a49e8eb-bf19-466c-879f-bbcc32b4a3dd.png"
+    },
+    {
+      "Id": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\1a9a2435-53ef-48ce-bb7b-5f82a0662c08.png",
+      "PackagePath": "staticwebassets\\Uploads\\1a9a2435-53ef-48ce-bb7b-5f82a0662c08.png"
+    },
+    {
+      "Id": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\274c969e-464c-45de-b0ec-0d818603c20f.png",
+      "PackagePath": "staticwebassets\\Uploads\\274c969e-464c-45de-b0ec-0d818603c20f.png"
+    },
+    {
+      "Id": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\3853a58b-8e58-4c60-b4f9-676af43f624d.png",
+      "PackagePath": "staticwebassets\\Uploads\\3853a58b-8e58-4c60-b4f9-676af43f624d.png"
+    },
+    {
+      "Id": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\5bf46080-3bca-486d-a82e-7a0c0228cc25.png",
+      "PackagePath": "staticwebassets\\Uploads\\5bf46080-3bca-486d-a82e-7a0c0228cc25.png"
+    },
+    {
+      "Id": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\d19a1d76-f36a-458a-8a0e-59392be0b620.png",
+      "PackagePath": "staticwebassets\\Uploads\\d19a1d76-f36a-458a-8a0e-59392be0b620.png"
+    },
+    {
+      "Id": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\fbd80d88-5ae0-401f-84e6-163c86127ed7.png",
+      "PackagePath": "staticwebassets\\Uploads\\fbd80d88-5ae0-401f-84e6-163c86127ed7.png"
+    },
+    {
       "Id": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_1_88e9e98f-d9dc-4e15-88ea-53a7737cff81.jpg",
       "PackagePath": "staticwebassets\\Uploads\\scene_1_88e9e98f-d9dc-4e15-88ea-53a7737cff81.jpg"
     },

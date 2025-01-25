@@ -18,6 +18,7 @@ interface DecisionOption {
     text: string;
     nextSceneId: number;
     effect?: string;
+    requiredItemID?: number;
 }
 
 interface PlayerStats {
@@ -103,6 +104,7 @@ const Scene = () => {
             
             if (optionsResponse.ok) {
                 const optionsData = await optionsResponse.json();
+                console.log('Scene options:', optionsData);
                 setSceneOptions(optionsData);
             }
             
@@ -118,29 +120,6 @@ const Scene = () => {
         }
     }, [API_BASE_URL, navigate]);
 
-    const fetchSceneOptions = async (sceneId: string) => {
-        try {
-            const token = localStorage.getItem('authToken');
-            if (!token) {
-                navigate('/login');
-                return;
-            }
-
-            const response = await fetch(`${API_BASE_URL}/Scenes/options/${sceneId}`, {
-                headers: {
-                    'Accept': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-            if (!response.ok) throw new Error('Failed to fetch scene options');
-            const options = await response.json();
-            setSceneOptions(options);
-            console.log('Scene options:', options); // Debug log
-        } catch (error) {
-            console.error('Error fetching scene options:', error);
-        }
-    };
-
     const loadSavedProgress = useCallback(() => {
         const email = localStorage.getItem('currentUserEmail');
         if (email) {
@@ -155,26 +134,6 @@ const Scene = () => {
         }
         return false;
     }, []);
-
-    const fetchItemName = async (itemId: number) => {
-        try {
-            const token = localStorage.getItem('authToken');
-            if (!token) return null;
-
-            const response = await fetch(`${API_BASE_URL}/api/Items/${itemId}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-
-            if (!response.ok) throw new Error('Failed to fetch item');
-            const item = await response.json();
-            return item.name;
-        } catch (error) {
-            console.error('Error fetching item name:', error);
-            return null;
-        }
-    };
 
     const fetchPlayerStats = useCallback(async () => {
         try {
@@ -289,25 +248,23 @@ const Scene = () => {
                 console.error('Error picking up item:', errorText);
                 throw new Error('Failed to pick up item');
             }
-
-            // Fetch item details from ItemsController
+            
             const itemResponse = await fetch(`${API_BASE_URL}/Items/${itemId}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
             });
 
-            if (!itemResponse.ok) throw new Error('Failed to fetch item details');
-            const item = await itemResponse.json();
+            if (itemResponse.ok) {
+                const item = await itemResponse.json();
+                setPlayerStats(prev => ({
+                    ...prev,
+                    item: [item.name],
+                    itemId: itemId
+                }));
+            }
 
-            // Update player stats with the new item
-            setPlayerStats(prev => ({
-                ...prev,
-                item: [item.name],
-                itemId: itemId
-            }));
-
-            // Get the current scene options again to ensure we have the correct ones
+            // Get the current scene options again
             const sceneOptionsResponse = await fetch(`${API_BASE_URL}/Scenes/options/${id}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -526,6 +483,16 @@ const Scene = () => {
     console.log('Image URL:', currentScene.imageURL);
     console.log('Background style:', backgroundStyle);
 
+    // Add check for required items when displaying options
+    const shouldShowOption = (option: DecisionOption) => {
+        console.log('Checking option:', option);
+        console.log('Player itemId:', playerStats.itemId);
+        
+        if (!option.requiredItemID) return true;
+        
+        return playerStats.itemId === option.requiredItemID;
+    };
+
     return (
         <div className={`${styles['scene-container']} ${isTransitioning ? styles['transitioning'] : ''}`}>
             <div className={styles['menu-container']}>
@@ -641,15 +608,20 @@ const Scene = () => {
                             </button>
                         ) : (
                             // Multiple options - show as text buttons
-                            sceneOptions.map((option) => (
-                                <button
-                                    key={option.optionId}
-                                    className={styles['_decision-option']}
-                                    onClick={() => handleOptionClick(option)}
-                                >
-                                    {option.text}
-                                </button>
-                            ))
+                            sceneOptions.map((option) => {
+                                // Only render option if it meets requirements
+                                if (!shouldShowOption(option)) return null;
+
+                                return (
+                                    <button
+                                        key={option.optionId}
+                                        className={styles['_decision-option']}
+                                        onClick={() => handleOptionClick(option)}
+                                    >
+                                        {option.text}
+                                    </button>
+                                );
+                            })
                         )}
                     </div>
                 )}

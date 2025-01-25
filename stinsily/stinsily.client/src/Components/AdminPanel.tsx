@@ -625,12 +625,15 @@ const AdminPanel = () => {
                             </span>
                         </div>
 
-                        <h2>Required Item ID</h2>
+                        <h2>Required Item ID (Optional)</h2>
                         <input
                             type="number"
                             placeholder="Required Item ID"
                             value={newConnection.requiredItemID || ''}
-                            onChange={(e) => setNewConnection({...newConnection, requiredItemID: parseInt(e.target.value) || null})}
+                            onChange={(e) => setNewConnection({
+                                ...newConnection, 
+                                requiredItemID: e.target.value ? parseInt(e.target.value) : null
+                            })}
                         />
                         <h2>Mini Game ID</h2>
                         <input
