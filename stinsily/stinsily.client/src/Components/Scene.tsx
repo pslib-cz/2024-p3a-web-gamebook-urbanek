@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import styles from '../Modules/Scene.module.css';
+import SpaceJetRepair from './SpaceJetRepair';
 
 interface Scene {
     sceneID: number;
@@ -19,6 +20,7 @@ interface DecisionOption {
     nextSceneId: number;
     effect?: string;
     requiredItemID?: number;
+    miniGameID?: number;
 }
 
 interface PlayerStats {
@@ -52,6 +54,8 @@ const Scene = () => {
     });
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [itemDetails, setItemDetails] = useState<Item | null>(null);
+    const [activeMinigame, setActiveMinigame] = useState<any | null>(null);
+    const [pendingChoice, setPendingChoice] = useState<DecisionOption | null>(null);
 
     const API_BASE_URL = 'http://localhost:5193/api';
 
@@ -177,10 +181,49 @@ const Scene = () => {
         }
     }, [API_BASE_URL, navigate, loadSavedProgress]);
 
+    const fetchMiniGame = async (miniGameId: number) => {
+        try {
+            const response = await fetch(`${API_BASE_URL}/MiniGames/${miniGameId}`, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                }
+            });
+            if (!response.ok) throw new Error('Failed to fetch minigame');
+            return await response.json();
+        } catch (error) {
+            console.error('Error fetching minigame:', error);
+            return null;
+        }
+    };
+
+    const handleMinigameComplete = async (success: boolean) => {
+        if (!pendingChoice) return;
+
+        if (success) {
+            setActiveMinigame(null);
+            await handleChoice(pendingChoice);
+        } else {
+            // Reset the minigame
+            const miniGame = await fetchMiniGame(pendingChoice.miniGameID!);
+            setActiveMinigame(miniGame);
+        }
+    };
+
     const handleOptionClick = async (option: DecisionOption) => {
+        if (option.miniGameID) {
+            setPendingChoice(option);
+            const miniGame = await fetchMiniGame(option.miniGameID);
+            if (miniGame) {
+                setActiveMinigame(miniGame);
+            }
+            return;
+        }
+        await handleChoice(option);
+    };
+
+    const handleChoice = async (option: DecisionOption) => {
         try {
             if (option.effect) {
-                // Convert colon format to plus/minus format
                 let formattedEffect = option.effect;
                 if (option.effect.includes(':')) {
                     const [stat, value] = option.effect.split(':');
@@ -188,7 +231,7 @@ const Scene = () => {
                     formattedEffect = `${stat}${sign}${value}`;
                 }
 
-                const response = await fetch('http://localhost:5193/api/Scenes/apply-effect', {
+                const response = await fetch(`${API_BASE_URL}/Scenes/apply-effect`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -200,23 +243,20 @@ const Scene = () => {
                 });
 
                 if (!response.ok) {
-                    const errorText = await response.text();
-                    console.error('Effect response:', errorText);
+                    console.error('Effect response:', await response.text());
                     console.error('Effect sent:', formattedEffect);
                 } else {
                     const result = await response.json();
-                    // Update stats in state while preserving the item
                     setPlayerStats(prev => ({
                         health: result.player.health,
                         force: result.player.force,
                         obiWanRelationship: result.player.obiWanRelationship,
-                        item: prev.item, // Preserve the current item
-                        itemId: prev.itemId // Preserve the current itemId
+                        item: prev.item,
+                        itemId: prev.itemId
                     }));
                 }
             }
 
-            // Navigate to next scene
             setIsTransitioning(true);
             setTimeout(() => {
                 navigate(`/scenes/${option.nextSceneId}`);
@@ -626,6 +666,15 @@ const Scene = () => {
                     </div>
                 )}
             </div>
+            {activeMinigame && (
+                <SpaceJetRepair
+                    miniGameId={activeMinigame.miniGameID}
+                    difficulty={activeMinigame.difficulty}
+                    timeLimit={activeMinigame.timeLimit}
+                    onComplete={handleMinigameComplete}
+                    onClose={() => setActiveMinigame(null)}
+                />
+            )}
         </div>
     );
 };
