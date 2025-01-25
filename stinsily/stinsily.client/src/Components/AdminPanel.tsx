@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react";
 import styles from '../Modules/AdminPanel.module.css';
 import { useNavigate } from "react-router-dom";
+import { FiHome, FiLink, FiBox, FiSettings } from 'react-icons/fi';
 
 interface Scene {
     sceneID: number;
     connectionID: number;
     title: string;
-    description?: string;
-    image?: string;
+    description: string;
+    imageURL?: string;
     itemID?: number | null;
+    type: 'Normal' | 'Decision';
 }
 
 interface ChoiceConnection {
@@ -44,8 +46,9 @@ const AdminPanel = () => {
         connectionID: 0,
         title: '',
         description: '',
-        image: '',
-        itemID: null
+        imageURL: '',
+        itemID: null,
+        type: 'Normal'
     });
     const [newConnection, setNewConnection] = useState<ChoiceConnection>({
         choicesConnectionsID: 0,
@@ -423,107 +426,80 @@ const AdminPanel = () => {
 
     return (
         <div className={styles['admin-panel']}>
-            <div className={styles.tabs}>
-                <button onClick={() => setActiveTab('scenes')}>Scenes</button>
-                <button onClick={() => setActiveTab('connections')}>Connections</button>
-                <button onClick={() => setActiveTab('items')}>Items</button>
+            <div className={styles.sidebar}>
+                <div className={styles['sidebar-header']}>
+                    <h1>Admin Dashboard</h1>
+                </div>
+                <div className={styles.tabs}>
+                    <button 
+                        className={`${styles.tab} ${activeTab === 'scenes' ? styles.active : ''}`}
+                        onClick={() => setActiveTab('scenes')}
+                    >
+                        <FiHome /> Scenes
+                    </button>
+                    <button 
+                        className={`${styles.tab} ${activeTab === 'connections' ? styles.active : ''}`}
+                        onClick={() => setActiveTab('connections')}
+                    >
+                        <FiLink /> Connections
+                    </button>
+                    <button 
+                        className={`${styles.tab} ${activeTab === 'items' ? styles.active : ''}`}
+                        onClick={() => setActiveTab('items')}
+                    >
+                        <FiBox /> Items
+                    </button>
+                </div>
             </div>
 
-            {activeTab === 'scenes' && (
-                <div className={styles['scenes-section']}>
-                    <h2>Scenes</h2>
-                    <div className={styles['add-form']}>
-                        <h2>Add Scene</h2>
-                        <input
-                            type="number"
-                            placeholder="Scene ID"
-                            value={newScene.sceneID}
-                            onChange={(e) => setNewScene({...newScene, sceneID: parseInt(e.target.value)})}
-                        />
-                        <input
-                            type="text"
-                            placeholder="Title"
-                            value={newScene.title}
-                            onChange={(e) => setNewScene({...newScene, title: e.target.value})}
-                        />
-                        <textarea
-                            placeholder="Description"
-                            value={newScene.description || ''}
-                            onChange={(e) => setNewScene({...newScene, description: e.target.value})}
-                        />
-                        <h2>Connection ID</h2>
-                        <input
-                            type="number"
-                            placeholder="Connection ID"
-                            value={newScene.connectionID}
-                            onChange={(e) => setNewScene({...newScene, connectionID: parseInt(e.target.value)})}
-                        />
-                        <h2>Scene Item</h2>
-                        <select
-                            value={newScene.itemID || ''}
-                            onChange={(e) => setNewScene({
-                                ...newScene, 
-                                itemID: e.target.value ? parseInt(e.target.value) : undefined
-                            })}
-                        >
-                            <option value="">No Item</option>
-                            {items.map(item => (
-                                <option key={item.itemID} value={item.itemID}>
-                                    {item.name}
-                                </option>
-                            ))}
-                        </select>
-                        <h2>Image</h2>
-                        <input
-                            id={`file-input-${newScene.sceneID}`}
-                            type="file"
-                            accept="image/jpeg,image/png,image/gif"
-                            onChange={(e) => {
-                                const file = e.target.files?.[0];
-                                if (file) {
-                                    console.log('File selected:', file.name);
-                                    setSelectedFile(file);
-                                }
-                            }}
-                        />
-                        {selectedFile && (
-                            <div>Selected file: {selectedFile.name}</div>
-                        )}
-                        <button onClick={addScene}>Add Scene</button>
-                    </div>
-                    <div className={styles['items-list']}>
-                        {scenes.map(scene => (
-                            <div key={scene.sceneID} className={styles.item}>
-                                <h3>Scene ID</h3>
+            <div className={styles['main-content']}>
+                {activeTab === 'scenes' && (
+                    <div className={styles['content-section']}>
+                        <div className={styles['add-form']}>
+                            <h2>Add New Scene</h2>
+                            <div className={styles['form-group']}>
+                                <label>Scene ID</label>
                                 <input
                                     type="number"
-                                    value={scene.sceneID}
-                                    onChange={(e) => updateScene({...scene, sceneID: parseInt(e.target.value)})}
+                                    className={styles['form-control']}
+                                    value={newScene.sceneID}
+                                    onChange={(e) => setNewScene({...newScene, sceneID: parseInt(e.target.value)})}
                                 />
-                                <h3>Connection ID</h3>
+                            </div>
+                            <div className={styles['form-group']}>
+                                <label>Connection ID</label>
                                 <input
                                     type="number"
-                                    value={scene.connectionID || ''}
-                                    onChange={(e) => updateScene({...scene, connectionID: parseInt(e.target.value)})}
+                                    className={styles['form-control']}
+                                    value={newScene.connectionID}
+                                    onChange={(e) => setNewScene({...newScene, connectionID: parseInt(e.target.value)})}
                                 />
-                                <h3>Title</h3>
+                            </div>
+                            <div className={styles['form-group']}>
+                                <label>Title</label>
                                 <input
                                     type="text"
-                                    value={scene.title}
-                                    onChange={(e) => updateScene({...scene, title: e.target.value})}
+                                    className={styles['form-control']}
+                                    value={newScene.title}
+                                    onChange={(e) => setNewScene({...newScene, title: e.target.value})}
                                 />
-                                <h3>Description</h3>
+                            </div>
+                            <div className={styles['form-group']}>
+                                <label>Description</label>
                                 <textarea
-                                    value={scene.description ?? ''}
-                                    onChange={(e) => updateScene({...scene, description: e.target.value || undefined})}
-                                    placeholder="Enter scene description"
+                                    className={styles['form-control']}
+                                    value={newScene.description}
+                                    onChange={(e) => setNewScene({...newScene, description: e.target.value})}
                                 />
-                                <h3>Scene Item</h3>
+                            </div>
+                            <div className={styles['form-group']}>
+                                <label>Scene Item</label>
                                 <select
-                                    value={scene.itemID || ''}
-                                    onChange={(e) => updateScene({
-                                        ...scene, 
-                                        itemID: e.target.value ? parseInt(e.target.value) : undefined
+                                    className={styles['form-control']}
+                                    value={newScene.itemID || ''}
+                                    onChange={(e) => setNewScene({
+                                        ...newScene, 
+                                        itemID: e.target.value ? parseInt(e.target.value) : null
                                     })}
                                 >
                                     <option value="">No Item</option>
@@ -533,298 +509,452 @@ const AdminPanel = () => {
                                         </option>
                                     ))}
                                 </select>
-                                {scene.image && (
-                                    <img 
-                                        src={`http://localhost:5193${scene.image}`}
-                                        alt="Scene preview"
-                                        style={{ maxWidth: '200px', marginBottom: '1rem' }}
+                            </div>
+                            <div className={styles['form-group']}>
+                                <label>Scene Image</label>
+                                <div className={styles['file-upload']}>
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
                                     />
-                                )}
-                                <h3>Update Image</h3>
-                                <input
-                                    id={`file-input-${scene.sceneID}`}
-                                    type="file"
-                                    accept="image/jpeg,image/png,image/gif"
-                                    onChange={(e) => {
-                                        if (e.target.files && e.target.files[0]) {
-                                            console.log('File selected for scene:', scene.sceneID);
-                                        }
-                                    }}
-                                />
-                                <div className={styles.buttonGroup}>
-                                    <button onClick={() => deleteScene(scene.sceneID)}>Delete</button>
-                                    <button onClick={() => updateScene(scene)}>Save Changes</button>
+                                    {selectedFile && (
+                                        <div className={styles['image-preview']}>
+                                            <img 
+                                                src={URL.createObjectURL(selectedFile)} 
+                                                alt="Preview" 
+                                                style={{ maxWidth: '200px' }}
+                                            />
+                                        </div>
+                                    )}
                                 </div>
                             </div>
-                        ))}
-                    </div>
-                </div>
-            )}
-
-            {activeTab === 'connections' && (
-                <div className={styles['connections-section']}>
-                    <h2>Connections</h2>
-                    <div className={styles['add-form']}>
-                        <h2>From Scene ID</h2>
-                        <input
-                            type="number"
-                            placeholder="From Scene ID"
-                            value={newConnection.sceneFromID || ''}
-                            onChange={(e) => setNewConnection({...newConnection, sceneFromID: parseInt(e.target.value)})}
-                        />
-                        <h2>To Scene ID</h2>
-                        <input
-                            type="number"
-                            placeholder="To Scene ID"
-                            value={newConnection.sceneToID || ''}
-                            onChange={(e) => setNewConnection({...newConnection, sceneToID: parseInt(e.target.value)})}
-                        />
-                        <h2>Text (Decision Response)</h2>
-                        <textarea
-                            value={newConnection.text}
-                            onChange={(e) => setNewConnection({...newConnection, text: e.target.value})}
-                            placeholder="Enter the character's response..."
-                        />
-                        
-                        <h2>Effect Type</h2>
-                        <select
-                            value={newConnection.effect.split(':')[0]}
-                            onChange={(e) => {
-                                const currentValue = newConnection.effect.split(':')[1] || '0';
-                                setNewConnection({
-                                    ...newConnection,
-                                    effect: `${e.target.value}:${currentValue}`
-                                });
-                            }}
-                        >
-                            <option value="scene">Go to Scene</option>
-                            <option value="health">Modify Health</option>
-                            <option value="force">Modify Force</option>
-                            <option value="obiwan">Modify Obi-Wan Relationship</option>
-                            <option value="scene">Go to Next Scene</option>
-                        </select>
-
-                        <h2>Effect Value</h2>
-                        <div className={styles['effect-input']}>
-                            <input
-                                type="number"
-                                placeholder="Value"
-                                value={newConnection.effect.split(':')[1] || '0'}
-                                onChange={(e) => {
-                                    const effectType = newConnection.effect.split(':')[0] || 'obiwan';
-                                    setNewConnection({
-                                        ...newConnection,
-                                        effect: `${effectType}:${e.target.value}`
-                                    });
-                                }}
-                            />
-                            <span className={styles['effect-hint']}>
-                                {newConnection.effect.startsWith('scene') 
-                                    ? '(Scene ID to navigate to)'
-                                    : '(Use + for increase, - for decrease)'}
-                            </span>
+                            <button className={styles['add-button']} onClick={addScene}>
+                                Add Scene
+                            </button>
                         </div>
 
-                        <h2>Required Item ID (Optional)</h2>
-                        <input
-                            type="number"
-                            placeholder="Required Item ID"
-                            value={newConnection.requiredItemID || ''}
-                            onChange={(e) => setNewConnection({
-                                ...newConnection, 
-                                requiredItemID: e.target.value ? parseInt(e.target.value) : null
-                            })}
-                        />
-                        <h2>Mini Game ID</h2>
-                        <input
-                            type="number"
-                            placeholder="Mini Game ID"
-                            value={newConnection.miniGameID || ''}
-                            onChange={(e) => setNewConnection({...newConnection, miniGameID: parseInt(e.target.value) || null})}
-                        />
-                        <button onClick={addConnection}>Add Connection</button>
+                        <div className={styles['items-grid']}>
+                            {scenes.map(scene => (
+                                <div key={scene.sceneID} className={styles['item-card']}>
+                                    <div className={styles['form-group']}>
+                                        <label>Scene ID</label>
+                                        <input
+                                            type="number"
+                                            value={scene.sceneID}
+                                            onChange={(e) => updateScene({...scene, sceneID: parseInt(e.target.value)})}
+                                        />
+                                    </div>
+                                    <div className={styles['form-group']}>
+                                        <label>Connection ID</label>
+                                        <input
+                                            type="number"
+                                            value={scene.connectionID || ''}
+                                            onChange={(e) => updateScene({...scene, connectionID: parseInt(e.target.value)})}
+                                        />
+                                    </div>
+                                    <div className={styles['form-group']}>
+                                        <label>Title</label>
+                                        <input
+                                            type="text"
+                                            value={scene.title}
+                                            onChange={(e) => updateScene({...scene, title: e.target.value})}
+                                        />
+                                    </div>
+                                    <div className={styles['form-group']}>
+                                        <label>Description</label>
+                                        <textarea
+                                            value={scene.description ?? ''}
+                                            onChange={(e) => updateScene({...scene, description: e.target.value || ""})}
+                                        />
+                                    </div>
+                                    <div className={styles['form-group']}>
+                                        <label>Scene Item</label>
+                                        <select
+                                            value={scene.itemID || ''}
+                                            onChange={(e) => updateScene({
+                                                ...scene, 
+                                                itemID: e.target.value ? parseInt(e.target.value) : undefined
+                                            })}
+                                        >
+                                            <option value="">No Item</option>
+                                            {items.map(item => (
+                                                <option key={item.itemID} value={item.itemID}>
+                                                    {item.name}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                    <div className={styles['form-group']}>
+                                        <label>Scene Image</label>
+                                        <div className={styles['file-upload']}>
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                onChange={async (e) => {
+                                                    const file = e.target.files?.[0];
+                                                    if (file) {
+                                                        const formData = new FormData();
+                                                        formData.append('image', file);
+                                                        await updateSceneWithImage(scene.sceneID, formData);
+                                                    }
+                                                }}
+                                            />
+                                        </div>
+                                        {scene.imageURL && (
+                                            <div className={styles['image-preview']}>
+                                                <img 
+                                                    src={`http://localhost:5193${scene.imageURL}`}
+                                                    alt="Scene preview"
+                                                    style={{ maxWidth: '200px' }}
+                                                />
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div className={styles['button-group']}>
+                                        <button 
+                                            className={styles['delete-button']} 
+                                            onClick={() => deleteScene(scene.sceneID)}
+                                        >
+                                            Delete
+                                        </button>
+                                        <button 
+                                            className={styles['save-button']} 
+                                            onClick={() => updateScene(scene)}
+                                        >
+                                            Save
+                                        </button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
                     </div>
-                    <div className={styles['items-list']}>
-                        {connections.map(connection => (
-                            <div key={connection.choicesConnectionsID} className={styles.item}>
-                                <h3>Connection ID</h3>
-                                <input
-                                    type="number"
-                                    value={connection.choicesConnectionsID}
-                                    onChange={(e) => updateConnection({...connection, choicesConnectionsID: parseInt(e.target.value)})}
-                                />
-                                <h3>From Scene ID</h3>
-                                <input
-                                    type="number"
-                                    value={connection.sceneFromID}
-                                    onChange={(e) => updateConnection({...connection, sceneFromID: parseInt(e.target.value)})}
-                                />
-                                <h3>To Scene ID</h3>
-                                <input
-                                    type="number"
-                                    value={connection.sceneToID}
-                                    onChange={(e) => updateConnection({...connection, sceneToID: parseInt(e.target.value)})}
-                                />
-                                <h3>Text</h3>
-                                <input
-                                    type="text"
-                                    value={connection.text}
-                                    onChange={(e) => updateConnection({...connection, text: e.target.value})}
-                                />
-                                <h3>Effect Type</h3>
-                                <select
-                                    value={connection.effect.split(':')[0]}
-                                    onChange={(e) => {
-                                        const currentValue = connection.effect.split(':')[1] || '0';
-                                        updateConnection({
-                                            ...connection,
-                                            effect: `${e.target.value}:${currentValue}`
-                                        });
-                                    }}
-                                >
-                                    <option value="scene">Go to Scene</option>
-                                    <option value="health">Modify Health</option>
-                                    <option value="force">Modify Force</option>
-                                    <option value="obiwan">Modify Obi-Wan Relationship</option>
-                                </select>
+                )}
 
-                                <h3>Effect Value</h3>
-                                <div className={styles['effect-input']}>
-                                    <input
-                                        type="number"
-                                        placeholder="Value"
-                                        value={connection.effect.split(':')[1] || '0'}
+                {activeTab === 'connections' && (
+                    <div className={styles['content-section']}>
+                        <div className={styles['add-form']}>
+                            <h2>Add New Connection</h2>
+                            <div className={styles['form-group']}>
+                                <label>From Scene ID</label>
+                                <input
+                                    type="number"
+                                    value={newConnection.sceneFromID || ''}
+                                    onChange={(e) => setNewConnection({...newConnection, sceneFromID: parseInt(e.target.value)})}
+                                />
+                            </div>
+                            <div className={styles['form-group']}>
+                                <label>To Scene ID</label>
+                                <input
+                                    type="number"
+                                    value={newConnection.sceneToID || ''}
+                                    onChange={(e) => setNewConnection({...newConnection, sceneToID: parseInt(e.target.value)})}
+                                />
+                            </div>
+                            <div className={styles['form-group']}>
+                                <label>Text (Decision Response)</label>
+                                <textarea
+                                    value={newConnection.text}
+                                    onChange={(e) => setNewConnection({...newConnection, text: e.target.value})}
+                                />
+                            </div>
+                            <div className={styles['form-group']}>
+                                <label>
+                                    Effect Type
+                                    <span className={styles.tooltip} data-tip="Choose how this choice affects the game">ⓘ</span>
+                                </label>
+                                <div className={styles['effect-group']}>
+                                    <select
+                                        value={newConnection.effect.split(':')[0]}
                                         onChange={(e) => {
-                                            const effectType = connection.effect.split(':')[0] || 'scene';
-                                            updateConnection({
-                                                ...connection,
-                                                effect: `${effectType}:${e.target.value}`
+                                            const currentValue = newConnection.effect.split(':')[1] || '0';
+                                            setNewConnection({
+                                                ...newConnection,
+                                                effect: `${e.target.value}:${currentValue}`
                                             });
                                         }}
-                                    />
-                                    <span className={styles['effect-hint']}>
-                                        {connection.effect.startsWith('scene') 
-                                            ? '(Scene ID to navigate to)'
-                                            : '(Use + or - for increase/decrease)'}
-                                    </span>
-                                </div>
-
-                                <h3>Required Item ID</h3>
-                                <input
-                                    type="number"
-                                    value={connection.requiredItemID || ''}
-                                    onChange={(e) => updateConnection({...connection, requiredItemID: parseInt(e.target.value) || null})}
-                                />
-                                <h3>Mini Game ID</h3>
-                                <input
-                                    type="number"
-                                    value={connection.miniGameID || ''}
-                                    onChange={(e) => updateConnection({...connection, miniGameID: parseInt(e.target.value) || null})}
-                                />
-                                <div className={styles.buttonGroup}>
-                                    <button onClick={() => deleteConnection(connection.choicesConnectionsID)}>Delete</button>
-                                    <button onClick={() => updateConnection(connection)}>Save Changes</button>
+                                    >
+                                        <option value="scene">Go to Scene</option>
+                                        <option value="health">Modify Health</option>
+                                        <option value="force">Modify Force</option>
+                                        <option value="obiwan">Modify Obi-Wan Relationship</option>
+                                    </select>
+                                    
+                                    <div className={styles['effect-value']} data-prefix={newConnection.effect.startsWith('scene') ? '#' : '±'}>
+                                        <input
+                                            type="number"
+                                            value={newConnection.effect.split(':')[1] || '0'}
+                                            onChange={(e) => {
+                                                const effectType = newConnection.effect.split(':')[0] || 'scene';
+                                                setNewConnection({
+                                                    ...newConnection,
+                                                    effect: `${effectType}:${e.target.value}`
+                                                });
+                                            }}
+                                        />
+                                    </div>
                                 </div>
                             </div>
-                        ))}
-                    </div>
-                </div>
-            )}
-
-            {activeTab === 'items' && (
-                <div className={styles['items-section']}>
-                    <h2>Items</h2>
-                    <div className={styles['add-form']}>
-                        <h2>Item ID</h2>
-                        <input
-                            type="number"
-                            placeholder="Item ID"
-                            value={newItem.itemID}
-                            onChange={(e) => setNewItem({...newItem, itemID: parseInt(e.target.value)})}
-                        />
-                        <h2>Name</h2>
-                        <input
-                            type="text"
-                            placeholder="Name"
-                            value={newItem.name}
-                            onChange={(e) => setNewItem({...newItem, name: e.target.value})}
-                        />
-                        <h2>Description</h2>
-                        <textarea
-                            placeholder="Description"
-                            value={newItem.description}
-                            onChange={(e) => setNewItem({...newItem, description: e.target.value})}
-                        />
-                        <h2>Health Modifier</h2>
-                        <input
-                            type="number"
-                            placeholder="Health Modifier"
-                            value={newItem.healthModifier}
-                            onChange={(e) => setNewItem({...newItem, healthModifier: parseInt(e.target.value)})}
-                        />
-                        <h2>Force Modifier</h2>
-                        <input
-                            type="number"
-                            placeholder="Force Modifier"
-                            value={newItem.forceModifier}
-                            onChange={(e) => setNewItem({...newItem, forceModifier: parseInt(e.target.value)})}
-                        />
-                        <h2>Obi-Wan Relationship Modifier</h2>
-                        <input
-                            type="number"
-                            placeholder="Obi-Wan Relationship Modifier"
-                            value={newItem.obiWanRelationshipModifier}
-                            onChange={(e) => setNewItem({...newItem, obiWanRelationshipModifier: parseInt(e.target.value)})}
-                        />
-                        <button onClick={addItem}>Add Item</button>
-                    </div>
-                    <div className={styles['items-list']}>
-                        {items.map(item => (
-                            <div key={item.itemID} className={styles.item}>
-                                <h3>Item ID</h3>
+                            <div className={styles['form-group']}>
+                                <label>Required Item ID (Optional)</label>
                                 <input
                                     type="number"
-                                    value={item.itemID}
-                                    onChange={(e) => updateItem({...item, itemID: parseInt(e.target.value)})}
+                                    value={newConnection.requiredItemID || ''}
+                                    onChange={(e) => setNewConnection({
+                                        ...newConnection, 
+                                        requiredItemID: e.target.value ? parseInt(e.target.value) : null
+                                    })}
                                 />
-                                <h3>Name</h3>
+                            </div>
+                            <div className={styles['form-group']}>
+                                <label>Mini Game ID</label>
+                                <input
+                                    type="number"
+                                    value={newConnection.miniGameID || ''}
+                                    onChange={(e) => setNewConnection({...newConnection, miniGameID: parseInt(e.target.value) || null})}
+                                />
+                            </div>
+                            <button className={styles['add-button']} onClick={addConnection}>
+                                Add Connection
+                            </button>
+                        </div>
+
+                        <div className={styles['items-grid']}>
+                            {connections.map(connection => (
+                                <div key={connection.choicesConnectionsID} className={styles['item-card']}>
+                                    <div className={styles['form-group']}>
+                                        <label>Connection ID</label>
+                                        <input
+                                            type="number"
+                                            value={connection.choicesConnectionsID}
+                                            onChange={(e) => updateConnection({...connection, choicesConnectionsID: parseInt(e.target.value)})}
+                                        />
+                                    </div>
+                                    <div className={styles['form-group']}>
+                                        <label>From Scene ID</label>
+                                        <input
+                                            type="number"
+                                            value={connection.sceneFromID}
+                                            onChange={(e) => updateConnection({...connection, sceneFromID: parseInt(e.target.value)})}
+                                        />
+                                    </div>
+                                    <div className={styles['form-group']}>
+                                        <label>To Scene ID</label>
+                                        <input
+                                            type="number"
+                                            value={connection.sceneToID}
+                                            onChange={(e) => updateConnection({...connection, sceneToID: parseInt(e.target.value)})}
+                                        />
+                                    </div>
+                                    <div className={styles['form-group']}>
+                                        <label>Text</label>
+                                        <input
+                                            type="text"
+                                            value={connection.text}
+                                            onChange={(e) => updateConnection({...connection, text: e.target.value})}
+                                        />
+                                    </div>
+                                    <div className={styles['form-group']}>
+                                        <label>Effect Type</label>
+                                        <select
+                                            value={connection.effect.split(':')[0]}
+                                            onChange={(e) => {
+                                                const currentValue = connection.effect.split(':')[1] || '0';
+                                                updateConnection({
+                                                    ...connection,
+                                                    effect: `${e.target.value}:${currentValue}`
+                                                });
+                                            }}
+                                        >
+                                            <option value="scene">Go to Scene</option>
+                                            <option value="health">Modify Health</option>
+                                            <option value="force">Modify Force</option>
+                                            <option value="obiwan">Modify Obi-Wan Relationship</option>
+                                        </select>
+                                    </div>
+                                    <div className={styles['form-group']}>
+                                        <label>Effect Value</label>
+                                        <div className={styles['effect-input']}>
+                                            <input
+                                                type="number"
+                                                value={connection.effect.split(':')[1] || '0'}
+                                                onChange={(e) => {
+                                                    const effectType = connection.effect.split(':')[0] || 'scene';
+                                                    updateConnection({
+                                                        ...connection,
+                                                        effect: `${effectType}:${e.target.value}`
+                                                    });
+                                                }}
+                                            />
+                                            <span className={styles['effect-hint']}>
+                                                {connection.effect.startsWith('scene') 
+                                                    ? '(Scene ID to navigate to)'
+                                                    : '(Use + or - for increase/decrease)'}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div className={styles['form-group']}>
+                                        <label>Required Item ID</label>
+                                        <input
+                                            type="number"
+                                            value={connection.requiredItemID || ''}
+                                            onChange={(e) => updateConnection({...connection, requiredItemID: parseInt(e.target.value) || null})}
+                                        />
+                                    </div>
+                                    <div className={styles['form-group']}>
+                                        <label>Mini Game ID</label>
+                                        <input
+                                            type="number"
+                                            value={connection.miniGameID || ''}
+                                            onChange={(e) => updateConnection({...connection, miniGameID: parseInt(e.target.value) || null})}
+                                        />
+                                    </div>
+                                    <div className={styles['button-group']}>
+                                        <button 
+                                            className={styles['delete-button']} 
+                                            onClick={() => deleteConnection(connection.choicesConnectionsID)}
+                                        >
+                                            Delete
+                                        </button>
+                                        <button 
+                                            className={styles['save-button']} 
+                                            onClick={() => updateConnection(connection)}
+                                        >
+                                            Save
+                                        </button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {activeTab === 'items' && (
+                    <div className={styles['content-section']}>
+                        <div className={styles['add-form']}>
+                            <h2>Add New Item</h2>
+                            <div className={styles['form-group']}>
+                                <label>Item ID</label>
+                                <input
+                                    type="number"
+                                    value={newItem.itemID}
+                                    onChange={(e) => setNewItem({...newItem, itemID: parseInt(e.target.value)})}
+                                />
+                            </div>
+                            <div className={styles['form-group']}>
+                                <label>Name</label>
                                 <input
                                     type="text"
-                                    value={item.name}
-                                    onChange={(e) => updateItem({...item, name: e.target.value})}
+                                    value={newItem.name}
+                                    onChange={(e) => setNewItem({...newItem, name: e.target.value})}
                                 />
-                                <h3>Description</h3>
-                                <textarea
-                                    value={item.description}
-                                    onChange={(e) => updateItem({...item, description: e.target.value})}
-                                />
-                                <h3>Health Modifier</h3>
-                                <input
-                                    type="number"
-                                    value={item.healthModifier}
-                                    onChange={(e) => updateItem({...item, healthModifier: parseInt(e.target.value)})}
-                                />
-                                <h3>Force Modifier</h3>
-                                <input
-                                    type="number"
-                                    value={item.forceModifier}
-                                    onChange={(e) => updateItem({...item, forceModifier: parseInt(e.target.value)})}
-                                />
-                                <h3>Obi-Wan Relationship Modifier</h3>
-                                <input
-                                    type="number"
-                                    value={item.obiWanRelationshipModifier}
-                                    onChange={(e) => updateItem({...item, obiWanRelationshipModifier: parseInt(e.target.value)})}
-                                />
-                                <div className={styles.buttonGroup}>
-                                    <button onClick={() => deleteItem(item.itemID)}>Delete</button>
-                                    <button onClick={() => updateItem(item)}>Save Changes</button>
-                                </div>
                             </div>
-                        ))}
+                            <div className={styles['form-group']}>
+                                <label>Description</label>
+                                <textarea
+                                    value={newItem.description}
+                                    onChange={(e) => setNewItem({...newItem, description: e.target.value})}
+                                />
+                            </div>
+                            <div className={styles['form-group']}>
+                                <label>Health Modifier</label>
+                                <input
+                                    type="number"
+                                    value={newItem.healthModifier}
+                                    onChange={(e) => setNewItem({...newItem, healthModifier: parseInt(e.target.value)})}
+                                />
+                            </div>
+                            <div className={styles['form-group']}>
+                                <label>Force Modifier</label>
+                                <input
+                                    type="number"
+                                    value={newItem.forceModifier}
+                                    onChange={(e) => setNewItem({...newItem, forceModifier: parseInt(e.target.value)})}
+                                />
+                            </div>
+                            <div className={styles['form-group']}>
+                                <label>Obi-Wan Relationship Modifier</label>
+                                <input
+                                    type="number"
+                                    value={newItem.obiWanRelationshipModifier}
+                                    onChange={(e) => setNewItem({...newItem, obiWanRelationshipModifier: parseInt(e.target.value)})}
+                                />
+                            </div>
+                            <button className={styles['add-button']} onClick={addItem}>
+                                Add Item
+                            </button>
+                        </div>
+
+                        <div className={styles['items-grid']}>
+                            {items.map(item => (
+                                <div key={item.itemID} className={styles['item-card']}>
+                                    <div className={styles['form-group']}>
+                                        <label>Item ID</label>
+                                        <input
+                                            type="number"
+                                            value={item.itemID}
+                                            onChange={(e) => updateItem({...item, itemID: parseInt(e.target.value)})}
+                                        />
+                                    </div>
+                                    <div className={styles['form-group']}>
+                                        <label>Name</label>
+                                        <input
+                                            type="text"
+                                            value={item.name}
+                                            onChange={(e) => updateItem({...item, name: e.target.value})}
+                                        />
+                                    </div>
+                                    <div className={styles['form-group']}>
+                                        <label>Description</label>
+                                        <textarea
+                                            value={item.description}
+                                            onChange={(e) => updateItem({...item, description: e.target.value})}
+                                        />
+                                    </div>
+                                    <div className={styles['form-group']}>
+                                        <label>Health Modifier</label>
+                                        <input
+                                            type="number"
+                                            value={item.healthModifier}
+                                            onChange={(e) => updateItem({...item, healthModifier: parseInt(e.target.value)})}
+                                        />
+                                    </div>
+                                    <div className={styles['form-group']}>
+                                        <label>Force Modifier</label>
+                                        <input
+                                            type="number"
+                                            value={item.forceModifier}
+                                            onChange={(e) => updateItem({...item, forceModifier: parseInt(e.target.value)})}
+                                        />
+                                    </div>
+                                    <div className={styles['form-group']}>
+                                        <label>Obi-Wan Relationship Modifier</label>
+                                        <input
+                                            type="number"
+                                            value={item.obiWanRelationshipModifier}
+                                            onChange={(e) => updateItem({...item, obiWanRelationshipModifier: parseInt(e.target.value)})}
+                                        />
+                                    </div>
+                                    <div className={styles['button-group']}>
+                                        <button 
+                                            className={styles['delete-button']} 
+                                            onClick={() => deleteItem(item.itemID)}
+                                        >
+                                            Delete
+                                        </button>
+                                        <button 
+                                            className={styles['save-button']} 
+                                            onClick={() => updateItem(item)}
+                                        >
+                                            Save
+                                        </button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
                     </div>
-                </div>
-            )}
+                )}
+            </div>
         </div>
     );
 };
