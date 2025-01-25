@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import styles from '../Modules/AdminPanel.module.css';
 import { useNavigate } from "react-router-dom";
-import { FiHome, FiLink, FiBox, FiSettings, FiGamepad } from 'react-icons/fi';
+import { FiHome, FiLink, FiBox, FiSettings } from 'react-icons/fi';
+import { FaGamepad } from "react-icons/fa";
 
 interface Scene {
     sceneID: number;
@@ -33,7 +34,7 @@ interface Item {
 }
 
 interface MiniGame {
-    miniGameID: number;
+    miniGameID: number | null;
     type: string;
     title: string;
     description: string;
@@ -65,7 +66,8 @@ const AdminPanel = () => {
         sceneFromID: 0,
         sceneToID: 0,
         text: '',
-        effect: ''
+        effect: '',
+        miniGameID: null
     });
     const [newItem, setNewItem] = useState<Item>({ itemID: 0, name: '', description: '', healthModifier: 0, forceModifier: 0, obiWanRelationshipModifier: 0 });
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -272,7 +274,8 @@ const AdminPanel = () => {
                 sceneFromID: 0,
                 sceneToID: 0,
                 text: '',
-                effect: ''
+                effect: '',
+                miniGameID: null
             });
         } catch (error) {
             console.error('Error adding connection:', error);
@@ -440,22 +443,6 @@ const AdminPanel = () => {
         }
     };
 
-    const handleDescriptionChange = (scene: Scene, newDescription: string) => {
-        const updatedScene = {
-            ...scene,
-            description: newDescription
-        };
-        setScenes(prevScenes => 
-            prevScenes.map(s => 
-                s.sceneID === scene.sceneID ? updatedScene : s
-            )
-        );
-    };
-
-    const handleSaveDescription = async (scene: Scene) => {
-        await updateScene(scene);
-    };
-
     // CRUD operace pro minigamy
     const addMiniGame = async () => {
         try {
@@ -566,12 +553,11 @@ const AdminPanel = () => {
                     >
                         <FiBox /> Items
                     </button>
-                    <button
+                    <button 
                         className={`${styles.tab} ${activeTab === 'minigames' ? styles.active : ''}`}
                         onClick={() => setActiveTab('minigames')}
                     >
-                        <FiGamepad />
-                        Mini Games
+                        <FaGamepad /> Mini Games
                     </button>
                 </div>
             </div>
@@ -1080,14 +1066,23 @@ const AdminPanel = () => {
                 )}
 
                 {activeTab === 'minigames' && (
-                    <div>
-                        <h2>Mini Games</h2>
+                    <div className={styles['content-section']}>
                         <div className={styles['add-form']}>
-                            <h3>Add New Mini Game</h3>
+                            <h2>Add New Mini Game</h2>
+                            <div className={styles['form-group']}>
+                                <label>Mini Game ID</label>
+                                <input
+                                    type="number"
+                                    className={styles['form-control']}
+                                    value={newMiniGame.miniGameID ?? ''}
+                                    onChange={(e) => setNewMiniGame({...newMiniGame, miniGameID: parseInt(e.target.value)})}
+                                />
+                            </div>
                             <div className={styles['form-group']}>
                                 <label>Title</label>
                                 <input
                                     type="text"
+                                    className={styles['form-control']}
                                     value={newMiniGame.title}
                                     onChange={(e) => setNewMiniGame({...newMiniGame, title: e.target.value})}
                                 />
@@ -1095,6 +1090,7 @@ const AdminPanel = () => {
                             <div className={styles['form-group']}>
                                 <label>Description</label>
                                 <textarea
+                                    className={styles['form-control']}
                                     value={newMiniGame.description}
                                     onChange={(e) => setNewMiniGame({...newMiniGame, description: e.target.value})}
                                 />
@@ -1126,9 +1122,19 @@ const AdminPanel = () => {
                             {miniGames.map(game => (
                                 <div key={game.miniGameID} className={styles['item-card']}>
                                     <div className={styles['form-group']}>
+                                        <label>Mini Game ID</label>
+                                        <input
+                                            type="number"
+                                            className={styles['form-control']}
+                                            value={game.miniGameID ?? ''}
+                                            onChange={(e) => updateMiniGame({...game, miniGameID: parseInt(e.target.value)})}
+                                        />
+                                    </div>
+                                    <div className={styles['form-group']}>
                                         <label>Title</label>
                                         <input
                                             type="text"
+                                            className={styles['form-control']}
                                             value={game.title}
                                             onChange={(e) => updateMiniGame({...game, title: e.target.value})}
                                         />
@@ -1136,6 +1142,7 @@ const AdminPanel = () => {
                                     <div className={styles['form-group']}>
                                         <label>Description</label>
                                         <textarea
+                                            className={styles['form-control']}
                                             value={game.description}
                                             onChange={(e) => updateMiniGame({...game, description: e.target.value})}
                                         />
@@ -1161,7 +1168,7 @@ const AdminPanel = () => {
                                     <div className={styles['button-group']}>
                                         <button 
                                             className={styles['delete-button']} 
-                                            onClick={() => deleteMiniGame(game.miniGameID)}
+                                            onClick={() => game.miniGameID && deleteMiniGame(game.miniGameID)}
                                         >
                                             Delete
                                         </button>

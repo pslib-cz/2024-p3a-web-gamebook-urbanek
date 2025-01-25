@@ -27,10 +27,10 @@ const SpaceJetRepair = ({ miniGameId, difficulty, timeLimit, onComplete, onClose
     const [selectedTool, setSelectedTool] = useState<Tool | null>(null);
     const [parts, setParts] = useState<Part[]>([]);
     const [tools] = useState<Tool[]>([
-        { id: 1, name: 'Hydrospanner', icon: '🔧' },
-        { id: 2, name: 'Fusion Welder', icon: '⚡' },
-        { id: 3, name: 'Power Calibrator', icon: '🔌' },
-        { id: 4, name: 'Shield Aligner', icon: '🛡️' }
+        { id: 1, name: 'Hydro', icon: '🔧' },
+        { id: 2, name: 'Welder', icon: '⚡' },
+        { id: 3, name: 'Power', icon: '🔌' },
+        { id: 4, name: 'Shield', icon: '🛡️' }
     ]);
     const [timeLeft, setTimeLeft] = useState(timeLimit);
     const [isComplete, setIsComplete] = useState(false);
@@ -38,7 +38,7 @@ const SpaceJetRepair = ({ miniGameId, difficulty, timeLimit, onComplete, onClose
     useEffect(() => {
         // Generate random parts based on difficulty
         const generateParts = () => {
-            const numParts = 3 + difficulty;
+            const numParts = Math.min(3 + difficulty, 6); // Cap max parts at 6 for mobile
             const newParts: Part[] = [];
             for (let i = 0; i < numParts; i++) {
                 newParts.push({
@@ -46,12 +46,12 @@ const SpaceJetRepair = ({ miniGameId, difficulty, timeLimit, onComplete, onClose
                     name: `Part ${i + 1}`,
                     isFixed: false,
                     position: {
-                        x: Math.random() * 80 + 10, // 10-90%
-                        y: Math.random() * 80 + 10  // 10-90%
+                        x: Math.random() * 60 + 20, // 20-80% for better visibility
+                        y: Math.random() * 60 + 20  // 20-80% for better visibility
                     },
                     requiredTools: tools
                         .sort(() => Math.random() - 0.5)
-                        .slice(0, 1 + Math.floor(difficulty / 2))
+                        .slice(0, Math.min(1 + Math.floor(difficulty / 2), 2)) // Cap required tools at 2 for mobile
                         .map(t => t.name)
                 });
             }
@@ -68,9 +68,15 @@ const SpaceJetRepair = ({ miniGameId, difficulty, timeLimit, onComplete, onClose
             }, 1000);
             return () => clearInterval(timer);
         } else if (timeLeft === 0) {
+            // When time runs out:
+            // 1. Show failure message
+            alert("Čas vypršel! Zkus to znovu.");
+            // 2. Close minigame and return to previous scene
+            onClose();
+            // 3. Signal failure to parent
             onComplete(false);
         }
-    }, [timeLeft, isComplete]);
+    }, [timeLeft, isComplete, onComplete, onClose]);
 
     const handlePartClick = (part: Part) => {
         if (!selectedTool) return;
@@ -115,11 +121,6 @@ const SpaceJetRepair = ({ miniGameId, difficulty, timeLimit, onComplete, onClose
                                 </div>
                             </div>
                         ))}
-                        <img 
-                            src="/spaceship.png" 
-                            alt="Space Fighter" 
-                            className={styles.shipImage}
-                        />
                     </div>
 
                     <div className={styles.toolbox}>

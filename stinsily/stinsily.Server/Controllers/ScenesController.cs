@@ -118,7 +118,8 @@ namespace stinsily.Server.Controllers
                     text = connection.Text,
                     nextSceneId = connection.SceneToID,
                     effect = connection.Effect,
-                    requiredItemID = connection.RequiredItemID
+                    requiredItemID = connection.RequiredItemID,
+                    miniGameID = connection.MiniGameID
                 }).ToList();
 
                 return Ok(options);

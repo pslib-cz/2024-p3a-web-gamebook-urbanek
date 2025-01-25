@@ -195,7 +195,7 @@ const Scene = () => {
             return null;
         }
     };
-
+    
     const handleMinigameComplete = async (success: boolean) => {
         if (!pendingChoice) return;
 
@@ -203,16 +203,19 @@ const Scene = () => {
             setActiveMinigame(null);
             await handleChoice(pendingChoice);
         } else {
-            // Reset the minigame
-            const miniGame = await fetchMiniGame(pendingChoice.miniGameID!);
-            setActiveMinigame(miniGame);
+            // Just close the minigame and stay on current scene
+            setActiveMinigame(null);
+            setPendingChoice(null);
         }
     };
 
     const handleOptionClick = async (option: DecisionOption) => {
+        console.log("Option clicked:", option);
         if (option.miniGameID) {
+            console.log("Has minigame ID:", option.miniGameID);
             setPendingChoice(option);
             const miniGame = await fetchMiniGame(option.miniGameID);
+            console.log("Fetched minigame:", miniGame);
             if (miniGame) {
                 setActiveMinigame(miniGame);
             }
