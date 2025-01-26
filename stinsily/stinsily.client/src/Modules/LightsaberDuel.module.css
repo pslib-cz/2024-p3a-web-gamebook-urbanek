@@ -1,0 +1,151 @@
+.overlay {
+    font-family: 'Space Grotesk', sans-serif;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 1rem;
+}
+
+.gameContainer {
+    background: #180608;
+    border: 2px solid #D0021B;
+    border-radius: 15px;
+    padding: 1.5rem;
+    width: fit-content;
+    max-width: 100%;
+    color: #D0021B;
+    animation: glow 2s infinite alternate;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.header {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.header h2{
+    font-size: 1.5rem;
+    border-bottom: 1px solid #D0021B;
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.healthBars {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.healthBar {
+    width: 100%;
+}
+
+.barContainer {
+    height: 20px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid #D0021B;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 0.5rem;
+}
+
+.barFill {
+    height: 100%;
+    background: #D0021B;
+    transition: width 0.3s ease;
+}
+
+.gameArea {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem
+}
+
+.duelCanvas {
+    background: rgba(0, 0, 0, 0.8);
+    border: 1px solid #D0021B;
+    border-radius: 10px;
+    cursor: crosshair;
+    image-rendering: optimizeQuality;
+    -ms-interpolation-mode: bicubic;
+    width: 100%;
+    max-width: 300px;
+    touch-action: none;
+}
+
+.instruction {
+    font-size: 1rem;
+    color: #D0021B;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    animation: pulse 2s infinite;
+    padding: 0.5rem;
+}
+
+.accuracy {
+    font-size: 1rem;
+    color: #007bff;
+}
+
+@keyframes pulse {
+    0% { opacity: 0.5; }
+    50% { opacity: 1; }
+    100% { opacity: 0.5; }
+}
+
+@media (min-width: 768px) {
+    .gameContainer {
+        padding: 2rem;
+        max-width: 1000px;
+        height: auto;
+        gap: 2rem;
+    }
+
+    .header h2 {
+        font-size: 2rem;
+    }
+
+    .healthBars {
+        flex-direction: row;
+        gap: 2rem;
+    }
+
+    .healthBar {
+        max-width: 300px;
+    }
+
+    .instruction {
+        font-size: 1.2rem;
+    }
+
+    .accuracy {
+        font-size: 1.1rem;
+    }
+
+    .duelCanvas {
+        max-width: 800px;
+    }
+}
+
+@keyframes patternGlow {
+    from { filter: drop-shadow(0 0 2px #007bff); }
+    to { filter: drop-shadow(0 0 4px #007bff); }
+}
+
+@keyframes playerGlow {
+    from { filter: drop-shadow(0 0 2px #32CD32); }
+    to { filter: drop-shadow(0 0 4px #32CD32); }
+} 

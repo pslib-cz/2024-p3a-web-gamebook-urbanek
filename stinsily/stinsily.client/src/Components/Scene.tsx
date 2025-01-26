@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import styles from '../Modules/Scene.module.css';
 import SpaceJetRepair from './SpaceJetRepair';
+import LightsaberDuel from './LightsaberDuel';
 
 interface Scene {
     sceneID: number;
@@ -670,13 +671,23 @@ const Scene = () => {
                 )}
             </div>
             {activeMinigame && (
-                <SpaceJetRepair
-                    miniGameId={activeMinigame.miniGameID}
-                    difficulty={activeMinigame.difficulty}
-                    timeLimit={activeMinigame.timeLimit}
-                    onComplete={handleMinigameComplete}
-                    onClose={() => setActiveMinigame(null)}
-                />
+                activeMinigame.type === 'SpaceJetRepair' ? (
+                    <SpaceJetRepair
+                        miniGameId={activeMinigame.miniGameID}
+                        difficulty={activeMinigame.difficulty}
+                        timeLimit={activeMinigame.timeLimit}
+                        onComplete={handleMinigameComplete}
+                        onClose={() => setActiveMinigame(null)}
+                    />
+                ) : activeMinigame.type === 'LightsaberDuel' ? (
+                    <LightsaberDuel
+                        miniGameId={activeMinigame.miniGameID}
+                        difficulty={activeMinigame.difficulty}
+                        timeLimit={activeMinigame.timeLimit}
+                        onComplete={handleMinigameComplete}
+                        onClose={() => setActiveMinigame(null)}
+                    />
+                ) : null
             )}
         </div>
     );

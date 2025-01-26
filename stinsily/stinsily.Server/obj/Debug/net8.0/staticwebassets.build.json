@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "IHswf7o2eAo+eACtoCP+WoVIs2IhUta3sMsifR+VCr0=",
+  "Hash": "yo4v/SNlykUbvHMpvN9iPo3ibYV58KgfMIzehVqqEd0=",
   "Source": "stinsily.Server",
   "BasePath": "_content/stinsily.Server",
   "Mode": "Default",
@@ -384,6 +384,48 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\Uploads\\scene_2_bd81c4a6-3e7a-45d3-be36-8df09c0ac137.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_21_3d0d68ca-52be-4d8a-b9a7-b4dd645042fa.jpg",
+      "SourceId": "stinsily.Server",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\",
+      "BasePath": "_content/stinsily.Server",
+      "RelativePath": "Uploads/scene_21_3d0d68ca-52be-4d8a-b9a7-b4dd645042fa#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "j2g6x2t1mm",
+      "Integrity": "JVBXHsDpCnmMdOwwxORi2k1iK2E9aCuqVyMDdmzmlEg=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Uploads\\scene_21_3d0d68ca-52be-4d8a-b9a7-b4dd645042fa.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_22_2c7ea640-0337-45e5-9ce3-f174f579def4.jpg",
+      "SourceId": "stinsily.Server",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\",
+      "BasePath": "_content/stinsily.Server",
+      "RelativePath": "Uploads/scene_22_2c7ea640-0337-45e5-9ce3-f174f579def4#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "j2g6x2t1mm",
+      "Integrity": "JVBXHsDpCnmMdOwwxORi2k1iK2E9aCuqVyMDdmzmlEg=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Uploads\\scene_22_2c7ea640-0337-45e5-9ce3-f174f579def4.jpg"
     },
     {
       "Identity": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_3_b4e3a545-634e-46be-87dc-8441e1c208a4.jpg",
@@ -1883,6 +1925,170 @@
         {
           "Name": "integrity",
           "Value": "sha256-rvt328aGBKXmE04+CbkN0jnFFf/9JEQnezv+lhdqAXY="
+        }
+      ]
+    },
+    {
+      "Route": "Uploads/scene_21_3d0d68ca-52be-4d8a-b9a7-b4dd645042fa.j2g6x2t1mm.jpg",
+      "AssetFile": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_21_3d0d68ca-52be-4d8a-b9a7-b4dd645042fa.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3726225"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"JVBXHsDpCnmMdOwwxORi2k1iK2E9aCuqVyMDdmzmlEg=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 25 Jan 2025 20:26:25 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "j2g6x2t1mm"
+        },
+        {
+          "Name": "label",
+          "Value": "Uploads/scene_21_3d0d68ca-52be-4d8a-b9a7-b4dd645042fa.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-JVBXHsDpCnmMdOwwxORi2k1iK2E9aCuqVyMDdmzmlEg="
+        }
+      ]
+    },
+    {
+      "Route": "Uploads/scene_21_3d0d68ca-52be-4d8a-b9a7-b4dd645042fa.jpg",
+      "AssetFile": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_21_3d0d68ca-52be-4d8a-b9a7-b4dd645042fa.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3726225"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"JVBXHsDpCnmMdOwwxORi2k1iK2E9aCuqVyMDdmzmlEg=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 25 Jan 2025 20:26:25 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-JVBXHsDpCnmMdOwwxORi2k1iK2E9aCuqVyMDdmzmlEg="
+        }
+      ]
+    },
+    {
+      "Route": "Uploads/scene_22_2c7ea640-0337-45e5-9ce3-f174f579def4.j2g6x2t1mm.jpg",
+      "AssetFile": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_22_2c7ea640-0337-45e5-9ce3-f174f579def4.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3726225"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"JVBXHsDpCnmMdOwwxORi2k1iK2E9aCuqVyMDdmzmlEg=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 25 Jan 2025 20:26:34 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "j2g6x2t1mm"
+        },
+        {
+          "Name": "label",
+          "Value": "Uploads/scene_22_2c7ea640-0337-45e5-9ce3-f174f579def4.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-JVBXHsDpCnmMdOwwxORi2k1iK2E9aCuqVyMDdmzmlEg="
+        }
+      ]
+    },
+    {
+      "Route": "Uploads/scene_22_2c7ea640-0337-45e5-9ce3-f174f579def4.jpg",
+      "AssetFile": "C:\\Users\\adamu\\Documents\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\wwwroot\\Uploads\\scene_22_2c7ea640-0337-45e5-9ce3-f174f579def4.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3726225"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"JVBXHsDpCnmMdOwwxORi2k1iK2E9aCuqVyMDdmzmlEg=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 25 Jan 2025 20:26:34 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-JVBXHsDpCnmMdOwwxORi2k1iK2E9aCuqVyMDdmzmlEg="
         }
       ]
     },

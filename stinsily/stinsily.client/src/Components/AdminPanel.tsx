@@ -34,8 +34,8 @@ interface Item {
 }
 
 interface MiniGame {
-    miniGameID: number | null;
-    type: string;
+    miniGameID: number;
+    type: 'SpaceJetRepair' | 'LightsaberDuel';
     title: string;
     description: string;
     difficulty: number;
@@ -444,21 +444,20 @@ const AdminPanel = () => {
     };
 
     // CRUD operace pro minigamy
-    const addMiniGame = async () => {
+    const handleAddMiniGame = async (miniGame: MiniGame) => {
         try {
             const response = await fetch("http://localhost:5193/api/MiniGames", {
                 method: "POST",
-                headers: getHeaders(),
-                body: JSON.stringify(newMiniGame)
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                },
+                body: JSON.stringify(miniGame)
             });
+
+            if (!response.ok) throw new Error('Failed to add mini game');
             
-            if (!response.ok) {
-                const errorText = await response.text();
-                console.error('Failed to add mini game. Status:', response.status, 'Error:', errorText);
-                return;
-            }
-            
-            await fetchMiniGames();
+            // Reset form and refresh list
             setNewMiniGame({
                 miniGameID: 0,
                 type: 'SpaceJetRepair',
@@ -468,6 +467,7 @@ const AdminPanel = () => {
                 timeLimit: 60,
                 isActive: true
             });
+            await fetchMiniGames();
         } catch (error) {
             console.error('Error adding mini game:', error);
         }
@@ -475,51 +475,34 @@ const AdminPanel = () => {
 
     const updateMiniGame = async (game: MiniGame) => {
         try {
-            const token = localStorage.getItem('authToken');
             const response = await fetch(`http://localhost:5193/api/MiniGames/${game.miniGameID}`, {
                 method: "PUT",
                 headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('authToken')}`
                 },
-                body: JSON.stringify({
-                    miniGameID: game.miniGameID,
-                    type: game.type,
-                    title: game.title,
-                    description: game.description,
-                    difficulty: game.difficulty,
-                    timeLimit: game.timeLimit,
-                    isActive: game.isActive
-                })
+                body: JSON.stringify(game)
             });
-            
-            if (!response.ok) {
-                const errorText = await response.text();
-                console.error('Failed to update mini game:', errorText);
-                alert('Failed to update mini game');
-                return;
-            }
-            
+
+            if (!response.ok) throw new Error('Failed to update mini game');
             await fetchMiniGames();
         } catch (error) {
             console.error('Error updating mini game:', error);
-            alert('Failed to update mini game');
         }
     };
 
     const deleteMiniGame = async (id: number) => {
+        if (!window.confirm('Are you sure you want to delete this mini game?')) return;
+
         try {
             const response = await fetch(`http://localhost:5193/api/MiniGames/${id}`, {
                 method: "DELETE",
-                headers: getHeaders()
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                }
             });
-            
-            if (!response.ok) {
-                const errorText = await response.text();
-                console.error('Failed to delete mini game. Status:', response.status, 'Error:', errorText);
-                return;
-            }
-            
+
+            if (!response.ok) throw new Error('Failed to delete mini game');
             await fetchMiniGames();
         } catch (error) {
             console.error('Error deleting mini game:', error);
@@ -1067,22 +1050,25 @@ const AdminPanel = () => {
 
                 {activeTab === 'minigames' && (
                     <div className={styles['content-section']}>
+                        <h2>Mini Games</h2>
                         <div className={styles['add-form']}>
-                            <h2>Add New Mini Game</h2>
-                            <div className={styles['form-group']}>
-                                <label>Mini Game ID</label>
-                                <input
-                                    type="number"
-                                    className={styles['form-control']}
-                                    value={newMiniGame.miniGameID ?? ''}
-                                    onChange={(e) => setNewMiniGame({...newMiniGame, miniGameID: parseInt(e.target.value)})}
-                                />
+                            <div className={styles['effect-group']}>
+                                <label>Type</label>
+                                <select
+                                    value={newMiniGame.type}
+                                    onChange={(e) => setNewMiniGame({
+                                        ...newMiniGame,
+                                        type: e.target.value as 'SpaceJetRepair' | 'LightsaberDuel'
+                                    })}
+                                >
+                                    <option value="SpaceJetRepair">Space Jet Repair</option>
+                                    <option value="LightsaberDuel">Lightsaber Duel</option>
+                                </select>
                             </div>
                             <div className={styles['form-group']}>
                                 <label>Title</label>
                                 <input
                                     type="text"
-                                    className={styles['form-control']}
                                     value={newMiniGame.title}
                                     onChange={(e) => setNewMiniGame({...newMiniGame, title: e.target.value})}
                                 />
@@ -1090,7 +1076,6 @@ const AdminPanel = () => {
                             <div className={styles['form-group']}>
                                 <label>Description</label>
                                 <textarea
-                                    className={styles['form-control']}
                                     value={newMiniGame.description}
                                     onChange={(e) => setNewMiniGame({...newMiniGame, description: e.target.value})}
                                 />
@@ -1113,7 +1098,10 @@ const AdminPanel = () => {
                                     onChange={(e) => setNewMiniGame({...newMiniGame, timeLimit: parseInt(e.target.value)})}
                                 />
                             </div>
-                            <button className={styles['add-button']} onClick={addMiniGame}>
+                            <button 
+                                className={styles['save-button']} 
+                                onClick={() => handleAddMiniGame(newMiniGame)}
+                            >
                                 Add Mini Game
                             </button>
                         </div>
@@ -1122,19 +1110,22 @@ const AdminPanel = () => {
                             {miniGames.map(game => (
                                 <div key={game.miniGameID} className={styles['item-card']}>
                                     <div className={styles['form-group']}>
-                                        <label>Mini Game ID</label>
-                                        <input
-                                            type="number"
-                                            className={styles['form-control']}
-                                            value={game.miniGameID ?? ''}
-                                            onChange={(e) => updateMiniGame({...game, miniGameID: parseInt(e.target.value)})}
-                                        />
+                                        <label>Type</label>
+                                        <select
+                                            value={game.type}
+                                            onChange={(e) => updateMiniGame({
+                                                ...game,
+                                                type: e.target.value as 'SpaceJetRepair' | 'LightsaberDuel'
+                                            })}
+                                        >
+                                            <option value="SpaceJetRepair">Space Jet Repair</option>
+                                            <option value="LightsaberDuel">Lightsaber Duel</option>
+                                        </select>
                                     </div>
                                     <div className={styles['form-group']}>
                                         <label>Title</label>
                                         <input
                                             type="text"
-                                            className={styles['form-control']}
                                             value={game.title}
                                             onChange={(e) => updateMiniGame({...game, title: e.target.value})}
                                         />
@@ -1142,7 +1133,6 @@ const AdminPanel = () => {
                                     <div className={styles['form-group']}>
                                         <label>Description</label>
                                         <textarea
-                                            className={styles['form-control']}
                                             value={game.description}
                                             onChange={(e) => updateMiniGame({...game, description: e.target.value})}
                                         />
@@ -1168,7 +1158,7 @@ const AdminPanel = () => {
                                     <div className={styles['button-group']}>
                                         <button 
                                             className={styles['delete-button']} 
-                                            onClick={() => game.miniGameID && deleteMiniGame(game.miniGameID)}
+                                            onClick={() => deleteMiniGame(game.miniGameID)}
                                         >
                                             Delete
                                         </button>

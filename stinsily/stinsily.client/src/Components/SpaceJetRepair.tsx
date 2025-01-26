@@ -27,10 +27,10 @@ const SpaceJetRepair = ({ miniGameId, difficulty, timeLimit, onComplete, onClose
     const [selectedTool, setSelectedTool] = useState<Tool | null>(null);
     const [parts, setParts] = useState<Part[]>([]);
     const [tools] = useState<Tool[]>([
-        { id: 1, name: 'Hydro', icon: '🔧' },
-        { id: 2, name: 'Welder', icon: '⚡' },
-        { id: 3, name: 'Power', icon: '🔌' },
-        { id: 4, name: 'Shield', icon: '🛡️' }
+        { id: 1, name: 'Klíč', icon: '🔧' },
+        { id: 2, name: 'Svářečka', icon: '⚡' },
+        { id: 3, name: 'Elektřina', icon: '🔌' },
+        { id: 4, name: 'Štít', icon: '🛡️' }
     ]);
     const [timeLeft, setTimeLeft] = useState(timeLimit);
     const [isComplete, setIsComplete] = useState(false);
@@ -98,8 +98,8 @@ const SpaceJetRepair = ({ miniGameId, difficulty, timeLimit, onComplete, onClose
         <div className={styles.overlay}>
             <div className={styles.gameContainer}>
                 <div className={styles.header}>
-                    <h2>Space Fighter Repair</h2>
-                    <div className={styles.timer}>Time: {timeLeft}s</div>
+                    <h2>Oprava stíhačky</h2>
+                    <div className={styles.timer}>Čas: {timeLeft}s</div>
                 </div>
 
                 <div className={styles.gameArea}>
