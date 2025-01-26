@@ -35,7 +35,7 @@ interface Item {
 
 interface MiniGame {
     miniGameID: number;
-    type: 'SpaceJetRepair' | 'LightsaberDuel';
+    type: 'SpaceJetRepair' | 'LightsaberDuel' | 'SyndicateInfiltration';
     title: string;
     description: string;
     difficulty: number;
@@ -443,9 +443,54 @@ const AdminPanel = () => {
         }
     };
 
+    // Add validation function
+    const validateMiniGame = (game: MiniGame): boolean => {
+        if (!game.title.trim()) {
+            alert('Title is required');
+            return false;
+        }
+        if (!game.description.trim()) {
+            alert('Description is required');
+            return false;
+        }
+        if (game.difficulty < 1 || game.difficulty > 3) {
+            alert('Difficulty must be between 1 and 3');
+            return false;
+        }
+        if (game.timeLimit < 30) {
+            alert('Time limit must be at least 30 seconds');
+            return false;
+        }
+
+        // Specific validations per game type
+        switch (game.type) {
+            case 'SyndicateInfiltration':
+                if (game.timeLimit > 180) {
+                    alert('Infiltration missions cannot exceed 3 minutes');
+                    return false;
+                }
+                break;
+            case 'LightsaberDuel':
+                if (game.timeLimit > 300) {
+                    alert('Duels cannot exceed 5 minutes');
+                    return false;
+                }
+                break;
+            case 'SpaceJetRepair':
+                if (game.timeLimit > 120) {
+                    alert('Repairs cannot exceed 2 minutes');
+                    return false;
+                }
+                break;
+        }
+        return true;
+    };
+
     // CRUD operace pro minigamy
     const handleAddMiniGame = async (miniGame: MiniGame) => {
         try {
+            if (!validateMiniGame(miniGame)) return;
+
             const response = await fetch("http://localhost:5193/api/MiniGames", {
                 method: "POST",
                 headers: {
@@ -455,7 +500,10 @@ const AdminPanel = () => {
                 body: JSON.stringify(miniGame)
             });
 
-            if (!response.ok) throw new Error('Failed to add mini game');
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`Failed to add mini game: ${errorText}`);
+            }
             
             // Reset form and refresh list
             setNewMiniGame({
@@ -470,11 +518,14 @@ const AdminPanel = () => {
             await fetchMiniGames();
         } catch (error) {
             console.error('Error adding mini game:', error);
+            alert('Failed to add mini game');
         }
     };
 
     const updateMiniGame = async (game: MiniGame) => {
         try {
+            if (!validateMiniGame(game)) return;
+
             const response = await fetch(`http://localhost:5193/api/MiniGames/${game.miniGameID}`, {
                 method: "PUT",
                 headers: {
@@ -484,15 +535,19 @@ const AdminPanel = () => {
                 body: JSON.stringify(game)
             });
 
-            if (!response.ok) throw new Error('Failed to update mini game');
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`Failed to update mini game: ${errorText}`);
+            }
             await fetchMiniGames();
         } catch (error) {
             console.error('Error updating mini game:', error);
+            alert('Failed to update mini game');
         }
     };
 
     const deleteMiniGame = async (id: number) => {
-        if (!window.confirm('Are you sure you want to delete this mini game?')) return;
+        if (!window.confirm('Are you sure you want to delete this mini game? This action cannot be undone.')) return;
 
         try {
             const response = await fetch(`http://localhost:5193/api/MiniGames/${id}`, {
@@ -502,10 +557,41 @@ const AdminPanel = () => {
                 }
             });
 
-            if (!response.ok) throw new Error('Failed to delete mini game');
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`Failed to delete mini game: ${errorText}`);
+            }
             await fetchMiniGames();
         } catch (error) {
             console.error('Error deleting mini game:', error);
+            alert('Failed to delete mini game');
+        }
+    };
+
+    // Add helper text components
+    const getTimeDescription = (type: string): string => {
+        switch (type) {
+            case 'SyndicateInfiltration':
+                return 'Time to collect required data (30-180 seconds)';
+            case 'LightsaberDuel':
+                return 'Maximum duel duration (30-300 seconds)';
+            case 'SpaceJetRepair':
+                return 'Time to repair all components (30-120 seconds)';
+            default:
+                return 'Time limit in seconds';
+        }
+    };
+
+    const getDifficultyDescription = (type: string): string => {
+        switch (type) {
+            case 'SyndicateInfiltration':
+                return 'Affects number of guards and data points';
+            case 'LightsaberDuel':
+                return 'Affects pattern complexity and damage';
+            case 'SpaceJetRepair':
+                return 'Affects number of parts and time limit';
+            default:
+                return 'Difficulty level (1-3)';
         }
     };
 
@@ -1058,11 +1144,12 @@ const AdminPanel = () => {
                                     value={newMiniGame.type}
                                     onChange={(e) => setNewMiniGame({
                                         ...newMiniGame,
-                                        type: e.target.value as 'SpaceJetRepair' | 'LightsaberDuel'
+                                        type: e.target.value as 'SpaceJetRepair' | 'LightsaberDuel' | 'SyndicateInfiltration'
                                     })}
                                 >
                                     <option value="SpaceJetRepair">Space Jet Repair</option>
                                     <option value="LightsaberDuel">Lightsaber Duel</option>
+                                    <option value="SyndicateInfiltration">Syndicate Infiltration</option>
                                 </select>
                             </div>
                             <div className={styles['form-group']}>
@@ -1089,14 +1176,25 @@ const AdminPanel = () => {
                                     value={newMiniGame.difficulty}
                                     onChange={(e) => setNewMiniGame({...newMiniGame, difficulty: parseInt(e.target.value)})}
                                 />
+                                <span className={styles['help-text']}>
+                                    {getDifficultyDescription(newMiniGame.type)}
+                                </span>
                             </div>
                             <div className={styles['form-group']}>
                                 <label>Time Limit (seconds)</label>
                                 <input
                                     type="number"
+                                    min="30"
+                                    max={
+                                        newMiniGame.type === 'SyndicateInfiltration' ? 180 :
+                                        newMiniGame.type === 'LightsaberDuel' ? 300 : 120
+                                    }
                                     value={newMiniGame.timeLimit}
                                     onChange={(e) => setNewMiniGame({...newMiniGame, timeLimit: parseInt(e.target.value)})}
                                 />
+                                <span className={styles['help-text']}>
+                                    {getTimeDescription(newMiniGame.type)}
+                                </span>
                             </div>
                             <button 
                                 className={styles['save-button']} 
@@ -1115,11 +1213,12 @@ const AdminPanel = () => {
                                             value={game.type}
                                             onChange={(e) => updateMiniGame({
                                                 ...game,
-                                                type: e.target.value as 'SpaceJetRepair' | 'LightsaberDuel'
+                                                type: e.target.value as 'SpaceJetRepair' | 'LightsaberDuel' | 'SyndicateInfiltration'
                                             })}
                                         >
                                             <option value="SpaceJetRepair">Space Jet Repair</option>
                                             <option value="LightsaberDuel">Lightsaber Duel</option>
+                                            <option value="SyndicateInfiltration">Syndicate Infiltration</option>
                                         </select>
                                     </div>
                                     <div className={styles['form-group']}>

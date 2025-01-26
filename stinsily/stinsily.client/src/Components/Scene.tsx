@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import styles from '../Modules/Scene.module.css';
 import SpaceJetRepair from './SpaceJetRepair';
 import LightsaberDuel from './LightsaberDuel';
+import SyndicateInfiltration from './SyndicateInfiltration';
 
 interface Scene {
     sceneID: number;
@@ -681,6 +682,14 @@ const Scene = () => {
                     />
                 ) : activeMinigame.type === 'LightsaberDuel' ? (
                     <LightsaberDuel
+                        miniGameId={activeMinigame.miniGameID}
+                        difficulty={activeMinigame.difficulty}
+                        timeLimit={activeMinigame.timeLimit}
+                        onComplete={handleMinigameComplete}
+                        onClose={() => setActiveMinigame(null)}
+                    />
+                ) : activeMinigame.type === 'SyndicateInfiltration' ? (
+                    <SyndicateInfiltration
                         miniGameId={activeMinigame.miniGameID}
                         difficulty={activeMinigame.difficulty}
                         timeLimit={activeMinigame.timeLimit}
