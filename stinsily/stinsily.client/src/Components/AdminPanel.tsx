@@ -35,7 +35,7 @@ interface Item {
 
 interface MiniGame {
     miniGameID: number;
-    type: 'SpaceJetRepair' | 'LightsaberDuel' | 'SyndicateInfiltration';
+    type: 'SpaceJetRepair' | 'LightsaberDuel' | 'SyndicateInfiltration' | 'FinalDuel';
     title: string;
     description: string;
     difficulty: number;
@@ -584,6 +584,8 @@ const AdminPanel = () => {
 
     const getDifficultyDescription = (type: string): string => {
         switch (type) {
+            case 'FinalDuel':
+                return 'Affects Vader\'s attack speed and pattern complexity';
             case 'SyndicateInfiltration':
                 return 'Affects number of guards and data points';
             case 'LightsaberDuel':
@@ -1142,14 +1144,12 @@ const AdminPanel = () => {
                                 <label>Type</label>
                                 <select
                                     value={newMiniGame.type}
-                                    onChange={(e) => setNewMiniGame({
-                                        ...newMiniGame,
-                                        type: e.target.value as 'SpaceJetRepair' | 'LightsaberDuel' | 'SyndicateInfiltration'
-                                    })}
+                                    onChange={(e) => setNewMiniGame({...newMiniGame, type: e.target.value as "SpaceJetRepair" | "LightsaberDuel" | "SyndicateInfiltration" | "FinalDuel"})}
                                 >
                                     <option value="SpaceJetRepair">Space Jet Repair</option>
                                     <option value="LightsaberDuel">Lightsaber Duel</option>
                                     <option value="SyndicateInfiltration">Syndicate Infiltration</option>
+                                    <option value="FinalDuel">Final Duel</option>
                                 </select>
                             </div>
                             <div className={styles['form-group']}>
@@ -1213,12 +1213,13 @@ const AdminPanel = () => {
                                             value={game.type}
                                             onChange={(e) => updateMiniGame({
                                                 ...game,
-                                                type: e.target.value as 'SpaceJetRepair' | 'LightsaberDuel' | 'SyndicateInfiltration'
+                                                type: e.target.value as 'SpaceJetRepair' | 'LightsaberDuel' | 'SyndicateInfiltration' | 'FinalDuel'
                                             })}
                                         >
                                             <option value="SpaceJetRepair">Space Jet Repair</option>
                                             <option value="LightsaberDuel">Lightsaber Duel</option>
                                             <option value="SyndicateInfiltration">Syndicate Infiltration</option>
+                                            <option value="FinalDuel">Final Duel</option>
                                         </select>
                                     </div>
                                     <div className={styles['form-group']}>

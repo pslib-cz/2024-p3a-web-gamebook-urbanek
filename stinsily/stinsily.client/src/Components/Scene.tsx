@@ -4,6 +4,7 @@ import styles from '../Modules/Scene.module.css';
 import SpaceJetRepair from './SpaceJetRepair';
 import LightsaberDuel from './LightsaberDuel';
 import SyndicateInfiltration from './SyndicateInfiltration';
+import FinalDuel from '../Components/FinalDuel';
 
 interface Scene {
     sceneID: number;
@@ -690,6 +691,14 @@ const Scene = () => {
                     />
                 ) : activeMinigame.type === 'SyndicateInfiltration' ? (
                     <SyndicateInfiltration
+                        miniGameId={activeMinigame.miniGameID}
+                        difficulty={activeMinigame.difficulty}
+                        timeLimit={activeMinigame.timeLimit}
+                        onComplete={handleMinigameComplete}
+                        onClose={() => setActiveMinigame(null)}
+                    />
+                ) : activeMinigame.type === 'FinalDuel' ? (
+                    <FinalDuel
                         miniGameId={activeMinigame.miniGameID}
                         difficulty={activeMinigame.difficulty}
                         timeLimit={activeMinigame.timeLimit}
