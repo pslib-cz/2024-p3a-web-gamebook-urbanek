@@ -78,7 +78,6 @@ const Scene = () => {
                 return;
             }
 
-            console.log('Fetching scene...', sceneId);
             const response = await fetch(`${API_BASE_URL}/Scenes/${sceneId}`, {
                 method: 'GET',
                 headers: {
@@ -93,7 +92,6 @@ const Scene = () => {
             }
 
             const sceneData = await response.json();
-            console.log('Full scene data:', sceneData);
             
             if (sceneData.imageURL === undefined && sceneData.image !== undefined) {
                 sceneData.imageURL = sceneData.image;
@@ -111,7 +109,6 @@ const Scene = () => {
             
             if (optionsResponse.ok) {
                 const optionsData = await optionsResponse.json();
-                console.log('Scene options:', optionsData);
                 setSceneOptions(optionsData);
             }
             
@@ -213,12 +210,9 @@ const Scene = () => {
     };
 
     const handleOptionClick = async (option: DecisionOption) => {
-        console.log("Option clicked:", option);
         if (option.miniGameID) {
-            console.log("Has minigame ID:", option.miniGameID);
             setPendingChoice(option);
             const miniGame = await fetchMiniGame(option.miniGameID);
-            console.log("Fetched minigame:", miniGame);
             if (miniGame) {
                 setActiveMinigame(miniGame);
             }
@@ -447,12 +441,10 @@ const Scene = () => {
         if (!currentScene) return { backgroundColor: 'black' };
         
         const imageURL = currentScene.imageURL || currentScene.image; // Try both properties
-        console.log('Raw image URL:', imageURL);
         
         if (!imageURL) return { backgroundColor: 'black' };
         
         const fullImageUrl = `http://localhost:5193/uploads/${imageURL.split('/').pop()}`;
-        console.log('Full image URL:', fullImageUrl);
         
         return {
             backgroundImage: `url(${fullImageUrl})`,
@@ -526,14 +518,8 @@ const Scene = () => {
 
     const backgroundStyle = getBackgroundStyle();
 
-    console.log('Image URL:', currentScene.imageURL);
-    console.log('Background style:', backgroundStyle);
-
     // Add check for required items when displaying options
     const shouldShowOption = (option: DecisionOption) => {
-        console.log('Checking option:', option);
-        console.log('Player itemId:', playerStats.itemId);
-        
         if (!option.requiredItemID) return true;
         
         return playerStats.itemId === option.requiredItemID;
