@@ -22,7 +22,7 @@ Hra kombinuje tradiční vyprávění s interaktivními volbami a minihrami, kte
    - **Morální rozhodnutí**: Výběr mezi světlou a temnou stranou.
      
 **Více zakončení**:
-   - Hra má tři hlavní zakončení: cesta světla, cesta temnoty nebo neutrální zakončení.
+   - Hra má dvě zakončení: cesta světla, nebo neutrální zakončení.
      
 **Příběh inspirovaný Star Wars univerzem**:
    - Originální příběh propojený s tématy, místy a postavami Star Wars.
@@ -48,3 +48,21 @@ Kael Orinn se vydává na misi do ruin Jedi chrámu na planetě Kash Tennar, kde
 **Design**:
    - Vytvořit čisté a intuitivní uživatelské rozhraní (UI) pro hráče.
    - Podpora různých zařízení: mobilní telefony, tablety a PC.
+
+## Instalace a spuštění projektu
+### Backend (ASP.NET Core)
+```bash
+cd stinsily.server
+dotnet restore
+dotnet run
+```
+
+### Frontend (React + TypeScript)
+```bash
+cd stinsily.client
+npm install
+npm start
+```
+
+## Inspirace a zdroje
+Tento projekt je inspirován univerzem Star Wars a využívá vlastní interpretaci jeho světa v rámci fanouškovského gamebooku.
