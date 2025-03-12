@@ -2,9 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import styles from '../Modules/LightsaberDuel.module.css';
 
 interface Props {
-    miniGameId: number;
     difficulty: number;
-    timeLimit: number;
     onComplete: (success: boolean) => void;
     onClose: () => void;
 }

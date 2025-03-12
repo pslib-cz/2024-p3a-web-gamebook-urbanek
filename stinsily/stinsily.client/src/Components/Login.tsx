@@ -100,13 +100,6 @@ const Login = () => {
         }
     };
 
-    // Add a logout function to clear the token
-    const handleLogout = () => {
-        localStorage.removeItem('authToken');
-        localStorage.removeItem('currentUserEmail');
-        navigate('/login');
-    };
-
     return (
         <div className={styles['login-form']}>
             {error && <div className={error.includes('successful') ? styles['success-message'] : styles['error-message']}>

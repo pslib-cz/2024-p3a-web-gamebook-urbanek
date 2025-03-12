@@ -41,12 +41,10 @@ interface Item {
 }
 
 const Scene = () => {
-    const [userEmail, setUserEmail] = useState<string | null>(null);
     const { id } = useParams();
     const navigate = useNavigate();
     const [currentScene, setCurrentScene] = useState<Scene | null>(null);
     const [sceneOptions, setSceneOptions] = useState<DecisionOption[]>([]);
-    const [loading, setLoading] = useState(true);
     const [isTransitioning, setIsTransitioning] = useState(false);
     const [currentDescriptionIndex, setCurrentDescriptionIndex] = useState(0);
     const [playerStats, setPlayerStats] = useState<PlayerStats>({
@@ -117,10 +115,8 @@ const Scene = () => {
                 await fetchItemDetails(sceneData.itemID);
             }
 
-            setLoading(false);
         } catch (error) {
             console.error('Error fetching scene:', error);
-            setLoading(false);
         }
     }, [API_BASE_URL, navigate]);
 
@@ -332,7 +328,6 @@ const Scene = () => {
 
     const getCurrentUserEmail = () => {
         const email = localStorage.getItem('currentUserEmail');
-        setUserEmail(email);
         return email;
     };
 
@@ -661,7 +656,6 @@ const Scene = () => {
             {activeMinigame && (
                 activeMinigame.type === 'SpaceJetRepair' ? (
                     <SpaceJetRepair
-                        miniGameId={activeMinigame.miniGameID}
                         difficulty={activeMinigame.difficulty}
                         timeLimit={activeMinigame.timeLimit}
                         onComplete={handleMinigameComplete}
@@ -669,15 +663,12 @@ const Scene = () => {
                     />
                 ) : activeMinigame.type === 'LightsaberDuel' ? (
                     <LightsaberDuel
-                        miniGameId={activeMinigame.miniGameID}
                         difficulty={activeMinigame.difficulty}
-                        timeLimit={activeMinigame.timeLimit}
                         onComplete={handleMinigameComplete}
                         onClose={() => setActiveMinigame(null)}
                     />
                 ) : activeMinigame.type === 'SyndicateInfiltration' ? (
                     <SyndicateInfiltration
-                        miniGameId={activeMinigame.miniGameID}
                         difficulty={activeMinigame.difficulty}
                         timeLimit={activeMinigame.timeLimit}
                         onComplete={handleMinigameComplete}
@@ -689,7 +680,6 @@ const Scene = () => {
                         difficulty={activeMinigame.difficulty}
                         timeLimit={activeMinigame.timeLimit}
                         onComplete={handleMinigameComplete}
-                        onClose={() => setActiveMinigame(null)}
                     />
                 ) : null
             )}

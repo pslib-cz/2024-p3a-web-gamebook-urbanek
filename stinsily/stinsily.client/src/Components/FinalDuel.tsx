@@ -6,7 +6,6 @@ interface Props {
     difficulty: number;
     timeLimit: number;
     onComplete: (success: boolean) => void;
-    onClose: () => void;
 }
 
 interface Point {
@@ -14,7 +13,7 @@ interface Point {
     y: number;
 }
 
-const FinalDuel = ({ difficulty, onComplete, onClose }: Props) => {
+const FinalDuel = ({ difficulty, onComplete }: Props) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [playerHealth, setPlayerHealth] = useState(100);
     const [vaderHealth, setVaderHealth] = useState(200);

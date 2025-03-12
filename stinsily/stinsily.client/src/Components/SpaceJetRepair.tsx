@@ -16,14 +16,13 @@ interface Tool {
 }
 
 interface Props {
-    miniGameId: number;
     difficulty: number;
     timeLimit: number;
     onComplete: (success: boolean) => void;
     onClose: () => void;
 }
 
-const SpaceJetRepair = ({ miniGameId, difficulty, timeLimit, onComplete, onClose }: Props) => {
+const SpaceJetRepair = ({ difficulty, timeLimit, onComplete, onClose }: Props) => {
     const [selectedTool, setSelectedTool] = useState<Tool | null>(null);
     const [parts, setParts] = useState<Part[]>([]);
     const [tools] = useState<Tool[]>([

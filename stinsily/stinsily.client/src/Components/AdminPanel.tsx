@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import styles from '../Modules/AdminPanel.module.css';
 import { useNavigate } from "react-router-dom";
-import { FiHome, FiLink, FiBox, FiSettings } from 'react-icons/fi';
+import { FiHome, FiLink, FiBox } from 'react-icons/fi';
 import { FaGamepad } from "react-icons/fa";
 
 interface Scene {

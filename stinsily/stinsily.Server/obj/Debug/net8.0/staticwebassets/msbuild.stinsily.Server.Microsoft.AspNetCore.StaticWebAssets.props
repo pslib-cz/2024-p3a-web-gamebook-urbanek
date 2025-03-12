@@ -828,6 +828,24 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Uploads\scene_48_1b347117-312c-4cac-a621-dd57e4cf6dab.jpg'))</OriginalItemSpec>
     </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Uploads\scene_49_05f58b04-09ff-4e8b-ba3e-bd33d501347d.jpg'))">
+      <SourceType>Package</SourceType>
+      <SourceId>stinsily.Server</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/stinsily.Server</BasePath>
+      <RelativePath>Uploads/scene_49_05f58b04-09ff-4e8b-ba3e-bd33d501347d.jpg</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>sszjmoglo3</Fingerprint>
+      <Integrity>/LFhYD0DC+djUpWxgDHxvOAzigeLUwfDdnfAHwMkX7I=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Uploads\scene_49_05f58b04-09ff-4e8b-ba3e-bd33d501347d.jpg'))</OriginalItemSpec>
+    </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Uploads\scene_4_682b0e1e-904d-4cff-8774-0b0e9bf4023e.jpg'))">
       <SourceType>Package</SourceType>
       <SourceId>stinsily.Server</SourceId>
@@ -845,6 +863,24 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Uploads\scene_4_682b0e1e-904d-4cff-8774-0b0e9bf4023e.jpg'))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Uploads\scene_50_df179acd-22b0-4f86-af49-1588af12e5ee.jpg'))">
+      <SourceType>Package</SourceType>
+      <SourceId>stinsily.Server</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/stinsily.Server</BasePath>
+      <RelativePath>Uploads/scene_50_df179acd-22b0-4f86-af49-1588af12e5ee.jpg</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>ht4e5pv3mg</Fingerprint>
+      <Integrity>5ejXgRiNqP5WMGBNyKP4RlYh1IWb9aDwv3PQe5i9wng=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Uploads\scene_50_df179acd-22b0-4f86-af49-1588af12e5ee.jpg'))</OriginalItemSpec>
     </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Uploads\scene_5_b6cbb5f5-3543-483f-bae2-80b89c1d2819.jpg'))">
       <SourceType>Package</SourceType>

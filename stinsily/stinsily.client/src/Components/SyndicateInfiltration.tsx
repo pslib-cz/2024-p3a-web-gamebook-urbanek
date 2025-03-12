@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from 'react';
 import styles from '../Modules/SyndicateInfiltration.module.css';
 
 interface Props {
-    miniGameId: number;
     difficulty: number;
     timeLimit: number;
     onComplete: (success: boolean) => void;
@@ -36,9 +35,7 @@ const SyndicateInfiltration = ({ difficulty, timeLimit, onComplete, onClose }: P
     const [score, setScore] = useState(0);
     const [timeLeft, setTimeLeft] = useState(timeLimit);
     const [isHidden, setIsHidden] = useState(false);
-    const [canvasSize, setCanvasSize] = useState({ width: 800, height: 600 });
-    const [gameOver, setGameOver] = useState(false);
-    const [playerVelocity, setPlayerVelocity] = useState({ x: 0, y: 0 });
+    const [canvasSize] = useState({ width: 800, height: 600 });
     const [keysPressed, setKeysPressed] = useState<{ [key: string]: boolean }>({});
     const PLAYER_SPEED = 5;
     const REQUIRED_SCORE = 100; // Points needed to win
@@ -202,7 +199,6 @@ const SyndicateInfiltration = ({ difficulty, timeLimit, onComplete, onClose }: P
         }
 
         if (score >= REQUIRED_SCORE) {
-            setGameOver(true);
             onComplete(true);
             return;
         }
@@ -222,7 +218,6 @@ const SyndicateInfiltration = ({ difficulty, timeLimit, onComplete, onClose }: P
 
     // Update handleGameOver
     const handleGameOver = () => {
-        setGameOver(true);
         if (score >= REQUIRED_SCORE) {
             onComplete(true); // Success - continue to next scene
         } else {
