@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http.Features;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = "Data Source=/app/data/gamebook.db";
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? "Data Source=./data/gamebook.db";
 builder.Services.AddDbContext<AppDbContext>(options => 
     options.UseSqlite(connectionString), 
     ServiceLifetime.Scoped
@@ -81,12 +81,10 @@ app.UseAuthorization();
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-    var context = services.GetRequiredService<AppDbContext>();
-    context.Database.Migrate();
-
     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
     var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
 
+    // Only create admin role and user if they don't exist
     if (!roleManager.RoleExistsAsync("Admin").Result)
     {
         roleManager.CreateAsync(new IdentityRole("Admin")).Wait();

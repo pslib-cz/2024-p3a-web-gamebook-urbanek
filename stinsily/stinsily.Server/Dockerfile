@@ -34,13 +34,7 @@ RUN dotnet publish "stinsily.Server.csproj" -c Release -o /app/publish /p:UseApp
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-
-# Create data directory and copy the pre-populated database
-RUN mkdir -p /app/data
-COPY ["stinsily.Server/data/gamebook.db", "/app/data/"]
-
-# Set permissions for the data directory
-RUN chown -R $APP_UID:$APP_UID /app/data && \
-    chmod -R 755 /app/data
-
+# Copy the pre-initialized database
+COPY ["stinsily.Server/data/gamebook.db", "./data/"]
+ENV ConnectionStrings__DefaultConnection="Data Source=/app/data/gamebook.db"
 ENTRYPOINT ["dotnet", "stinsily.Server.dll"]
