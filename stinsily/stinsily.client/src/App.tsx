@@ -1,8 +1,8 @@
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
-import HomeScreen from './components/HomeScreen';
-import Login from './components/Login';
-import Scene from './components/Scene';
-import AdminPanel from './components/AdminPanel';
+import HomeScreen from './Components/HomeScreen';
+import Login from './Components/Login';
+import Scene from './Components/Scene';
+import AdminPanel from './Components/AdminPanel';
 
 const API_BASE_URL = 'http://localhost:5193';
 
