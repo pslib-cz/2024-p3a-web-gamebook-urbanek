@@ -27,7 +27,9 @@ COPY ["stinsily.Server/", "./"]
 RUN mkdir -p wwwroot data
 COPY --from=client-build /src/client/dist wwwroot/
 
-# Build the app
+# Create initial database
+RUN dotnet tool install --global dotnet-ef
+ENV PATH="${PATH}:/root/.dotnet/tools"
 RUN dotnet build "stinsily.Server.csproj" -c Release -o /app/build
 
 # Publish .NET server
@@ -40,8 +42,8 @@ WORKDIR /app
 ENV ASPNETCORE_URLS=http://+:8080
 ENV ASPNETCORE_ENVIRONMENT=Production
 COPY --from=publish /app/publish .
-RUN mkdir -p data
-# Create data directory with correct permissions
+# Ensure data directory exists
+RUN mkdir -p /app/data
 RUN chown -R $APP_UID:$APP_UID /app
 USER $APP_UID
 ENTRYPOINT ["dotnet", "stinsily.Server.dll"]

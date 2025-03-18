@@ -6,7 +6,8 @@ using Microsoft.AspNetCore.Http.Features;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = "Data Source=/app/data/gamebook.db";
+// Use relative path for the database
+var connectionString = "Data Source=./data/gamebook.db";
 builder.Services.AddDbContext<AppDbContext>(options => 
     options.UseSqlite(connectionString), 
     ServiceLifetime.Scoped
@@ -71,6 +72,7 @@ app.UseCors("AllowReactApp");
 app.UseAuthentication();
 app.UseAuthorization();
 
+// Always try to create the database if it doesn't exist
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -78,17 +80,19 @@ using (var scope = app.Services.CreateScope())
     
     try
     {
-        // Only create database if it doesn't exist
+        // Ensure database is created
         context.Database.EnsureCreated();
 
         var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
         var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
 
+        // Add Admin role if it doesn't exist
         if (!roleManager.RoleExistsAsync("Admin").Result)
         {
             roleManager.CreateAsync(new IdentityRole("Admin")).Wait();
         }
 
+        // Add admin user if it doesn't exist
         var adminEmail = "admin@admin.com";
         var adminUser = userManager.FindByEmailAsync(adminEmail).Result;
         if (adminUser == null)
@@ -105,8 +109,8 @@ using (var scope = app.Services.CreateScope())
     }
     catch (Exception ex)
     {
-        // Log the error but don't prevent the application from starting
         Console.WriteLine($"An error occurred while setting up the database: {ex.Message}");
+        // Don't throw during startup in production
     }
 }
 
