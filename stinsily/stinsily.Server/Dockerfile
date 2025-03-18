@@ -7,22 +7,28 @@ WORKDIR /app
 EXPOSE 8080
 EXPOSE 8081
 
+# Build stage for client
+FROM node:20-alpine AS client-build
+WORKDIR /src/stinsily.client
+COPY ["stinsily.client/package*.json", "./"]
+RUN npm install
+COPY ["stinsily.client/", "./"]
+RUN npm run build
 
-# This stage is used to build the service project
+# Build stage for server
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["stinsily.Server/stinsily.Server.csproj", "stinsily.Server/"]
 COPY ["stinsily.client/stinsily.client.esproj", "stinsily.client/"]
 RUN dotnet restore "./stinsily.Server/stinsily.Server.csproj"
 COPY . .
+COPY --from=client-build /src/stinsily.client/dist /src/stinsily.Server/wwwroot
 WORKDIR "/src/stinsily.Server"
-RUN dotnet build "./stinsily.Server.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet build "./stinsily.Server.csproj" -c Release -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage
 FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./stinsily.Server.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./stinsily.Server.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 # This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
 FROM base AS final
