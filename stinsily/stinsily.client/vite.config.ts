@@ -1,34 +1,40 @@
-import { fileURLToPath, URL } from 'node:url';
-
 import { defineConfig } from 'vite';
-import plugin from '@vitejs/plugin-react';
+import react from '@vitejs/plugin-react';
+import { fileURLToPath } from 'url';
+import { dirname, resolve } from 'path';
 import fs from 'fs';
-import path from 'path';
+import { spawnSync } from 'child_process';
 import { env } from 'process';
 
-// Only setup certificates for development
-const isProd = process.env.NODE_ENV === 'production';
-let httpsConfig = {};
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
-if (!isProd) {
-    const baseFolder =
-        env.APPDATA !== undefined && env.APPDATA !== ''
-            ? `${env.APPDATA}/ASP.NET/https`
-            : `${env.HOME}/.aspnet/https`;
+const baseFolder =
+    env.APPDATA !== undefined && env.APPDATA !== ''
+        ? `${env.APPDATA}/ASP.NET/https`
+        : `${env.HOME}/.aspnet/https`;
 
-    const certificateName = "stinsily.client";
-    const certFilePath = path.join(baseFolder, `${certificateName}.pem`);
-    const keyFilePath = path.join(baseFolder, `${certificateName}.key`);
+const certificateName = "stinsily.client";
+const certFilePath = resolve(baseFolder, `${certificateName}.pem`);
+const keyFilePath = resolve(baseFolder, `${certificateName}.key`);
 
-    if (!fs.existsSync(baseFolder)) {
-        fs.mkdirSync(baseFolder, { recursive: true });
-    }
+if (!fs.existsSync(baseFolder)) {
+    fs.mkdirSync(baseFolder);
+}
 
-    if (fs.existsSync(certFilePath) && fs.existsSync(keyFilePath)) {
-        httpsConfig = {
-            key: fs.readFileSync(keyFilePath),
-            cert: fs.readFileSync(certFilePath),
-        };
+if (!fs.existsSync(certFilePath) || !fs.existsSync(keyFilePath)) {
+    const result = spawnSync('dotnet', [
+        'dev-certs',
+        'https',
+        '--export-path',
+        certFilePath,
+        '--format',
+        'Pem',
+        '--no-password',
+    ], { stdio: 'inherit' });
+    
+    if (result.status !== 0) {
+        throw new Error("Could not create certificate.");
     }
 }
 
@@ -37,10 +43,10 @@ const target = env.ASPNETCORE_HTTPS_PORT ? `https://localhost:${env.ASPNETCORE_H
 
 // https://vitejs.dev/config/
 export default defineConfig({
-    plugins: [plugin()],
+    plugins: [react()],
     resolve: {
         alias: {
-            '@': fileURLToPath(new URL('./src', import.meta.url))
+            '@': resolve(__dirname, './src')
         }
     },
     server: {
@@ -51,6 +57,9 @@ export default defineConfig({
             }
         },
         port: 50701,
-        https: httpsConfig
+        https: {
+            key: fs.readFileSync(keyFilePath),
+            cert: fs.readFileSync(certFilePath),
+        }
     }
 })

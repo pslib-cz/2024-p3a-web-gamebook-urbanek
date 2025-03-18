@@ -1,10 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import styles from '../Modules/Scene.module.css';
-import SpaceJetRepair from './SpaceJetRepair';
-import LightsaberDuel from './LightsaberDuel';
-import SyndicateInfiltration from './SyndicateInfiltration';
-import FinalDuel from '../Components/FinalDuel';
+import SpaceJetRepair from '../components/SpaceJetRepair';
+import LightsaberDuel from '../components/LightsaberDuel';
+import SyndicateInfiltration from '../components/SyndicateInfiltration';
+import FinalDuel from '../components/FinalDuel';
 
 interface Scene {
     sceneID: number;
