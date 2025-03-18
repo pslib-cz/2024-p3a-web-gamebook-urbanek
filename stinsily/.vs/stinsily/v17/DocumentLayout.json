@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "C:\\Users\\adamu\\OneDrive\\Dokumenty\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|c:\\users\\adamu\\onedrive\\dokumenty\\github\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.server\\dockerfile||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|solutionrelative:stinsily.server\\dockerfile||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|c:\\users\\adamu\\onedrive\\dokumenty\\github\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.server\\data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{F2611C35-82AC-4678-9A7A-D6ACB815BB39}|stinsily.Server\\stinsily.Server.csproj|solutionrelative:stinsily.server\\data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -70,7 +74,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Bookmark",
@@ -78,7 +82,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
+              "Title": "Dockerfile",
+              "DocumentMoniker": "C:\\Users\\adamu\\OneDrive\\Dokumenty\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Dockerfile",
+              "RelativeDocumentMoniker": "stinsily.Server\\Dockerfile",
+              "ToolTip": "C:\\Users\\adamu\\OneDrive\\Dokumenty\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Dockerfile",
+              "RelativeToolTip": "stinsily.Server\\Dockerfile",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-03-18T19:28:08.361Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "appsettings.json",
               "DocumentMoniker": "C:\\Users\\adamu\\OneDrive\\Dokumenty\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\appsettings.json",
               "RelativeDocumentMoniker": "stinsily.Server\\appsettings.json",
@@ -90,7 +107,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "AppDbContext.cs",
               "DocumentMoniker": "C:\\Users\\adamu\\OneDrive\\Dokumenty\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Data\\AppDbContext.cs",
               "RelativeDocumentMoniker": "stinsily.Server\\Data\\AppDbContext.cs",
@@ -103,7 +120,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\adamu\\OneDrive\\Dokumenty\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Program.cs",
               "RelativeDocumentMoniker": "stinsily.Server\\Program.cs",
@@ -111,12 +128,11 @@
               "RelativeToolTip": "stinsily.Server\\Program.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAaAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-22T11:23:16.895Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-01-22T11:23:16.895Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "ChoicesConnectionsController.cs",
               "DocumentMoniker": "C:\\Users\\adamu\\OneDrive\\Dokumenty\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Controllers\\ChoicesConnectionsController.cs",
               "RelativeDocumentMoniker": "stinsily.Server\\Controllers\\ChoicesConnectionsController.cs",
@@ -128,7 +144,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "ChoicesConnections.cs",
               "DocumentMoniker": "C:\\Users\\adamu\\OneDrive\\Dokumenty\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Models\\ChoicesConnections.cs",
               "RelativeDocumentMoniker": "stinsily.Server\\Models\\ChoicesConnections.cs",
@@ -140,7 +156,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 14,
               "Title": "ItemsController.cs",
               "DocumentMoniker": "C:\\Users\\adamu\\OneDrive\\Dokumenty\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Controllers\\ItemsController.cs",
               "RelativeDocumentMoniker": "stinsily.Server\\Controllers\\ItemsController.cs",
@@ -152,7 +168,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 7,
               "Title": "Items.cs",
               "DocumentMoniker": "C:\\Users\\adamu\\OneDrive\\Dokumenty\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Models\\Items.cs",
               "RelativeDocumentMoniker": "stinsily.Server\\Models\\Items.cs",
@@ -164,7 +180,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 13,
               "Title": "MiniGamesController.cs",
               "DocumentMoniker": "C:\\Users\\adamu\\OneDrive\\Dokumenty\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Controllers\\MiniGamesController.cs",
               "RelativeDocumentMoniker": "stinsily.Server\\Controllers\\MiniGamesController.cs",
@@ -176,7 +192,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 15,
               "Title": "MiniGames.cs",
               "DocumentMoniker": "C:\\Users\\adamu\\OneDrive\\Dokumenty\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Models\\MiniGames.cs",
               "RelativeDocumentMoniker": "stinsily.Server\\Models\\MiniGames.cs",
@@ -188,7 +204,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 12,
               "Title": "PlayersController.cs",
               "DocumentMoniker": "C:\\Users\\adamu\\OneDrive\\Dokumenty\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Controllers\\PlayersController.cs",
               "RelativeDocumentMoniker": "stinsily.Server\\Controllers\\PlayersController.cs",
@@ -200,7 +216,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "Players.cs",
               "DocumentMoniker": "C:\\Users\\adamu\\OneDrive\\Dokumenty\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Models\\Players.cs",
               "RelativeDocumentMoniker": "stinsily.Server\\Models\\Players.cs",
@@ -212,7 +228,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 8,
               "Title": "ScenesController.cs",
               "DocumentMoniker": "C:\\Users\\adamu\\OneDrive\\Dokumenty\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Controllers\\ScenesController.cs",
               "RelativeDocumentMoniker": "stinsily.Server\\Controllers\\ScenesController.cs",
@@ -224,7 +240,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 9,
               "Title": "Scenes.cs",
               "DocumentMoniker": "C:\\Users\\adamu\\OneDrive\\Dokumenty\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Models\\Scenes.cs",
               "RelativeDocumentMoniker": "stinsily.Server\\Models\\Scenes.cs",
@@ -236,7 +252,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 11,
               "Title": "UsersController.cs",
               "DocumentMoniker": "C:\\Users\\adamu\\OneDrive\\Dokumenty\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Controllers\\UsersController.cs",
               "RelativeDocumentMoniker": "stinsily.Server\\Controllers\\UsersController.cs",
@@ -248,7 +264,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 10,
               "Title": "Users.cs",
               "DocumentMoniker": "C:\\Users\\adamu\\OneDrive\\Dokumenty\\GitHub\\2024-p3a-web-gamebook-urbanek\\stinsily\\stinsily.Server\\Models\\Users.cs",
               "RelativeDocumentMoniker": "stinsily.Server\\Models\\Users.cs",
