@@ -218,8 +218,8 @@ namespace stinsily.Server.Controllers
                 scene.Title = request.Title;
                 scene.Description = request.Description;
                 scene.ItemID = request.ItemID;
-
-                if (request.Image != null && request.Image.Length > 0)
+                // Skip image upload in Docker environment
+                if (request.Image != null && request.Image.Length > 0 && Environment.GetEnvironmentVariable("DOCKER_BUILD")?.ToLower() != "true")
                 {
                     if (!string.IsNullOrEmpty(scene.ImageURL))
                     {

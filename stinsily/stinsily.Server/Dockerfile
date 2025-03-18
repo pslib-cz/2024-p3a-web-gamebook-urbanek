@@ -32,5 +32,6 @@ RUN dotnet publish "stinsily.Server.csproj" -c Release -o /app/publish /p:UseApp
 # Final stage
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
+ENV DOCKER_BUILD=true
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "stinsily.Server.dll"]
