@@ -10,6 +10,7 @@ EXPOSE 8081
 # Build React client
 FROM node:20-alpine AS client-build
 WORKDIR /src/client
+ENV DOCKER_BUILD=true
 COPY ["stinsily.client/package*.json", "./"]
 RUN npm install
 COPY ["stinsily.client/", "./"]
