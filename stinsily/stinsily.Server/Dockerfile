@@ -12,6 +12,7 @@ FROM node:20-alpine AS client-build
 WORKDIR /src
 COPY ["stinsily.client/package*.json", "stinsily.client/"]
 WORKDIR /src/stinsily.client
+ENV NODE_ENV=production
 RUN npm install
 COPY ["stinsily.client/", "./"]
 RUN npm run build
