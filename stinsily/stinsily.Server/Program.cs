@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http.Features;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = "Data Source=./data/gamebook.db";
+var connectionString = "Data Source=/app/data/gamebook.db";
 builder.Services.AddDbContext<AppDbContext>(options => 
     options.UseSqlite(connectionString), 
     ServiceLifetime.Scoped
@@ -82,27 +82,38 @@ using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     var context = services.GetRequiredService<AppDbContext>();
-
-    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-    var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
-
-    if (!roleManager.RoleExistsAsync("Admin").Result)
+    
+    try
     {
-        roleManager.CreateAsync(new IdentityRole("Admin")).Wait();
-    }
+        // Only create database if it doesn't exist
+        context.Database.EnsureCreated();
 
-    var adminEmail = "admin@admin.com";
-    var adminUser = userManager.FindByEmailAsync(adminEmail).Result;
-    if (adminUser == null)
-    {
-        adminUser = new IdentityUser
+        var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+        var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
+
+        if (!roleManager.RoleExistsAsync("Admin").Result)
         {
-            UserName = adminEmail,
-            Email = adminEmail,
-            EmailConfirmed = true
-        };
-        userManager.CreateAsync(adminUser, "adminPassword123").Wait();
-        userManager.AddToRoleAsync(adminUser, "Admin").Wait();
+            roleManager.CreateAsync(new IdentityRole("Admin")).Wait();
+        }
+
+        var adminEmail = "admin@admin.com";
+        var adminUser = userManager.FindByEmailAsync(adminEmail).Result;
+        if (adminUser == null)
+        {
+            adminUser = new IdentityUser
+            {
+                UserName = adminEmail,
+                Email = adminEmail,
+                EmailConfirmed = true
+            };
+            userManager.CreateAsync(adminUser, "adminPassword123").Wait();
+            userManager.AddToRoleAsync(adminUser, "Admin").Wait();
+        }
+    }
+    catch (Exception ex)
+    {
+        // Log the error but don't prevent the application from starting
+        Console.WriteLine($"An error occurred while setting up the database: {ex.Message}");
     }
 }
 

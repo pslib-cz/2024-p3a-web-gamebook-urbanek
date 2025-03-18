@@ -24,8 +24,7 @@ RUN dotnet restore
 COPY ["stinsily.Server/", "./"]
 RUN mkdir -p wwwroot
 COPY --from=client-build /src/client/dist wwwroot/
-# Copy the pre-built database file
-COPY ["stinsily.Server/data/gamebook.db", "./data/"]
+RUN mkdir -p data
 RUN dotnet build "stinsily.Server.csproj" -c Release -o /app/build
 
 # Publish .NET server
@@ -36,6 +35,5 @@ RUN dotnet publish "stinsily.Server.csproj" -c Release -o /app/publish /p:UseApp
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-# Copy the database file to the final image
-COPY --from=build /src/data/gamebook.db ./data/
+RUN mkdir -p data
 ENTRYPOINT ["dotnet", "stinsily.Server.dll"]
