@@ -26,7 +26,8 @@ RUN dotnet restore
 COPY ["stinsily.Server/", "./"]
 RUN mkdir -p wwwroot data
 COPY --from=client-build /src/client/dist wwwroot/
-RUN mkdir -p data
+
+# Build the app
 RUN dotnet build "stinsily.Server.csproj" -c Release -o /app/build
 
 # Publish .NET server
@@ -39,7 +40,8 @@ WORKDIR /app
 ENV ASPNETCORE_URLS=http://+:8080
 ENV ASPNETCORE_ENVIRONMENT=Production
 COPY --from=publish /app/publish .
-COPY --from=build /app/data/gamebook.db ./data/
+RUN mkdir -p data
+# Create data directory with correct permissions
 RUN chown -R $APP_UID:$APP_UID /app
 USER $APP_UID
 ENTRYPOINT ["dotnet", "stinsily.Server.dll"]
