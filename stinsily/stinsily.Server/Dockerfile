@@ -13,8 +13,12 @@ WORKDIR /src
 COPY ["stinsily.client/package*.json", "stinsily.client/"]
 WORKDIR /src/stinsily.client
 ENV NODE_ENV=production
+# Install dependencies and TypeScript globally
+RUN npm install -g typescript
 RUN npm install
 COPY ["stinsily.client/", "./"]
+# Install types for Node.js
+RUN npm install --save-dev @types/node
 RUN npm run build
 
 # Build stage for server
