@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("stinsily.Server")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+87decffe1d80a4a3bd5018046d994b43735e5d23")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1431bb331fa98cedba4042973c4204f034fa5b86")]
 [assembly: System.Reflection.AssemblyProductAttribute("stinsily.Server")]
 [assembly: System.Reflection.AssemblyTitleAttribute("stinsily.Server")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

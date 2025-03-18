@@ -2,13 +2,17 @@
 using stinsily.Server.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using System.IO;
 
 namespace stinsily.Server.Data
 {
     public class AppDbContext : IdentityDbContext<IdentityUser>
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+        private readonly IConfiguration _configuration;
+
+        public AppDbContext(DbContextOptions<AppDbContext> options, IConfiguration configuration) : base(options)
         {
+            _configuration = configuration;
         }
 
         public new DbSet<Users> Users { get; set; }
@@ -17,6 +21,20 @@ namespace stinsily.Server.Data
         public DbSet<Items> Items { get; set; }
         public DbSet<ChoicesConnections> ChoicesConnections { get; set; }
         public DbSet<MiniGames> MiniGames { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                var dbPath = Path.Combine(Directory.GetCurrentDirectory(), "Data", "./data/gamebook.db");
+                Console.WriteLine($"Database path: {dbPath}");
+
+                optionsBuilder
+                    .UseSqlite($"Data Source={dbPath}")
+                    .EnableSensitiveDataLogging()
+                    .LogTo(Console.WriteLine);
+            }
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -55,4 +73,4 @@ namespace stinsily.Server.Data
             }
         }
     }
-}
+} 
