@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http.Features;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = "Data Source=gamebook.db";
+var connectionString = "Data Source=./data/gamebook.db";
 builder.Services.AddDbContext<AppDbContext>(options => 
     options.UseSqlite(connectionString), 
     ServiceLifetime.Scoped
