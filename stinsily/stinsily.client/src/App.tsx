@@ -4,7 +4,8 @@ import Login from './Components/Login';
 import Scene from './Components/Scene';
 import AdminPanel from './Components/AdminPanel';
 
-const API_BASE_URL = 'http://localhost:5193';
+// Use relative URL for API endpoints
+const API_BASE_URL = '';
 
 // Helper function to check if user is authenticated
 const isAuthenticated = () => {

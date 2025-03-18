@@ -6,19 +6,11 @@ using Microsoft.AspNetCore.Http.Features;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Check if we're in database initialization mode
-var isInitializingDb = args.Length > 0 && args[0] == "--initialize-db";
-
 var connectionString = "Data Source=/app/data/gamebook.db";
 builder.Services.AddDbContext<AppDbContext>(options => 
-{
-    options.UseSqlite(connectionString);
-    if (!isInitializingDb)
-    {
-        // Set read-only mode for runtime
-        options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-    }
-}, ServiceLifetime.Scoped);
+    options.UseSqlite(connectionString), 
+    ServiceLifetime.Scoped
+);
 
 builder.Services.AddControllers();
 
@@ -48,16 +40,9 @@ builder.Services.AddCors(options =>
         builder =>
         {
             builder
-                .WithOrigins(
-                    "https://localhost:50701",
-                    "http://localhost:50701",
-                    "http://localhost:5173"
-                )
+                .AllowAnyOrigin()
                 .AllowAnyMethod()
-                .AllowAnyHeader()
-                .AllowCredentials()
-                .WithExposedHeaders("Content-Disposition")
-                .SetIsOriginAllowed(_ => true);
+                .AllowAnyHeader();
         });
 });
 
@@ -79,27 +64,31 @@ builder.Services.Configure<FormOptions>(options =>
 
 var app = builder.Build();
 
-// Database initialization during build
-if (isInitializingDb)
+app.UseStaticFiles();
+
+app.UseRouting();
+app.UseCors("AllowReactApp");
+app.UseAuthentication();
+app.UseAuthorization();
+
+using (var scope = app.Services.CreateScope())
 {
-    using (var scope = app.Services.CreateScope())
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<AppDbContext>();
+    
+    try
     {
-        var services = scope.ServiceProvider;
-        var context = services.GetRequiredService<AppDbContext>();
-        
-        // Create database and schema
+        // Only create database if it doesn't exist
         context.Database.EnsureCreated();
 
         var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
         var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
 
-        // Create admin role
         if (!roleManager.RoleExistsAsync("Admin").Result)
         {
             roleManager.CreateAsync(new IdentityRole("Admin")).Wait();
         }
 
-        // Create admin user
         var adminEmail = "admin@admin.com";
         var adminUser = userManager.FindByEmailAsync(adminEmail).Result;
         if (adminUser == null)
@@ -113,18 +102,13 @@ if (isInitializingDb)
             userManager.CreateAsync(adminUser, "adminPassword123").Wait();
             userManager.AddToRoleAsync(adminUser, "Admin").Wait();
         }
-
-        // Exit after database initialization
-        Environment.Exit(0);
+    }
+    catch (Exception ex)
+    {
+        // Log the error but don't prevent the application from starting
+        Console.WriteLine($"An error occurred while setting up the database: {ex.Message}");
     }
 }
-
-// Normal runtime configuration
-app.UseStaticFiles();
-app.UseRouting();
-app.UseCors("AllowReactApp");
-app.UseAuthentication();
-app.UseAuthorization();
 
 if (app.Environment.IsDevelopment())
 {
@@ -133,6 +117,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.MapCustomIdentityApi<IdentityUser>();
+
 app.MapControllers();
+
+// Add SPA fallback to handle client-side routing
+app.MapFallbackToFile("index.html");
 
 app.Run();

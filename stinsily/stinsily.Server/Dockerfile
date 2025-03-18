@@ -14,22 +14,20 @@ RUN npm install
 COPY ["stinsily.client/", "./"]
 RUN npm run build
 
-# Build .NET server and prepare database
+# Build .NET server and create database
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
+ENV DOCKER_BUILD=true
+ENV ASPNETCORE_ENVIRONMENT=Production
 COPY ["stinsily.Server/stinsily.Server.csproj", "./"]
 # Remove client project reference for Docker build
 RUN sed -i '/<ProjectReference.*stinsily.client.esproj/,/<\/ProjectReference>/d' stinsily.Server.csproj
 RUN dotnet restore
 COPY ["stinsily.Server/", "./"]
-RUN mkdir -p wwwroot
+RUN mkdir -p wwwroot data
 COPY --from=client-build /src/client/dist wwwroot/
-
-# Create and initialize the database during build
-RUN mkdir -p /app/data && \
-    dotnet build "stinsily.Server.csproj" -c Release -o /app/build && \
-    cd /app/build && \
-    dotnet stinsily.Server.dll --initialize-db
+RUN mkdir -p data
+RUN dotnet build "stinsily.Server.csproj" -c Release -o /app/build
 
 # Publish .NET server
 FROM build AS publish
@@ -38,6 +36,10 @@ RUN dotnet publish "stinsily.Server.csproj" -c Release -o /app/publish /p:UseApp
 # Final stage
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
+ENV ASPNETCORE_URLS=http://+:8080
+ENV ASPNETCORE_ENVIRONMENT=Production
 COPY --from=publish /app/publish .
-COPY --from=build /app/data /app/data
+COPY --from=build /app/data/gamebook.db ./data/
+RUN chown -R $APP_UID:$APP_UID /app
+USER $APP_UID
 ENTRYPOINT ["dotnet", "stinsily.Server.dll"]
