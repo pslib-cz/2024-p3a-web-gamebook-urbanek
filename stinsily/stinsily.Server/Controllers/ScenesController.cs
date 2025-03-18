@@ -17,6 +17,7 @@ namespace stinsily.Server.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IWebHostEnvironment _environment;
         private readonly ILogger<ScenesController> _logger;
+        private readonly bool _isDockerEnvironment;
 
         public ScenesController(AppDbContext context, UserManager<IdentityUser> userManager, IWebHostEnvironment environment, ILogger<ScenesController> logger)
         {
@@ -24,12 +25,7 @@ namespace stinsily.Server.Controllers
             _userManager = userManager;
             _environment = environment;
             _logger = logger;
-
-            var uploadsPath = Path.Combine(_environment.WebRootPath, "Uploads");
-            if (!Directory.Exists(uploadsPath))
-            {
-                Directory.CreateDirectory(uploadsPath);
-            }
+            _isDockerEnvironment = Environment.GetEnvironmentVariable("DOCKER_BUILD")?.ToLower() == "true";
         }
 
         [HttpGet]
@@ -218,8 +214,9 @@ namespace stinsily.Server.Controllers
                 scene.Title = request.Title;
                 scene.Description = request.Description;
                 scene.ItemID = request.ItemID;
+
                 // Skip image upload in Docker environment
-                if (request.Image != null && request.Image.Length > 0 && Environment.GetEnvironmentVariable("DOCKER_BUILD")?.ToLower() != "true")
+                if (request.Image != null && request.Image.Length > 0 && !_isDockerEnvironment)
                 {
                     if (!string.IsNullOrEmpty(scene.ImageURL))
                     {
@@ -230,17 +227,7 @@ namespace stinsily.Server.Controllers
                         }
                     }
 
-                    var uploadsPath = Path.Combine(_environment.WebRootPath, "uploads");
-                    Directory.CreateDirectory(uploadsPath);
-
                     var fileName = $"scene_{scene.SceneID}_{Guid.NewGuid()}.jpg";
-                    var filePath = Path.Combine(uploadsPath, fileName);
-
-                    using (var fileStream = System.IO.File.Create(filePath))
-                    {
-                        await request.Image.CopyToAsync(fileStream);
-                    }
-
                     scene.ImageURL = $"/uploads/{fileName}";
                 }
 
@@ -280,37 +267,12 @@ namespace stinsily.Server.Controllers
                     ImageURL = string.Empty,
                 };
 
-                if (request.Image != null && request.Image.Length > 0)
+                if (request.Image != null && request.Image.Length > 0 && !_isDockerEnvironment)
                 {
                     _logger.LogInformation($"Processing image: {request.Image.FileName}, Size: {request.Image.Length} bytes");
-
-                    try
-                    {
-                        var uploadsFolder = Path.Combine(_environment.WebRootPath, "uploads");
-                        if (!Directory.Exists(uploadsFolder))
-                        {
-                            Directory.CreateDirectory(uploadsFolder);
-                            _logger.LogInformation($"Created uploads directory: {uploadsFolder}");
-                        }
-
-                        var uniqueFileName = $"{Guid.NewGuid()}{Path.GetExtension(request.Image.FileName)}";
-                        var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                        _logger.LogInformation($"Saving file to: {filePath}");
-
-                        using (var fileStream = new FileStream(filePath, FileMode.Create))
-                        {
-                            await request.Image.CopyToAsync(fileStream);
-                        }
-
-                        scene.ImageURL = $"/uploads/{uniqueFileName}";
-                        _logger.LogInformation($"File saved successfully. URL: {scene.ImageURL}");
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.LogError($"Error saving file: {ex.Message}");
-                        _logger.LogError($"Stack trace: {ex.StackTrace}");
-                        return StatusCode(500, $"Error saving image: {ex.Message}");
-                    }
+                    var uniqueFileName = $"{Guid.NewGuid()}{Path.GetExtension(request.Image.FileName)}";
+                    scene.ImageURL = $"/uploads/{uniqueFileName}";
+                    _logger.LogInformation($"Image URL set to: {scene.ImageURL}");
                 }
 
                 try
@@ -466,6 +428,11 @@ namespace stinsily.Server.Controllers
                     return Unauthorized();
                 }
 
+                if (_isDockerEnvironment)
+                {
+                    return BadRequest("Image uploads are not supported in Docker environment");
+                }
+
                 var scene = await _context.Scenes.FindAsync(id);
                 if (scene == null)
                 {
@@ -484,18 +451,7 @@ namespace stinsily.Server.Controllers
                         }
                     }
 
-                    // Save new image
-                    var uploadsPath = Path.Combine(_environment.WebRootPath, "uploads");
-                    Directory.CreateDirectory(uploadsPath);
-
                     var fileName = $"scene_{scene.SceneID}_{Guid.NewGuid()}.jpg";
-                    var filePath = Path.Combine(uploadsPath, fileName);
-
-                    using (var fileStream = System.IO.File.Create(filePath))
-                    {
-                        await image.CopyToAsync(fileStream);
-                    }
-
                     scene.ImageURL = $"/uploads/{fileName}";
                     _context.Update(scene);
                     await _context.SaveChangesAsync();
