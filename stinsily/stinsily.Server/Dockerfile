@@ -9,19 +9,19 @@ EXPOSE 8081
 FROM node:20-alpine AS client-build
 WORKDIR /src/client
 ENV DOCKER_BUILD=true
-COPY ["../stinsily.client/package*.json", "./"]
+COPY ["stinsily.client/package*.json", "./"]
 RUN npm install
-COPY ["../stinsily.client/", "./"]
+COPY ["stinsily.client/", "./"]
 RUN npm run build
 
 # Build .NET server
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
-COPY ["stinsily.Server.csproj", "./"]
+COPY ["stinsily.Server/stinsily.Server.csproj", "./"]
 # Remove client project reference for Docker build
 RUN sed -i '/<ProjectReference.*stinsily.client.esproj/,/<\/ProjectReference>/d' stinsily.Server.csproj
 RUN dotnet restore
-COPY . .
+COPY ["stinsily.Server/", "./"]
 RUN mkdir -p wwwroot
 COPY --from=client-build /src/client/dist wwwroot/
 RUN dotnet build "stinsily.Server.csproj" -c Release -o /app/build
