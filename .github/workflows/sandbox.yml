@@ -21,8 +21,8 @@ jobs:
       - name: Sestavení a nahrání kontejnerového obrazu
         uses: docker/build-push-action@v6
         with:
-          context: . # změň cestu podle toho, kde se nachází složka s řešením (soubor .sln)
-          file: ./Dockerfile # změň cestu podle toho, kde se nachází Dockerfile
+          context: ./stinsily # změň cestu podle toho, kde se nachází složka s řešením (soubor .sln)
+          file: ./stinsily/stinsily.Server/Dockerfile # změň cestu podle toho, kde se nachází Dockerfile
           push: true
           tags: registry.pslib.cloud/sandbox/app-46:latest
           cache-from: type=gha
