@@ -6,11 +6,19 @@ using Microsoft.AspNetCore.Http.Features;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Check if we're in database initialization mode
+var isInitializingDb = args.Length > 0 && args[0] == "--initialize-db";
+
 var connectionString = "Data Source=/app/data/gamebook.db";
 builder.Services.AddDbContext<AppDbContext>(options => 
-    options.UseSqlite(connectionString), 
-    ServiceLifetime.Scoped
-);
+{
+    options.UseSqlite(connectionString);
+    if (!isInitializingDb)
+    {
+        // Set read-only mode for runtime
+        options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+    }
+}, ServiceLifetime.Scoped);
 
 builder.Services.AddControllers();
 
@@ -71,31 +79,27 @@ builder.Services.Configure<FormOptions>(options =>
 
 var app = builder.Build();
 
-app.UseStaticFiles();
-
-app.UseRouting();
-app.UseCors("AllowReactApp");
-app.UseAuthentication();
-app.UseAuthorization();
-
-using (var scope = app.Services.CreateScope())
+// Database initialization during build
+if (isInitializingDb)
 {
-    var services = scope.ServiceProvider;
-    var context = services.GetRequiredService<AppDbContext>();
-    
-    try
+    using (var scope = app.Services.CreateScope())
     {
-        // Only create database if it doesn't exist
+        var services = scope.ServiceProvider;
+        var context = services.GetRequiredService<AppDbContext>();
+        
+        // Create database and schema
         context.Database.EnsureCreated();
 
         var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
         var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
 
+        // Create admin role
         if (!roleManager.RoleExistsAsync("Admin").Result)
         {
             roleManager.CreateAsync(new IdentityRole("Admin")).Wait();
         }
 
+        // Create admin user
         var adminEmail = "admin@admin.com";
         var adminUser = userManager.FindByEmailAsync(adminEmail).Result;
         if (adminUser == null)
@@ -109,13 +113,18 @@ using (var scope = app.Services.CreateScope())
             userManager.CreateAsync(adminUser, "adminPassword123").Wait();
             userManager.AddToRoleAsync(adminUser, "Admin").Wait();
         }
-    }
-    catch (Exception ex)
-    {
-        // Log the error but don't prevent the application from starting
-        Console.WriteLine($"An error occurred while setting up the database: {ex.Message}");
+
+        // Exit after database initialization
+        Environment.Exit(0);
     }
 }
+
+// Normal runtime configuration
+app.UseStaticFiles();
+app.UseRouting();
+app.UseCors("AllowReactApp");
+app.UseAuthentication();
+app.UseAuthorization();
 
 if (app.Environment.IsDevelopment())
 {
@@ -124,7 +133,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.MapCustomIdentityApi<IdentityUser>();
-
 app.MapControllers();
 
 app.Run();

@@ -14,7 +14,7 @@ RUN npm install
 COPY ["stinsily.client/", "./"]
 RUN npm run build
 
-# Build .NET server
+# Build .NET server and prepare database
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 COPY ["stinsily.Server/stinsily.Server.csproj", "./"]
@@ -24,8 +24,12 @@ RUN dotnet restore
 COPY ["stinsily.Server/", "./"]
 RUN mkdir -p wwwroot
 COPY --from=client-build /src/client/dist wwwroot/
-RUN mkdir -p data
-RUN dotnet build "stinsily.Server.csproj" -c Release -o /app/build
+
+# Create and initialize the database during build
+RUN mkdir -p /app/data && \
+    dotnet build "stinsily.Server.csproj" -c Release -o /app/build && \
+    cd /app/build && \
+    dotnet stinsily.Server.dll --initialize-db
 
 # Publish .NET server
 FROM build AS publish
@@ -35,5 +39,5 @@ RUN dotnet publish "stinsily.Server.csproj" -c Release -o /app/publish /p:UseApp
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-RUN mkdir -p data
+COPY --from=build /app/data /app/data
 ENTRYPOINT ["dotnet", "stinsily.Server.dll"]
