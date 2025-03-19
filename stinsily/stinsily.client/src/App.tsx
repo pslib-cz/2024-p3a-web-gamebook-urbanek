@@ -5,7 +5,7 @@ import Scene from './Components/Scene';
 import AdminPanel from './Components/AdminPanel';
 
 // Use relative URL for API endpoints
-const API_BASE_URL = '';
+const API_BASE_URL = 'https://id-46.pslib.cloud/';
 
 // Helper function to check if user is authenticated
 const isAuthenticated = () => {
