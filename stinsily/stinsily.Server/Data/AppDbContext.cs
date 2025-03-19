@@ -26,54 +26,13 @@ namespace stinsily.Server.Data
         {
             if (!optionsBuilder.IsConfigured)
             {
-                try
-                {
-                    // Try different paths for the database
-                    var dataDirectory = Path.Combine(Directory.GetCurrentDirectory(), "data");
-                    Console.WriteLine($"Attempting to create directory: {dataDirectory}");
-                    
-                    // Try to create directory with exception handling
-                    try {
-                        Directory.CreateDirectory(dataDirectory);
-                        Console.WriteLine($"Directory created or already exists: {dataDirectory}");
-                    } catch (Exception ex) {
-                        Console.WriteLine($"Error creating directory: {ex.Message}");
-                    }
-                    
-                    // List directory contents
-                    Console.WriteLine($"Directory exists check: {Directory.Exists(dataDirectory)}");
-                    if (Directory.Exists(dataDirectory)) {
-                        Console.WriteLine("Directory contents:");
-                        foreach (var file in Directory.GetFiles(dataDirectory)) {
-                            Console.WriteLine($"  - {file}");
-                        }
-                    }
-                    
-                    var dbPath = Path.Combine(dataDirectory, "gamebook.db");
-                    Console.WriteLine($"Database path: {dbPath}");
+                var dbPath = Path.Combine("/app", "data", "gamebook.db");
+                Console.WriteLine($"Database path: {dbPath}");
 
-                    // Try to touch the file to make sure we can write there
-                    try {
-                        if (!File.Exists(dbPath)) {
-                            File.WriteAllText(dbPath + ".test", "test");
-                            Console.WriteLine("Successfully wrote test file");
-                        }
-                    } catch (Exception ex) {
-                        Console.WriteLine($"Error testing file write: {ex.Message}");
-                    }
-
-                    optionsBuilder
-                        .UseSqlite($"Data Source={dbPath}")
-                        .EnableSensitiveDataLogging()
-                        .LogTo(Console.WriteLine);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Critical error in OnConfiguring: {ex.Message}");
-                    // Fallback to memory database as a last resort
-                    optionsBuilder.UseInMemoryDatabase("FallbackDb");
-                    Console.WriteLine("Using in-memory database as fallback");
-                }
+                optionsBuilder
+                    .UseSqlite($"Data Source={dbPath}")
+                    .EnableSensitiveDataLogging()
+                    .LogTo(Console.WriteLine);
             }
         }
 

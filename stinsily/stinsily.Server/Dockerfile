@@ -43,22 +43,11 @@ ENV ASPNETCORE_URLS=http://+:8080
 ENV ASPNETCORE_ENVIRONMENT=Production
 COPY --from=publish /app/publish .
 
-# Ensure data directory exists with proper permissions
-RUN mkdir -p /app/data
-RUN chmod -R 777 /app/data
-RUN chmod -R 777 /app
-
-# Add diagnostic commands to run at startup
-RUN echo '#!/bin/bash\n\
-echo "Current directory: $(pwd)"\n\
-echo "Directory listing:"\n\
-ls -la\n\
-echo "Data directory listing:"\n\
-ls -la data\n\
-echo "Current user: $(id)"\n\
-echo "Starting application..."\n\
-dotnet stinsily.Server.dll\n\
-' > /app/start.sh && chmod +x /app/start.sh
+# Create data directory and set permissions before switching user
+RUN mkdir -p /app/data && \
+    chown -R $APP_UID:$APP_UID /app && \
+    chmod -R 755 /app && \
+    chmod 777 /app/data
 
 USER $APP_UID
-ENTRYPOINT ["/app/start.sh"]
+ENTRYPOINT ["dotnet", "stinsily.Server.dll"]

@@ -3,16 +3,11 @@ using stinsily.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.AspNetCore.Http.Features;
-using System.IO;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Use Path.Combine to create the database path properly
-var dataDirectory = Path.Combine(Directory.GetCurrentDirectory(), "data");
-Directory.CreateDirectory(dataDirectory); // Create directory if it doesn't exist
-var dbPath = Path.Combine(dataDirectory, "gamebook.db");
-var connectionString = $"Data Source={dbPath}";
-
+// Use absolute path for the database
+var connectionString = "Data Source=/app/data/gamebook.db";
 builder.Services.AddDbContext<AppDbContext>(options => 
     options.UseSqlite(connectionString), 
     ServiceLifetime.Scoped
