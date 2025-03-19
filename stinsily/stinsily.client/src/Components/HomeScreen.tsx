@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from '../Modules/HomeScreen.module.css';
+import { API_BASE_URL } from '../config/api';
 
 const HomeScreen = () => {
     const navigate = useNavigate();
@@ -22,7 +23,7 @@ const HomeScreen = () => {
             }
 
             // Reset stats on server
-            const response = await fetch('http://localhost:5193/api/Scenes/reset-stats', {
+            const response = await fetch(`${API_BASE_URL}/Scenes/reset-stats`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`

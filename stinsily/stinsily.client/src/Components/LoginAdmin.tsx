@@ -1,11 +1,12 @@
 import { useState } from "react";
+import { API_BASE_URL } from '../config/api';
 
 const LoginAdmin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleLogin = async () => {
-    const response = await fetch("http://localhost:5193/api/auth/login", { //http://localhost:5193/api/auth/login
+    const response = await fetch(`${API_BASE_URL}/auth/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
