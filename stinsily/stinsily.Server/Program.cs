@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Http.Features;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Use absolute path for the database
-var connectionString = "Data Source=/app/data/gamebook.db";
+// Use relative path for the database
+var connectionString = "Data Source=../data/gamebook.db";
 builder.Services.AddDbContext<AppDbContext>(options => 
     options.UseSqlite(connectionString), 
     ServiceLifetime.Scoped

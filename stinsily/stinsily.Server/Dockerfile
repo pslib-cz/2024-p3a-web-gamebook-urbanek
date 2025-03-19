@@ -42,12 +42,8 @@ WORKDIR /app
 ENV ASPNETCORE_URLS=http://+:8080
 ENV ASPNETCORE_ENVIRONMENT=Production
 COPY --from=publish /app/publish .
-
-# Create data directory and set permissions before switching user
-RUN mkdir -p /app/data && \
-    chown -R $APP_UID:$APP_UID /app && \
-    chmod -R 755 /app && \
-    chmod 777 /app/data
-
+# Ensure data directory exists
+RUN mkdir -p /app/data
+RUN chown -R $APP_UID:$APP_UID /app
 USER $APP_UID
 ENTRYPOINT ["dotnet", "stinsily.Server.dll"]
