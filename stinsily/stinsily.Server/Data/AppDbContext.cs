@@ -26,13 +26,29 @@ namespace stinsily.Server.Data
         {
             if (!optionsBuilder.IsConfigured)
             {
-                var projectRoot = Directory.GetCurrentDirectory();
-                while (!Directory.Exists(Path.Combine(projectRoot, "data")) && Directory.GetParent(projectRoot) != null)
+                string dbPath;
+                var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+                
+                if (environment == "Production")
                 {
-                    projectRoot = Directory.GetParent(projectRoot).FullName;
+                    // In production, use the root /data directory
+                    dbPath = Path.Combine("/data", "gamebook.db");
                 }
-                var dbPath = Path.Combine(projectRoot, "data", "gamebook.db");
+                else
+                {
+                    // In development, search for the data directory
+                    var projectRoot = Directory.GetCurrentDirectory();
+                    while (!Directory.Exists(Path.Combine(projectRoot, "data")) && Directory.GetParent(projectRoot) != null)
+                    {
+                        projectRoot = Directory.GetParent(projectRoot).FullName;
+                    }
+                    dbPath = Path.Combine(projectRoot, "data", "gamebook.db");
+                }
+
+                Console.WriteLine($"Environment: {environment ?? "Development"}");
                 Console.WriteLine($"Database path: {dbPath}");
+                Console.WriteLine($"Directory exists: {Directory.Exists(Path.GetDirectoryName(dbPath))}");
+                Console.WriteLine($"File exists: {File.Exists(dbPath)}");
 
                 optionsBuilder
                     .UseSqlite($"Data Source={dbPath}")

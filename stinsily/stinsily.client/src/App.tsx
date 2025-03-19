@@ -5,7 +5,9 @@ import Scene from './Components/Scene';
 import AdminPanel from './Components/AdminPanel';
 
 // Use relative URL for API endpoints
-const API_BASE_URL =  import.meta.env.VITE_API_URL || 'https://id-46.pslib.cloud';
+const API_BASE_URL = import.meta.env.PROD 
+    ? 'https://id-46.pslib.cloud'  // Production URL
+    : 'http://localhost:5193';     // Development URL
 
 // Helper function to check if user is authenticated
 const isAuthenticated = () => {
