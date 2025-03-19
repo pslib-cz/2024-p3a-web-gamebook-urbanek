@@ -28,16 +28,20 @@ namespace stinsily.Server.Data
             {
                 string dbPath;
                 var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+                var currentDirectory = Directory.GetCurrentDirectory();
+                
+                Console.WriteLine($"Current Directory: {currentDirectory}");
                 
                 if (environment == "Production")
                 {
-                    // In production, use the root /data directory
-                    dbPath = "../data/gamebook.db";
+                    // In production, use absolute path to data directory
+                    var rootPath = Path.GetFullPath(Path.Combine(currentDirectory, ".."));
+                    dbPath = Path.GetFullPath(Path.Combine(rootPath, "data", "gamebook.db"));
                 }
                 else
                 {
                     // In development, search for the data directory
-                    var projectRoot = Directory.GetCurrentDirectory();
+                    var projectRoot = currentDirectory;
                     while (!Directory.Exists(Path.Combine(projectRoot, "data")) && Directory.GetParent(projectRoot) != null)
                     {
                         projectRoot = Directory.GetParent(projectRoot).FullName;
@@ -49,10 +53,13 @@ namespace stinsily.Server.Data
                 Console.WriteLine($"Database path: {dbPath}");
                 Console.WriteLine($"Directory exists: {Directory.Exists(Path.GetDirectoryName(dbPath))}");
                 Console.WriteLine($"File exists: {File.Exists(dbPath)}");
+                Console.WriteLine($"File size: {(File.Exists(dbPath) ? new FileInfo(dbPath).Length.ToString() : "N/A")}");
+
+                var connectionString = $"Data Source={dbPath};Foreign Keys=True;";
+                Console.WriteLine($"Connection string: {connectionString}");
 
                 optionsBuilder
-                    .UseSqlite(
-                        $"Data Source={dbPath};Foreign Keys=True;",
+                    .UseSqlite(connectionString,
                         options => {
                             options.CommandTimeout(60);
                             options.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
@@ -64,19 +71,27 @@ namespace stinsily.Server.Data
                 // Try to open the database to verify connection
                 try
                 {
-                    using var connection = new Microsoft.Data.Sqlite.SqliteConnection($"Data Source={dbPath}");
+                    using var connection = new Microsoft.Data.Sqlite.SqliteConnection(connectionString);
                     connection.Open();
                     
-                    // Enable foreign keys
+                    // Enable foreign keys and check tables
                     using var command = connection.CreateCommand();
-                    command.CommandText = "PRAGMA foreign_keys = ON;";
-                    command.ExecuteNonQuery();
+                    command.CommandText = @"
+                        PRAGMA foreign_keys = ON;
+                        SELECT name FROM sqlite_master WHERE type='table';
+                    ";
                     
-                    Console.WriteLine("Successfully connected to database and enabled foreign keys");
+                    using var reader = command.ExecuteReader();
+                    Console.WriteLine("Tables in database:");
+                    while (reader.Read())
+                    {
+                        Console.WriteLine($"- {reader.GetString(0)}");
+                    }
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine($"Error connecting to database: {ex.Message}");
+                    Console.WriteLine($"Stack trace: {ex.StackTrace}");
                     throw;
                 }
             }

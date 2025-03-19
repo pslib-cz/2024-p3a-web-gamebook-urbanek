@@ -41,21 +41,43 @@ namespace stinsily.Server.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Scenes>> GetScene(int id)
         {
-            var scene = await _context.Scenes.FindAsync(id);
-
-            if (scene == null)
+            try
             {
-                return NotFound();
-            }
+                _logger.LogInformation($"Attempting to get scene with ID: {id}");
+                
+                // First check if we can connect to the database
+                var dbPath = _context.Database.GetDbConnection().ConnectionString;
+                _logger.LogInformation($"Database connection string: {dbPath}");
+                
+                // Try to get all scenes first to see if we can read from the database
+                var allScenes = await _context.Scenes.ToListAsync();
+                _logger.LogInformation($"Total scenes in database: {allScenes.Count}");
+                
+                var scene = await _context.Scenes.FindAsync(id);
 
-            return new JsonResult(new {
-                sceneID = scene.SceneID,
-                title = scene.Title,
-                description = scene.Description,
-                imageURL = scene.ImageURL,
-                connectionID = scene.ConnectionID,
-                itemID = scene.ItemID
-            });
+                if (scene == null)
+                {
+                    _logger.LogWarning($"Scene with ID {id} not found");
+                    return NotFound($"Scene with ID {id} not found");
+                }
+
+                _logger.LogInformation($"Successfully retrieved scene: {scene.Title}");
+                
+                return new JsonResult(new {
+                    sceneID = scene.SceneID,
+                    title = scene.Title,
+                    description = scene.Description,
+                    imageURL = scene.ImageURL,
+                    connectionID = scene.ConnectionID,
+                    itemID = scene.ItemID
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error getting scene {id}: {ex.Message}");
+                _logger.LogError($"Stack trace: {ex.StackTrace}");
+                return StatusCode(500, $"Error retrieving scene: {ex.Message}");
+            }
         }
 
         [HttpGet("available-scenes")]
