@@ -3,7 +3,6 @@ import styles from '../Modules/AdminPanel.module.css';
 import { useNavigate } from "react-router-dom";
 import { FiHome, FiLink, FiBox } from 'react-icons/fi';
 import { FaGamepad } from "react-icons/fa";
-import { API_BASE_URL, getImageUrl } from '../config/api';
 
 interface Scene {
     sceneID: number;
@@ -115,7 +114,7 @@ const AdminPanel = () => {
 
     const fetchScenes = async () => {
         try {
-            const response = await fetch(`${API_BASE_URL}/Scenes`, {
+            const response = await fetch("http://localhost:5193/api/Scenes", {
                 headers: getHeaders()
             });
             if (!response.ok) throw new Error('Failed to fetch scenes');
@@ -128,7 +127,7 @@ const AdminPanel = () => {
 
     const fetchConnections = async () => {
         try {
-            const response = await fetch(`${API_BASE_URL}/ChoicesConnections`, {
+            const response = await fetch("http://localhost:5193/api/ChoicesConnections", {
                 headers: getHeaders()
             });
             if (!response.ok) throw new Error('Failed to fetch connections');
@@ -141,7 +140,7 @@ const AdminPanel = () => {
 
     const fetchItems = async () => {
         try {
-            const response = await fetch(`${API_BASE_URL}/Items`, {
+            const response = await fetch("http://localhost:5193/api/Items", {
                 headers: getHeaders()
             });
             if (!response.ok) throw new Error('Failed to fetch items');
@@ -154,7 +153,7 @@ const AdminPanel = () => {
 
     const fetchMiniGames = async () => {
         try {
-            const response = await fetch(`${API_BASE_URL}/MiniGames`, {
+            const response = await fetch("http://localhost:5193/api/MiniGames", {
                 headers: getHeaders()
             });
             if (!response.ok) throw new Error('Failed to fetch mini games');
@@ -182,7 +181,7 @@ const AdminPanel = () => {
             }
 
             const token = localStorage.getItem('authToken');
-            const response = await fetch(`${API_BASE_URL}/Scenes`, {
+            const response = await fetch("http://localhost:5193/api/Scenes", {
                 method: "POST",
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -216,7 +215,7 @@ const AdminPanel = () => {
             }
 
             const token = localStorage.getItem('authToken');
-            const response = await fetch(`${API_BASE_URL}/Scenes/${scene.sceneID}`, {
+            const response = await fetch(`http://localhost:5193/api/Scenes/${scene.sceneID}`, {
                 method: "PUT",
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -237,7 +236,7 @@ const AdminPanel = () => {
 
     const deleteScene = async (id: number) => {
         try {
-            const response = await fetch(`${API_BASE_URL}/Scenes/${id}`, {
+            const response = await fetch(`http://localhost:5193/api/Scenes/${id}`, {
                 method: "DELETE",
                 headers: getHeaders()
             });
@@ -257,7 +256,7 @@ const AdminPanel = () => {
     // CRUD operace pro spojení
     const addConnection = async () => {
         try {
-            const response = await fetch(`${API_BASE_URL}/ChoicesConnections`, {
+            const response = await fetch("http://localhost:5193/api/ChoicesConnections", {
                 method: "POST",
                 headers: getHeaders(),
                 body: JSON.stringify(newConnection)
@@ -286,7 +285,7 @@ const AdminPanel = () => {
     const updateConnection = async (connection: ChoiceConnection) => {
         try {
             const token = localStorage.getItem('authToken');
-            const response = await fetch(`${API_BASE_URL}/ChoicesConnections/${connection.choicesConnectionsID}`, {
+            const response = await fetch(`http://localhost:5193/api/ChoicesConnections/${connection.choicesConnectionsID}`, {
                 method: "PUT",
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -319,7 +318,7 @@ const AdminPanel = () => {
 
     const deleteConnection = async (id: number) => {
         try {
-            const response = await fetch(`${API_BASE_URL}/ChoicesConnections/${id}`, {
+            const response = await fetch(`http://localhost:5193/api/ChoicesConnections/${id}`, {
                 method: "DELETE",
                 headers: getHeaders()
             });
@@ -342,7 +341,7 @@ const AdminPanel = () => {
             const headers = getHeaders();
             console.log('Request headers:', headers);
 
-            const response = await fetch(`${API_BASE_URL}/Items`, {
+            const response = await fetch("http://localhost:5193/api/Items", {
                 method: "POST",
                 headers: headers,
                 body: JSON.stringify({
@@ -371,7 +370,7 @@ const AdminPanel = () => {
     const updateItem = async (item: Item) => {
         try {
             const token = localStorage.getItem('authToken');
-            const response = await fetch(`${API_BASE_URL}/Items/${item.itemID}`, {
+            const response = await fetch(`http://localhost:5193/api/Items/${item.itemID}`, {
                 method: "PUT",
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -403,7 +402,7 @@ const AdminPanel = () => {
 
     const deleteItem = async (id: number) => {
         try {
-            const response = await fetch(`${API_BASE_URL}/Items/${id}`, {
+            const response = await fetch(`http://localhost:5193/api/Items/${id}`, {
                 method: "DELETE",
                 headers: getHeaders()
             });
@@ -424,7 +423,7 @@ const AdminPanel = () => {
     const updateSceneWithImage = async (sceneId: number, formData: FormData) => {
         try {
             const token = localStorage.getItem('authToken');
-            const response = await fetch(`${API_BASE_URL}/Scenes/${sceneId}/image`, {
+            const response = await fetch(`http://localhost:5193/api/Scenes/${sceneId}/image`, {
                 method: "PUT",
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -492,7 +491,7 @@ const AdminPanel = () => {
         try {
             if (!validateMiniGame(miniGame)) return;
 
-            const response = await fetch(`${API_BASE_URL}/MiniGames`, {
+            const response = await fetch("http://localhost:5193/api/MiniGames", {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json',
@@ -527,7 +526,7 @@ const AdminPanel = () => {
         try {
             if (!validateMiniGame(game)) return;
 
-            const response = await fetch(`${API_BASE_URL}/MiniGames/${game.miniGameID}`, {
+            const response = await fetch(`http://localhost:5193/api/MiniGames/${game.miniGameID}`, {
                 method: "PUT",
                 headers: {
                     'Content-Type': 'application/json',
@@ -551,7 +550,7 @@ const AdminPanel = () => {
         if (!window.confirm('Are you sure you want to delete this mini game? This action cannot be undone.')) return;
 
         try {
-            const response = await fetch(`${API_BASE_URL}/MiniGames/${id}`, {
+            const response = await fetch(`http://localhost:5193/api/MiniGames/${id}`, {
                 method: "DELETE",
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('authToken')}`
@@ -786,7 +785,7 @@ const AdminPanel = () => {
                                         {scene.imageURL && (
                                             <div className={styles['image-preview']}>
                                                 <img 
-                                                    src={getImageUrl(scene.imageURL)}
+                                                    src={`http://localhost:5193${scene.imageURL}`}
                                                     alt="Scene preview"
                                                     style={{ maxWidth: '200px' }}
                                                 />

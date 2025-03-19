@@ -5,7 +5,6 @@ import SpaceJetRepair from './SpaceJetRepair';
 import LightsaberDuel from './LightsaberDuel';
 import SyndicateInfiltration from './SyndicateInfiltration';
 import FinalDuel from './FinalDuel';
-import { API_BASE_URL, getImageUrl } from '../config/api';
 
 interface Scene {
     sceneID: number;
@@ -58,6 +57,8 @@ const Scene = () => {
     const [itemDetails, setItemDetails] = useState<Item | null>(null);
     const [activeMinigame, setActiveMinigame] = useState<any | null>(null);
     const [pendingChoice, setPendingChoice] = useState<DecisionOption | null>(null);
+
+    const API_BASE_URL = 'http://localhost:5193/api';
 
     useEffect(() => {
         const token = localStorage.getItem('authToken');
@@ -438,7 +439,7 @@ const Scene = () => {
         
         if (!imageURL) return { backgroundColor: 'black' };
         
-        const fullImageUrl = getImageUrl(`/uploads/${imageURL.split('/').pop()}`);
+        const fullImageUrl = `http://localhost:5193/uploads/${imageURL.split('/').pop()}`;
         
         return {
             backgroundImage: `url(${fullImageUrl})`,
