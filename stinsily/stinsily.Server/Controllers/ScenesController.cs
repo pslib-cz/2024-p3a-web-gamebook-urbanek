@@ -594,6 +594,19 @@ namespace stinsily.Server.Controllers
                 if (player == null)
                 {
                     _logger.LogInformation("Creating new player");
+
+                    // First check if Scene 1 exists, if not get the first available scene
+                    var scene = await _context.Scenes.FindAsync(1) ?? 
+                              await _context.Scenes.OrderBy(s => s.SceneID).FirstOrDefaultAsync();
+
+                    if (scene == null)
+                    {
+                        _logger.LogError("No scenes found in the database");
+                        return StatusCode(500, "No scenes available");
+                    }
+
+                    _logger.LogInformation($"Using scene {scene.SceneID} for new player");
+
                     player = new Players
                     {
                         UserID = user.Id,
@@ -601,10 +614,20 @@ namespace stinsily.Server.Controllers
                         Force = 50,
                         ObiWanRelationship = 25,
                         ItemID = null,
-                        CurrentSceneID = 1
+                        CurrentSceneID = scene.SceneID
                     };
-                    _context.Players.Add(player);
-                    await _context.SaveChangesAsync();
+
+                    try
+                    {
+                        _context.Players.Add(player);
+                        await _context.SaveChangesAsync();
+                        _logger.LogInformation($"Successfully created new player with scene {scene.SceneID}");
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError($"Failed to create player: {ex.Message}");
+                        return StatusCode(500, $"Failed to create player: {ex.Message}");
+                    }
                 }
 
                 // Get item name separately if needed

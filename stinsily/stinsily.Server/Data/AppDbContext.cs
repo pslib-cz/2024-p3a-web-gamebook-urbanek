@@ -32,7 +32,7 @@ namespace stinsily.Server.Data
                 if (environment == "Production")
                 {
                     // In production, use the root /data directory
-                    dbPath = Path.Combine("/data", "gamebook.db");
+                    dbPath = "../data/gamebook.db";
                 }
                 else
                 {
@@ -51,9 +51,34 @@ namespace stinsily.Server.Data
                 Console.WriteLine($"File exists: {File.Exists(dbPath)}");
 
                 optionsBuilder
-                    .UseSqlite($"Data Source={dbPath}")
+                    .UseSqlite(
+                        $"Data Source={dbPath};Foreign Keys=True;",
+                        options => {
+                            options.CommandTimeout(60);
+                            options.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+                        })
                     .EnableSensitiveDataLogging()
+                    .EnableDetailedErrors()
                     .LogTo(Console.WriteLine);
+
+                // Try to open the database to verify connection
+                try
+                {
+                    using var connection = new Microsoft.Data.Sqlite.SqliteConnection($"Data Source={dbPath}");
+                    connection.Open();
+                    
+                    // Enable foreign keys
+                    using var command = connection.CreateCommand();
+                    command.CommandText = "PRAGMA foreign_keys = ON;";
+                    command.ExecuteNonQuery();
+                    
+                    Console.WriteLine("Successfully connected to database and enabled foreign keys");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error connecting to database: {ex.Message}");
+                    throw;
+                }
             }
         }
 
