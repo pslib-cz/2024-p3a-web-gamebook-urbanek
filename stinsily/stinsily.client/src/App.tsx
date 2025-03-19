@@ -33,7 +33,7 @@ function App() {
             element: isAuthenticated() ? <HomeScreen /> : <Navigate to="/login" />,
         },
         {
-            path: "/scenes/:id",
+            path: "/api/scenes/:id",
             element: isAuthenticated() ? <Scene /> : <Navigate to="/login" />,
             loader: async () => {
                 const response = await fetch(`${API_BASE_URL}/api/scenes`, {

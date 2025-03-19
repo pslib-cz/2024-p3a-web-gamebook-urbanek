@@ -41,7 +41,7 @@ const HomeScreen = () => {
             }
 
             // Navigate to the first scene
-            navigate('/scenes/1');
+            navigate('/api/scenes/1');
         } catch (error) {
             console.error('Error starting new game:', error);
             alert('Error starting new game. Please try again.');
@@ -59,10 +59,10 @@ const HomeScreen = () => {
         const savedProgress = localStorage.getItem(`gameProgress_${email}`);
         if (savedProgress) {
             const gameState = JSON.parse(savedProgress);
-            navigate(`/scenes/${gameState.currentSceneId}`);
+            navigate(`/api/scenes/${gameState.currentSceneId}`);
         } else {
             alert('No saved game found. Starting new game...');
-            navigate('/scenes/1');
+            navigate('/api/scenes/1');
         }
     };
 
@@ -111,7 +111,7 @@ const HomeScreen = () => {
             // Save the imported progress
             localStorage.setItem(`gameProgress_${currentEmail}`, JSON.stringify(gameState));
             alert('Progress imported successfully!');
-            navigate(`/scenes/${gameState.currentSceneId}`);
+            navigate(`/api/scenes/${gameState.currentSceneId}`);
         } catch (error) {
             alert('Error importing save file. Make sure it\'s a valid save file.');
             console.error('Import error:', error);

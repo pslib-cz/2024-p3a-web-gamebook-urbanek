@@ -26,7 +26,12 @@ namespace stinsily.Server.Data
         {
             if (!optionsBuilder.IsConfigured)
             {
-                var dbPath = Path.Combine(Directory.GetCurrentDirectory(), "Data", "./data/gamebook.db");
+                var projectRoot = Directory.GetCurrentDirectory();
+                while (!Directory.Exists(Path.Combine(projectRoot, "data")) && Directory.GetParent(projectRoot) != null)
+                {
+                    projectRoot = Directory.GetParent(projectRoot).FullName;
+                }
+                var dbPath = Path.Combine(projectRoot, "data", "gamebook.db");
                 Console.WriteLine($"Database path: {dbPath}");
 
                 optionsBuilder

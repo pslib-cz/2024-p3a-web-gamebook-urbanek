@@ -254,7 +254,7 @@ const Scene = () => {
 
             setIsTransitioning(true);
             setTimeout(() => {
-                navigate(`/scenes/${option.nextSceneId}`);
+                navigate(`/api/scenes/${option.nextSceneId}`);
             }, 300);
         } catch (error) {
             console.error('Error applying effect:', error);
@@ -383,7 +383,7 @@ const Scene = () => {
                     }
                     // Then navigate to the scene
                     if (gameState.currentSceneId && gameState.currentSceneId !== id) {
-                        navigate(`/scenes/${gameState.currentSceneId}`);
+                        navigate(`/api/scenes/${gameState.currentSceneId}`);
                     }
                 }
             }
