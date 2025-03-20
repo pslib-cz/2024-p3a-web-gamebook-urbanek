@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Http.Features;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlite("Data Source=../data/gamebook;"));
+    options.UseSqlite("Data Source=data/gamebook.db"));
 
 builder.Services.AddControllers();
 
