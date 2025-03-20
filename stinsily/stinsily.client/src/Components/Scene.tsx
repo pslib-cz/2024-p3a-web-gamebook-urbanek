@@ -75,7 +75,7 @@ const Scene = () => {
                 return;
             }
 
-            const response = await fetch(`${API_BASE_URL}/Scenes/${sceneId}`, {
+            const response = await fetch(`${API_BASE_URL}/api/Scenes/${sceneId}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -97,7 +97,7 @@ const Scene = () => {
             setCurrentScene(sceneData);
 
             // Fetch options for this scene
-            const optionsResponse = await fetch(`${API_BASE_URL}/Scenes/options/${sceneId}`, {
+            const optionsResponse = await fetch(`${API_BASE_URL}/api/Scenes/options/${sceneId}`, {
                 credentials: 'include',
                 headers: {
                     'Accept': 'application/json'
@@ -226,7 +226,7 @@ const Scene = () => {
                     formattedEffect = `${stat}${sign}${value}`;
                 }
 
-                const response = await fetch(`${API_BASE_URL}/Scenes/apply-effect`, {
+                const response = await fetch(`${API_BASE_URL}/api/Scenes/apply-effect`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -254,7 +254,7 @@ const Scene = () => {
 
             setIsTransitioning(true);
             setTimeout(() => {
-                navigate(`/api/scenes/${option.nextSceneId}`);
+                navigate(`/scene/${option.nextSceneId}`);
             }, 300);
         } catch (error) {
             console.error('Error applying effect:', error);
