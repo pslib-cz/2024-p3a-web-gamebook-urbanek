@@ -1,5 +1,5 @@
 export const API_BASE_URL = import.meta.env.PROD 
-  ? 'https://id-46.pslib.cloud/api'  // Production: use full URL
+  ? 'https://id-46.pslib.cloud/'  // Production: use full URL
   : 'http://localhost:5193/api';  // Development: use localhost
 
 export const getImageUrl = (imageUrl: string) => {
