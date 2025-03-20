@@ -75,7 +75,7 @@ const Scene = () => {
                 return;
             }
 
-            const response = await fetch(`${API_BASE_URL}/Scenes/${sceneId}`, {
+            const response = await fetch(`${API_BASE_URL}/api/Scenes/${sceneId}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -100,7 +100,8 @@ const Scene = () => {
             const optionsResponse = await fetch(`${API_BASE_URL}/api/Scenes/options/${sceneId}`, {
                 credentials: 'include',
                 headers: {
-                    'Accept': 'application/json'
+                    'Accept': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 }
             });
             
@@ -144,7 +145,7 @@ const Scene = () => {
 
             if (!loadSavedProgress()) {
                 // Fetch basic stats
-                const response = await fetch(`${API_BASE_URL}/Scenes/player-stats`, {
+                const response = await fetch(`${API_BASE_URL}/api/Scenes/player-stats`, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -155,7 +156,7 @@ const Scene = () => {
                 
                 // Fetch item separately using ItemsController if itemId exists
                 if (stats.itemId) {
-                    const itemResponse = await fetch(`${API_BASE_URL}/Items/${stats.itemId}`, {
+                    const itemResponse = await fetch(`${API_BASE_URL}/api/Items/${stats.itemId}`, {
                         headers: {
                             'Authorization': `Bearer ${token}`
                         }
@@ -178,7 +179,7 @@ const Scene = () => {
 
     const fetchMiniGame = async (miniGameId: number) => {
         try {
-            const response = await fetch(`${API_BASE_URL}/MiniGames/${miniGameId}`, {
+            const response = await fetch(`${API_BASE_URL}/api/MiniGames/${miniGameId}`, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('authToken')}`
                 }
@@ -266,7 +267,7 @@ const Scene = () => {
             const token = localStorage.getItem('authToken');
             if (!token) return;
 
-            const response = await fetch(`${API_BASE_URL}/Scenes/item`, {
+            const response = await fetch(`${API_BASE_URL}/api/Scenes/item`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -284,7 +285,7 @@ const Scene = () => {
                 throw new Error('Failed to pick up item');
             }
             
-            const itemResponse = await fetch(`${API_BASE_URL}/Items/${itemId}`, {
+            const itemResponse = await fetch(`${API_BASE_URL}/api/Items/${itemId}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -300,7 +301,7 @@ const Scene = () => {
             }
 
             // Get the current scene options again
-            const sceneOptionsResponse = await fetch(`${API_BASE_URL}/Scenes/options/${id}`, {
+            const sceneOptionsResponse = await fetch(`${API_BASE_URL}/api/Scenes/options/${id}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -351,7 +352,7 @@ const Scene = () => {
             const token = localStorage.getItem('authToken');
             if (!token) return;
 
-            await fetch(`${API_BASE_URL}/Scenes/save-progress`, {
+            await fetch(`${API_BASE_URL}/api/Scenes/save-progress`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -398,7 +399,7 @@ const Scene = () => {
             const token = localStorage.getItem('authToken');
             if (!token) return;
 
-            await fetch(`${API_BASE_URL}/Scenes/sync-stats`, {
+            await fetch(`${API_BASE_URL}/api/Scenes/sync-stats`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -406,7 +407,7 @@ const Scene = () => {
                 },
                 body: JSON.stringify({
                     ...stats,
-                    itemId: stats.itemId || null  // Ensure itemId is included in sync
+                    itemId: stats.itemId || null
                 })
             });
         } catch (error) {
@@ -490,7 +491,7 @@ const Scene = () => {
             const token = localStorage.getItem('authToken');
             if (!token) return;
 
-            const response = await fetch(`${API_BASE_URL}/Items/${itemId}`, {
+            const response = await fetch(`${API_BASE_URL}/api/Items/${itemId}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
