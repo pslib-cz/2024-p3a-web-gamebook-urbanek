@@ -78,6 +78,7 @@ const Scene = () => {
             const response = await fetch(`${API_BASE_URL}/api/Scenes/${sceneId}`, {
                 method: 'GET',
                 headers: {
+                    'Accept': 'application/json',
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
@@ -85,10 +86,13 @@ const Scene = () => {
             });
 
             if (!response.ok) {
+                const errorText = await response.text();
+                console.error('Scene fetch error:', errorText);
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
 
             const sceneData = await response.json();
+            console.log('Scene data:', sceneData); // Debug log
             
             if (sceneData.imageURL === undefined && sceneData.image !== undefined) {
                 sceneData.imageURL = sceneData.image;
@@ -98,6 +102,7 @@ const Scene = () => {
 
             // Fetch options for this scene
             const optionsResponse = await fetch(`${API_BASE_URL}/api/Scenes/options/${sceneId}`, {
+                method: 'GET',
                 credentials: 'include',
                 headers: {
                     'Accept': 'application/json',
@@ -105,10 +110,15 @@ const Scene = () => {
                 }
             });
             
-            if (optionsResponse.ok) {
-                const optionsData = await optionsResponse.json();
-                setSceneOptions(optionsData);
+            if (!optionsResponse.ok) {
+                const errorText = await optionsResponse.text();
+                console.error('Options fetch error:', errorText);
+                throw new Error(`Options fetch failed: ${optionsResponse.status}`);
             }
+
+            const optionsData = await optionsResponse.json();
+            console.log('Options data:', optionsData); // Debug log
+            setSceneOptions(optionsData);
             
             // If scene has an item, fetch its details
             if (sceneData.itemID) {
@@ -117,6 +127,10 @@ const Scene = () => {
 
         } catch (error) {
             console.error('Error fetching scene:', error);
+            if (error instanceof Error && error.message.includes('404')) {
+                // If scene not found, redirect to scene 1
+                navigate('/scene/1');
+            }
         }
     }, [API_BASE_URL, navigate]);
 
@@ -146,18 +160,30 @@ const Scene = () => {
             if (!loadSavedProgress()) {
                 // Fetch basic stats
                 const response = await fetch(`${API_BASE_URL}/api/Scenes/player-stats`, {
+                    method: 'GET',
+                    credentials: 'include',
                     headers: {
+                        'Accept': 'application/json',
                         'Authorization': `Bearer ${token}`
                     }
                 });
 
-                if (!response.ok) throw new Error('Failed to fetch stats');
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('Stats fetch error:', errorText);
+                    throw new Error('Failed to fetch stats');
+                }
+
                 const stats = await response.json();
+                console.log('Player stats:', stats); // Debug log
                 
                 // Fetch item separately using ItemsController if itemId exists
                 if (stats.itemId) {
                     const itemResponse = await fetch(`${API_BASE_URL}/api/Items/${stats.itemId}`, {
+                        method: 'GET',
+                        credentials: 'include',
                         headers: {
+                            'Accept': 'application/json',
                             'Authorization': `Bearer ${token}`
                         }
                     });
@@ -165,6 +191,9 @@ const Scene = () => {
                     if (itemResponse.ok) {
                         const item = await itemResponse.json();
                         stats.item = [item.name];
+                    } else {
+                        const errorText = await itemResponse.text();
+                        console.error('Item fetch error:', errorText);
                     }
                 } else {
                     stats.item = [];
@@ -384,7 +413,7 @@ const Scene = () => {
                     }
                     // Then navigate to the scene
                     if (gameState.currentSceneId && gameState.currentSceneId !== id) {
-                        navigate(`/api/scenes/${gameState.currentSceneId}`);
+                        navigate(`/scene/${gameState.currentSceneId}`);
                     }
                 }
             }
