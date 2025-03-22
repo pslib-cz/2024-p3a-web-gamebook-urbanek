@@ -75,13 +75,12 @@ const Scene = () => {
                 return;
             }
 
-            const response = await fetch(`${API_BASE_URL}/api/scenes/${sceneId}`, {
+            const response = await fetch(`${API_BASE_URL}/scenes/${sceneId}`, {
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                    'Cache-Control': 'no-cache'
+                    'Authorization': `Bearer ${token}`
                 },
                 credentials: 'include'
             });
@@ -92,34 +91,17 @@ const Scene = () => {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
 
-            let sceneData;
-            const contentType = response.headers.get('content-type');
-            if (contentType && contentType.includes('application/json')) {
-                sceneData = await response.json();
-            } else {
-                const text = await response.text();
-                try {
-                    sceneData = JSON.parse(text);
-                } catch (e) {
-                    console.error('Failed to parse response as JSON:', text);
-                    throw new Error('Invalid response format');
-                }
-            }
-
+            const sceneData = await response.json();
             console.log('Scene data:', sceneData); // Debug log
             
             if (sceneData.imageURL === undefined && sceneData.image !== undefined) {
                 sceneData.imageURL = sceneData.image;
             }
             
-            if (sceneData.description) {
-                sceneData.description = decodeURIComponent(JSON.parse('"' + sceneData.description.replace(/\"/g, '\\"') + '"'));
-            }
-            
             setCurrentScene(sceneData);
 
             // Fetch options for this scene
-            const optionsResponse = await fetch(`${API_BASE_URL}/api/scenes/options/${sceneId}`, {
+            const optionsResponse = await fetch(`${API_BASE_URL}/scenes/options/${sceneId}`, {
                 method: 'GET',
                 credentials: 'include',
                 headers: {
