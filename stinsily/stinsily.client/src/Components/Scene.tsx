@@ -47,6 +47,7 @@ const Scene = () => {
     const [currentScene, setCurrentScene] = useState<Scene | null>(null);
     const [sceneOptions, setSceneOptions] = useState<DecisionOption[]>([]);
     const [isTransitioning, setIsTransitioning] = useState(false);
+    const [currentDescriptionIndex, setCurrentDescriptionIndex] = useState(0);
     const [playerStats, setPlayerStats] = useState<PlayerStats>({
         health: 100,
         force: 50,
@@ -74,7 +75,7 @@ const Scene = () => {
                 return;
             }
 
-            const response = await fetch(`${API_BASE_URL}/Scenes/${sceneId}`, {
+            const response = await fetch(`${API_BASE_URL}/api/scenes/${sceneId}`, {
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json',
@@ -97,13 +98,10 @@ const Scene = () => {
                 sceneData.imageURL = sceneData.image;
             }
             
-            // Add type property to scene data
-            sceneData.type = 'Normal'; // Default to Normal type
-            
             setCurrentScene(sceneData);
 
             // Fetch options for this scene
-            const optionsResponse = await fetch(`${API_BASE_URL}/api/Scenes/options/${sceneId}`, {
+            const optionsResponse = await fetch(`${API_BASE_URL}/api/scenes/options/${sceneId}`, {
                 method: 'GET',
                 credentials: 'include',
                 headers: {
@@ -161,7 +159,7 @@ const Scene = () => {
 
             if (!loadSavedProgress()) {
                 // Fetch basic stats
-                const response = await fetch(`${API_BASE_URL}/api/Scenes/player-stats`, {
+                const response = await fetch(`${API_BASE_URL}/api/scenes/player-stats`, {
                     method: 'GET',
                     credentials: 'include',
                     headers: {
@@ -258,7 +256,7 @@ const Scene = () => {
                     formattedEffect = `${stat}${sign}${value}`;
                 }
 
-                const response = await fetch(`${API_BASE_URL}/api/Scenes/apply-effect`, {
+                const response = await fetch(`${API_BASE_URL}/api/scenes/apply-effect`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -298,7 +296,7 @@ const Scene = () => {
             const token = localStorage.getItem('authToken');
             if (!token) return;
 
-            const response = await fetch(`${API_BASE_URL}/api/Scenes/item`, {
+            const response = await fetch(`${API_BASE_URL}/api/scenes/item`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -332,7 +330,7 @@ const Scene = () => {
             }
 
             // Get the current scene options again
-            const sceneOptionsResponse = await fetch(`${API_BASE_URL}/api/Scenes/options/${id}`, {
+            const sceneOptionsResponse = await fetch(`${API_BASE_URL}/api/scenes/options/${id}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -383,7 +381,7 @@ const Scene = () => {
             const token = localStorage.getItem('authToken');
             if (!token) return;
 
-            await fetch(`${API_BASE_URL}/api/Scenes/save-progress`, {
+            await fetch(`${API_BASE_URL}/api/scenes/save-progress`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -430,7 +428,7 @@ const Scene = () => {
             const token = localStorage.getItem('authToken');
             if (!token) return;
 
-            await fetch(`${API_BASE_URL}/api/Scenes/sync-stats`, {
+            await fetch(`${API_BASE_URL}/api/scenes/sync-stats`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -478,6 +476,15 @@ const Scene = () => {
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat'
         };
+    };
+
+    const descriptions = currentScene?.description?.split(';') || [];
+    const isLastDescription = currentDescriptionIndex === descriptions.length - 1;
+
+    const handleNextDescription = () => {
+        if (currentDescriptionIndex < descriptions.length - 1) {
+            setCurrentDescriptionIndex(prev => prev + 1);
+        }
     };
 
     const exportProgress = () => {
@@ -625,44 +632,55 @@ const Scene = () => {
             </div>
             <div className={`${styles['scene-content']} ${currentScene?.type === 'Decision' ? styles['decision'] : ''}`}>
                 <p className={styles['scene-description']}>
-                    {currentScene.description}
+                    {descriptions[currentDescriptionIndex]}
                 </p>
                 
-                <div className={styles['decision-container']}>
-                    {currentScene?.itemID && (
-                        <button 
-                            className={styles['pickup-button']}
-                            onClick={() => handleItemPickup(currentScene.itemID!)}
-                        >
-                            {itemDetails?.description || 'Sebrat předmět'}
-                        </button>
-                    )}
-                    {sceneOptions.length === 1 ? (
-                        // Single option - show as arrow
-                        <button
-                            className={styles['next-button']}
-                            onClick={() => handleOptionClick(sceneOptions[0])}
-                        >
-                            Next
-                        </button>
-                    ) : (
-                        // Multiple options - show as text buttons
-                        sceneOptions.map((option) => {
-                            // Only render option if it meets requirements
-                            if (!shouldShowOption(option)) return null;
+                {!isLastDescription ? (
+                    // Show "Next" button if there are more descriptions
+                    <button 
+                        className={styles['next-button']}
+                        onClick={handleNextDescription}
+                    >
+                        Next
+                    </button>
+                ) : (
+                    // Show choices/navigation options on last description
+                    <div className={styles['decision-container']}>
+                        {currentScene?.itemID && (
+                            <button 
+                                className={styles['pickup-button']}
+                                onClick={() => handleItemPickup(currentScene.itemID!)}
+                            >
+                                {itemDetails?.description || 'Sebrat předmět'}
+                            </button>
+                        )}
+                        {sceneOptions.length === 1 ? (
+                            // Single option - show as arrow
+                            <button
+                                className={styles['next-button']}
+                                onClick={() => handleOptionClick(sceneOptions[0])}
+                            >
+                                Next
+                            </button>
+                        ) : (
+                            // Multiple options - show as text buttons
+                            sceneOptions.map((option) => {
+                                // Only render option if it meets requirements
+                                if (!shouldShowOption(option)) return null;
 
-                            return (
-                                <button
-                                    key={option.optionId}
-                                    className={styles['_decision-option']}
-                                    onClick={() => handleOptionClick(option)}
-                                >
-                                    {option.text}
-                                </button>
-                            );
-                        })
-                    )}
-                </div>
+                                return (
+                                    <button
+                                        key={option.optionId}
+                                        className={styles['_decision-option']}
+                                        onClick={() => handleOptionClick(option)}
+                                    >
+                                        {option.text}
+                                    </button>
+                                );
+                            })
+                        )}
+                    </div>
+                )}
             </div>
             {activeMinigame && (
                 activeMinigame.type === 'SpaceJetRepair' ? (
