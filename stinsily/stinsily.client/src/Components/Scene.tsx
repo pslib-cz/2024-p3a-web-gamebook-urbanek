@@ -80,7 +80,8 @@ const Scene = () => {
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
+                    'Authorization': `Bearer ${token}`,
+                    'Cache-Control': 'no-cache'
                 },
                 credentials: 'include'
             });
@@ -91,11 +92,28 @@ const Scene = () => {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
 
-            const sceneData = await response.json();
+            let sceneData;
+            const contentType = response.headers.get('content-type');
+            if (contentType && contentType.includes('application/json')) {
+                sceneData = await response.json();
+            } else {
+                const text = await response.text();
+                try {
+                    sceneData = JSON.parse(text);
+                } catch (e) {
+                    console.error('Failed to parse response as JSON:', text);
+                    throw new Error('Invalid response format');
+                }
+            }
+
             console.log('Scene data:', sceneData); // Debug log
             
             if (sceneData.imageURL === undefined && sceneData.image !== undefined) {
                 sceneData.imageURL = sceneData.image;
+            }
+            
+            if (sceneData.description) {
+                sceneData.description = decodeURIComponent(JSON.parse('"' + sceneData.description.replace(/\"/g, '\\"') + '"'));
             }
             
             setCurrentScene(sceneData);
