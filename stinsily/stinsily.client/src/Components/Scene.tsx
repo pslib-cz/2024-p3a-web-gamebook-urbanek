@@ -101,7 +101,7 @@ const Scene = () => {
             setCurrentScene(sceneData);
 
             // Fetch options for this scene
-            const optionsResponse = await fetch(`${API_BASE_URL}/scenes/options/${sceneId}`, {
+            const optionsResponse = await fetch(`${API_BASE_URL}/scene/options/${sceneId}`, {
                 method: 'GET',
                 credentials: 'include',
                 headers: {
