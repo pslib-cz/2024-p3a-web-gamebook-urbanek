@@ -1,7 +1,10 @@
-export const API_BASE_URL = 'https://id-46.pslib.cloud';
+const BASE_URL = import.meta.env.PROD 
+    ? 'https://id-46.pslib.cloud'
+    : 'http://localhost:5193';
+
+export const API_BASE_URL = `${BASE_URL}/api`;
 
 export const getImageUrl = (imageUrl: string) => {
-  if (!imageUrl) return '';
-  const baseUrl = import.meta.env.PROD ? 'https://id-46.pslib.cloud' : 'http://localhost:5193';
-  return `${baseUrl}${imageUrl}`;
+    if (!imageUrl) return '';
+    return `${BASE_URL}${imageUrl}`;
 };
