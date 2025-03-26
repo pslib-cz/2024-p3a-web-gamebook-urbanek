@@ -33,6 +33,13 @@ function App() {
         {
             path: "/scene/:id",
             element: isAuthenticated() ? <Scene /> : <Navigate to="/login" />,
+            loader: async () => {
+                const token = localStorage.getItem('authToken');
+                if (!token) {
+                    throw new Error('Unauthorized');
+                }
+                return null;
+            },
             errorElement: <Navigate to="/login" />
         },
         {
@@ -41,7 +48,9 @@ function App() {
                 <AdminPanel /> : 
                 <Navigate to="/login" />,
         }
-    ]);
+    ], {
+        basename: '/'
+    });
 
     return <RouterProvider router={router} />;
 }
