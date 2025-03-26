@@ -101,7 +101,7 @@ const Scene = () => {
             setCurrentScene(sceneData);
 
             // Fetch options for this scene
-            const optionsResponse = await fetch(`${API_BASE_URL}/scenes/options/${sceneId}`, {
+            const optionsResponse = await fetch(`${API_BASE_URL}/scene/options/${sceneId}`, {
                 method: 'GET',
                 credentials: 'include',
                 headers: {
@@ -179,7 +179,7 @@ const Scene = () => {
                 
                 // Fetch item separately using ItemsController if itemId exists
                 if (stats.itemId) {
-                    const itemResponse = await fetch(`${API_BASE_URL}/api/Items/${stats.itemId}`, {
+                    const itemResponse = await fetch(`${API_BASE_URL}/Items/${stats.itemId}`, {
                         method: 'GET',
                         credentials: 'include',
                         headers: {
@@ -208,7 +208,7 @@ const Scene = () => {
 
     const fetchMiniGame = async (miniGameId: number) => {
         try {
-            const response = await fetch(`${API_BASE_URL}/api/MiniGames/${miniGameId}`, {
+            const response = await fetch(`${API_BASE_URL}/MiniGames/${miniGameId}`, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('authToken')}`
                 }
@@ -314,7 +314,7 @@ const Scene = () => {
                 throw new Error('Failed to pick up item');
             }
             
-            const itemResponse = await fetch(`${API_BASE_URL}/api/Items/${itemId}`, {
+            const itemResponse = await fetch(`${API_BASE_URL}/Items/${itemId}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -520,7 +520,7 @@ const Scene = () => {
             const token = localStorage.getItem('authToken');
             if (!token) return;
 
-            const response = await fetch(`${API_BASE_URL}/api/Items/${itemId}`, {
+            const response = await fetch(`${API_BASE_URL}/Items/${itemId}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
