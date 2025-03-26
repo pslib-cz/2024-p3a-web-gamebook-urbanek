@@ -3,7 +3,11 @@ import HomeScreen from './Components/HomeScreen';
 import Login from './Components/Login';
 import Scene from './Components/Scene';
 import AdminPanel from './Components/AdminPanel';
-import { API_BASE_URL } from './config/api';
+
+// Use relative URL for API endpoints
+const API_BASE_URL = import.meta.env.PROD 
+    ? 'https://id-46.pslib.cloud'  // Production URL
+    : 'http://localhost:5193';     // Development URL
 
 // Helper function to check if user is authenticated
 const isAuthenticated = () => {
@@ -33,13 +37,13 @@ function App() {
         {
             path: "/scene/:id",
             element: isAuthenticated() ? <Scene /> : <Navigate to="/login" />,
-            loader: async ({ params }) => {
+            loader: async () => {
                 const token = localStorage.getItem('authToken');
                 if (!token) {
                     throw new Error('Unauthorized');
                 }
 
-                const response = await fetch(`${API_BASE_URL}/scenes/${params.id}`, {
+                const response = await fetch(`${API_BASE_URL}/scenes`, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Accept': 'application/json',
