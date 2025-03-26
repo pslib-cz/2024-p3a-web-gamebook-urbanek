@@ -3,7 +3,7 @@ import HomeScreen from './Components/HomeScreen';
 import Login from './Components/Login';
 import Scene from './Components/Scene';
 import AdminPanel from './Components/AdminPanel';
-// import { API_BASE_URL } from './config/api';
+import { API_BASE_URL } from './config/api';
 
 // Helper function to check if user is authenticated
 const isAuthenticated = () => {
