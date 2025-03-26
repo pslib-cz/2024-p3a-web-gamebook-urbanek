@@ -129,7 +129,7 @@ const Scene = () => {
             console.error('Error fetching scene:', error);
             if (error instanceof Error && error.message.includes('404')) {
                 // If scene not found, redirect to scene 1
-                navigate('/scenes/1');
+                navigate('/scene/1');
             }
         }
     }, [API_BASE_URL, navigate]);
@@ -284,7 +284,7 @@ const Scene = () => {
 
             setIsTransitioning(true);
             setTimeout(() => {
-                navigate(`/scenes/${option.nextSceneId}`);
+                navigate(`/scene/${option.nextSceneId}`);
             }, 300);
         } catch (error) {
             console.error('Error applying effect:', error);
@@ -416,7 +416,7 @@ const Scene = () => {
                     }
                     // Then navigate to the scene
                     if (gameState.currentSceneId && gameState.currentSceneId !== id) {
-                        navigate(`/scenes/${gameState.currentSceneId}`);
+                        navigate(`/scene/${gameState.currentSceneId}`);
                     }
                 }
             }
