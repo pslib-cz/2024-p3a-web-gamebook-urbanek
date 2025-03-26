@@ -81,45 +81,48 @@ const Scene = () => {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
-                },
-                credentials: 'include'
+                }
             });
+
+            if (response.status === 401) {
+                // Token expired or invalid
+                localStorage.removeItem('authToken');
+                navigate('/login');
+                return;
+            }
 
             if (!response.ok) {
                 const errorText = await response.text();
                 console.error('Scene fetch error:', errorText);
-                throw new Error(`HTTP error! status: ${response.status}`);
+                if (response.status === 404) {
+                    navigate('/scene/1');
+                    return;
+                }
+                throw new Error('Failed to fetch scene');
+            }
+
+            const contentType = response.headers.get('content-type');
+            if (!contentType || !contentType.includes('application/json')) {
+                throw new Error('Invalid response format. Expected JSON.');
             }
 
             const sceneData = await response.json();
-            console.log('Scene data:', sceneData); // Debug log
-            
-            if (sceneData.imageURL === undefined && sceneData.image !== undefined) {
-                sceneData.imageURL = sceneData.image;
-            }
-            
             setCurrentScene(sceneData);
 
-            // Fetch options for this scene
+            // Fetch scene options
             const optionsResponse = await fetch(`${API_BASE_URL}/scene/options/${sceneId}`, {
-                method: 'GET',
-                credentials: 'include',
                 headers: {
                     'Accept': 'application/json',
+                    'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 }
             });
-            
-            if (!optionsResponse.ok) {
-                const errorText = await optionsResponse.text();
-                console.error('Options fetch error:', errorText);
-                throw new Error(`Options fetch failed: ${optionsResponse.status}`);
+
+            if (optionsResponse.ok) {
+                const options = await optionsResponse.json();
+                setSceneOptions(options);
             }
 
-            const optionsData = await optionsResponse.json();
-            console.log('Options data:', optionsData); // Debug log
-            setSceneOptions(optionsData);
-            
             // If scene has an item, fetch its details
             if (sceneData.itemID) {
                 await fetchItemDetails(sceneData.itemID);
@@ -127,9 +130,15 @@ const Scene = () => {
 
         } catch (error) {
             console.error('Error fetching scene:', error);
-            if (error instanceof Error && error.message.includes('404')) {
-                // If scene not found, redirect to scene 1
-                navigate('/scene/1');
+            if (error instanceof Error) {
+                if (error.message.includes('Invalid response format')) {
+                    // If we get HTML instead of JSON, it's likely an authentication issue
+                    localStorage.removeItem('authToken');
+                    navigate('/login');
+                } else if (error.message.includes('404')) {
+                    // If scene not found, redirect to scene 1
+                    navigate('/scene/1');
+                }
             }
         }
     }, [API_BASE_URL, navigate]);
@@ -161,17 +170,29 @@ const Scene = () => {
                 // Fetch basic stats
                 const response = await fetch(`${API_BASE_URL}/scene/player-stats`, {
                     method: 'GET',
-                    credentials: 'include',
                     headers: {
                         'Accept': 'application/json',
+                        'Content-Type': 'application/json',
                         'Authorization': `Bearer ${token}`
                     }
                 });
+
+                if (response.status === 401) {
+                    // Token expired or invalid
+                    localStorage.removeItem('authToken');
+                    navigate('/login');
+                    return;
+                }
 
                 if (!response.ok) {
                     const errorText = await response.text();
                     console.error('Stats fetch error:', errorText);
                     throw new Error('Failed to fetch stats');
+                }
+
+                const contentType = response.headers.get('content-type');
+                if (!contentType || !contentType.includes('application/json')) {
+                    throw new Error('Invalid response format. Expected JSON.');
                 }
 
                 const stats = await response.json();
@@ -181,9 +202,9 @@ const Scene = () => {
                 if (stats.itemId) {
                     const itemResponse = await fetch(`${API_BASE_URL}/Items/${stats.itemId}`, {
                         method: 'GET',
-                        credentials: 'include',
                         headers: {
                             'Accept': 'application/json',
+                            'Content-Type': 'application/json',
                             'Authorization': `Bearer ${token}`
                         }
                     });
@@ -203,6 +224,11 @@ const Scene = () => {
             }
         } catch (error) {
             console.error('Error fetching player stats:', error);
+            if (error instanceof Error && error.message.includes('Invalid response format')) {
+                // If we get HTML instead of JSON, it's likely an authentication issue
+                localStorage.removeItem('authToken');
+                navigate('/login');
+            }
         }
     }, [API_BASE_URL, navigate, loadSavedProgress]);
 
