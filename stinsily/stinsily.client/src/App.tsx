@@ -38,7 +38,17 @@ function App() {
             path: "/scene/:id",
             element: isAuthenticated() ? <Scene /> : <Navigate to="/login" />,
             loader: async () => {
+                const token = localStorage.getItem('authToken');
+                if (!token) {
+                    throw new Error('Unauthorized');
+                }
+
                 const response = await fetch(`${API_BASE_URL}/api/scenes`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
                     credentials: 'include'
                 });
                 
