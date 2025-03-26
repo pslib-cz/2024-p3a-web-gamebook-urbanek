@@ -43,7 +43,7 @@ function App() {
                     throw new Error('Unauthorized');
                 }
 
-                const response = await fetch(`${API_BASE_URL}/api/scenes`, {
+                const response = await fetch(`${API_BASE_URL}/scenes`, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Accept': 'application/json',
