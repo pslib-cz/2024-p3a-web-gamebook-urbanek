@@ -33,22 +33,9 @@ function App() {
         {
             path: "/scene/:id",
             element: isAuthenticated() ? <Scene /> : <Navigate to="/login" />,
-            loader: async ({ params }) => {
+            loader: async () => {
                 const token = localStorage.getItem('authToken');
                 if (!token) {
-                    throw new Error('Unauthorized');
-                }
-
-                const response = await fetch(`${API_BASE_URL}/scenes/${params.id}`, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    credentials: 'include'
-                });
-                
-                if (!response.ok) {
                     throw new Error('Unauthorized');
                 }
                 return null;
@@ -61,7 +48,9 @@ function App() {
                 <AdminPanel /> : 
                 <Navigate to="/login" />,
         }
-    ]);
+    ], {
+        basename: '/'
+    });
 
     return <RouterProvider router={router} />;
 }
