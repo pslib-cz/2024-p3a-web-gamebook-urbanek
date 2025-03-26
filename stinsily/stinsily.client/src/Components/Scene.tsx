@@ -75,7 +75,7 @@ const Scene = () => {
                 return;
             }
 
-            const response = await fetch(`${API_BASE_URL}/scenes/${sceneId}`, {
+            const response = await fetch(`${API_BASE_URL}/scene/${sceneId}`, {
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json',
@@ -159,7 +159,7 @@ const Scene = () => {
 
             if (!loadSavedProgress()) {
                 // Fetch basic stats
-                const response = await fetch(`${API_BASE_URL}/api/scenes/player-stats`, {
+                const response = await fetch(`${API_BASE_URL}/scene/player-stats`, {
                     method: 'GET',
                     credentials: 'include',
                     headers: {
@@ -256,7 +256,7 @@ const Scene = () => {
                     formattedEffect = `${stat}${sign}${value}`;
                 }
 
-                const response = await fetch(`${API_BASE_URL}/api/scenes/apply-effect`, {
+                const response = await fetch(`${API_BASE_URL}/scene/apply-effect`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -296,7 +296,7 @@ const Scene = () => {
             const token = localStorage.getItem('authToken');
             if (!token) return;
 
-            const response = await fetch(`${API_BASE_URL}/api/scenes/item`, {
+            const response = await fetch(`${API_BASE_URL}/scene/item`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -381,7 +381,7 @@ const Scene = () => {
             const token = localStorage.getItem('authToken');
             if (!token) return;
 
-            await fetch(`${API_BASE_URL}/api/scenes/save-progress`, {
+            await fetch(`${API_BASE_URL}/scene/save-progress`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -428,7 +428,7 @@ const Scene = () => {
             const token = localStorage.getItem('authToken');
             if (!token) return;
 
-            await fetch(`${API_BASE_URL}/api/scenes/sync-stats`, {
+            await fetch(`${API_BASE_URL}/scene/sync-stats`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
