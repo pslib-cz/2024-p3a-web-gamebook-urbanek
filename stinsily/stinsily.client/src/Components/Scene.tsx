@@ -75,7 +75,7 @@ const Scene = () => {
                 return;
             }
 
-            const response = await fetch(`${API_BASE_URL}/api/scenes/${sceneId}`, {
+            const response = await fetch(`${API_BASE_URL}/scene/${sceneId}`, {
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json',

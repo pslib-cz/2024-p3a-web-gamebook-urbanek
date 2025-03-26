@@ -35,7 +35,7 @@ function App() {
             element: isAuthenticated() ? <HomeScreen /> : <Navigate to="/login" />,
         },
         {
-            path: "/api/scenes/:id",
+            path: "/scene/:id",
             element: isAuthenticated() ? <Scene /> : <Navigate to="/login" />,
             loader: async () => {
                 const token = localStorage.getItem('authToken');
