@@ -506,13 +506,8 @@ const Scene = () => {
         
         if (!imageURL) return { backgroundColor: 'black' };
         
-        // Get the full image URL
-        const fullImageUrl = getImageUrl(imageURL);
-        
-        // Debug logging
-        console.log('Scene data:', currentScene);
-        console.log('Image URL from scene:', imageURL);
-        console.log('Full image URL:', fullImageUrl);
+        // Use the full URL directly since it already includes /uploads/
+        const fullImageUrl = `${API_BASE_URL}${imageURL}`;
         
         return {
             backgroundImage: `url(${fullImageUrl})`,
