@@ -506,8 +506,9 @@ const Scene = () => {
         
         if (!imageURL) return { backgroundColor: 'black' };
         
-        // Use the full URL directly since it already includes /uploads/
-        const fullImageUrl = `${API_BASE_URL}${imageURL}`;
+        // Fix the case of 'uploads' to 'Uploads' in the URL
+        const fixedImageUrl = imageURL.replace('/uploads/', '/Uploads/');
+        const fullImageUrl = `${API_BASE_URL}${fixedImageUrl}`;
         
         return {
             backgroundImage: `url(${fullImageUrl})`,
