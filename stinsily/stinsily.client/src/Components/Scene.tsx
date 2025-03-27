@@ -75,7 +75,7 @@ const Scene = () => {
                 return;
             }
 
-            const response = await fetch(`${API_BASE_URL}/scene/${sceneId}`, {
+            const response = await fetch(`${API_BASE_URL}/api/Scenes/${sceneId}`, {
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json',
@@ -123,7 +123,7 @@ const Scene = () => {
             setCurrentScene(sceneData);
 
             // Fetch scene options
-            const optionsResponse = await fetch(`${API_BASE_URL}/scene/options/${sceneId}`, {
+            const optionsResponse = await fetch(`${API_BASE_URL}/api/Scenes/options/${sceneId}`, {
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
@@ -181,7 +181,7 @@ const Scene = () => {
 
             if (!loadSavedProgress()) {
                 // Fetch basic stats
-                const response = await fetch(`${API_BASE_URL}/scene/player-stats`, {
+                const response = await fetch(`${API_BASE_URL}/api/Scenes/player-stats`, {
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json',
@@ -238,7 +238,6 @@ const Scene = () => {
         } catch (error) {
             console.error('Error fetching player stats:', error);
             if (error instanceof Error && error.message.includes('Invalid response format')) {
-                // If we get HTML instead of JSON, it's likely an authentication issue
                 localStorage.removeItem('authToken');
                 navigate('/login');
             }

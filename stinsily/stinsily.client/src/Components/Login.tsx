@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from '../Modules/Login.module.css' 
-
-const API_BASE_URL =  import.meta.env.VITE_API_URL || 'https://id-46.pslib.cloud';
+import { API_BASE_URL } from '../config/api';
 
 const Login = () => {
     const [email, setEmail] = useState('');

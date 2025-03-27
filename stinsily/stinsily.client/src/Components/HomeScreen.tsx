@@ -26,7 +26,7 @@ const HomeScreen = () => {
             navigate('/scene/1');
 
             // Then reset stats on server in the background
-            fetch(`${API_BASE_URL}/Scenes/reset-stats`, {
+            fetch(`${API_BASE_URL}/api/Scenes/reset-stats`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`
