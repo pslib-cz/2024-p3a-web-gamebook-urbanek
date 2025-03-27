@@ -213,7 +213,7 @@ const Scene = () => {
                 
                 // Fetch item separately using ItemsController if itemId exists
                 if (stats.itemId) {
-                    const itemResponse = await fetch(`${API_BASE_URL}/Items/${stats.itemId}`, {
+                    const itemResponse = await fetch(`${API_BASE_URL}/api/Items/${stats.itemId}`, {
                         method: 'GET',
                         headers: {
                             'Accept': 'application/json',
@@ -246,7 +246,7 @@ const Scene = () => {
 
     const fetchMiniGame = async (miniGameId: number) => {
         try {
-            const response = await fetch(`${API_BASE_URL}/MiniGames/${miniGameId}`, {
+            const response = await fetch(`${API_BASE_URL}/api/MiniGames/${miniGameId}`, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('authToken')}`
                 }
@@ -294,7 +294,7 @@ const Scene = () => {
                     formattedEffect = `${stat}${sign}${value}`;
                 }
 
-                const response = await fetch(`${API_BASE_URL}/scene/apply-effect`, {
+                const response = await fetch(`${API_BASE_URL}/api/scenes/apply-effect`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -334,7 +334,7 @@ const Scene = () => {
             const token = localStorage.getItem('authToken');
             if (!token) return;
 
-            const response = await fetch(`${API_BASE_URL}/scene/item`, {
+            const response = await fetch(`${API_BASE_URL}/api/scenes/item`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -352,7 +352,7 @@ const Scene = () => {
                 throw new Error('Failed to pick up item');
             }
             
-            const itemResponse = await fetch(`${API_BASE_URL}/Items/${itemId}`, {
+            const itemResponse = await fetch(`${API_BASE_URL}/api/Items/${itemId}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -368,7 +368,7 @@ const Scene = () => {
             }
 
             // Get the current scene options again
-            const sceneOptionsResponse = await fetch(`${API_BASE_URL}/scene/options/${id}`, {
+            const sceneOptionsResponse = await fetch(`${API_BASE_URL}/api/scenes/options/${id}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -419,7 +419,7 @@ const Scene = () => {
             const token = localStorage.getItem('authToken');
             if (!token) return;
 
-            await fetch(`${API_BASE_URL}/scene/save-progress`, {
+            await fetch(`${API_BASE_URL}/api/scenes/save-progress`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -466,7 +466,7 @@ const Scene = () => {
             const token = localStorage.getItem('authToken');
             if (!token) return;
 
-            await fetch(`${API_BASE_URL}/scene/sync-stats`, {
+            await fetch(`${API_BASE_URL}/api/scenes/sync-stats`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -506,7 +506,13 @@ const Scene = () => {
         
         if (!imageURL) return { backgroundColor: 'black' };
         
-        const fullImageUrl = getImageUrl(`/uploads/${imageURL.split('/').pop()}`);
+        // Get the full image URL
+        const fullImageUrl = getImageUrl(imageURL);
+        
+        // Debug logging
+        console.log('Scene data:', currentScene);
+        console.log('Image URL from scene:', imageURL);
+        console.log('Full image URL:', fullImageUrl);
         
         return {
             backgroundImage: `url(${fullImageUrl})`,
@@ -558,7 +564,7 @@ const Scene = () => {
             const token = localStorage.getItem('authToken');
             if (!token) return;
 
-            const response = await fetch(`${API_BASE_URL}/Items/${itemId}`, {
+            const response = await fetch(`${API_BASE_URL}/api/Items/${itemId}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
