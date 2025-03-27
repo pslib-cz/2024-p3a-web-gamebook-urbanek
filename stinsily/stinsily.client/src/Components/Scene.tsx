@@ -62,7 +62,7 @@ const Scene = () => {
     useEffect(() => {
         const token = localStorage.getItem('authToken');
         if (!token) {
-            navigate('/login');
+            // Don't immediately redirect, let the fetch handle auth errors
             return;
         }
     }, [navigate]);
@@ -95,6 +95,19 @@ const Scene = () => {
                 const errorText = await response.text();
                 console.error('Scene fetch error:', errorText);
                 if (response.status === 404) {
+                    // If scene not found, try to load from local storage first
+                    const email = localStorage.getItem('currentUserEmail');
+                    if (email) {
+                        const savedProgress = localStorage.getItem(`gameProgress_${email}`);
+                        if (savedProgress) {
+                            const gameState = JSON.parse(savedProgress);
+                            if (gameState.currentSceneId) {
+                                navigate(`/scene/${gameState.currentSceneId}`);
+                                return;
+                            }
+                        }
+                    }
+                    // If no saved progress, go to scene 1
                     navigate('/scene/1');
                     return;
                 }
