@@ -5,7 +5,7 @@ import SpaceJetRepair from './SpaceJetRepair';
 import LightsaberDuel from './LightsaberDuel';
 import SyndicateInfiltration from './SyndicateInfiltration';
 import FinalDuel from './FinalDuel';
-import { API_BASE_URL, getImageUrl } from '../config/api';
+import { API_BASE_URL } from '../config/api';
 
 interface Scene {
     sceneID: number;
